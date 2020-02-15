@@ -1,9 +1,19 @@
 module.exports = {
-    norpc: true,
-    copyPackages: [],
-    buildDirPath: '/build/contracts',
-    testCommand: 'ganache-cli --port 8555 --gasPrice 0x01 --gasLimit 0xfffffffffff > /dev/null & truffle test --network coverage',
-    skipFiles: [
-        'Migrations.sol'
-    ]
-}
+  port: 7546,
+  testrpcOptions: '-p 7546 -l 0xfffffffffff --allowUnlimitedContractSize',
+  buildDirPath: '/build',
+  dir: '.',
+  providerOptions: {
+    "gasLimit": 0xfffffffffff,
+    "callGasLimit": 0xfffffffffff,
+    "allowUnlimitedContractSize": true
+  },
+  silent: false,
+  // client: require("ganache-core"),
+  copyPackages: ['openzeppelin-solidity'],
+  skipFiles: [
+    'Migrations.sol',
+    'interfaces',
+    'z_mocks',
+  ]
+};

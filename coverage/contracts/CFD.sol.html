@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/CFD.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> CFD.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">27.03% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>10/37</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">14.29% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">27.03% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>10/37</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">pragma solidity ^0.5.16;
+&nbsp;
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+//import "openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+import "./interfaces/IUniswapFactory.sol";
+import "./interfaces/IUniswapExchange.sol";
+import "./interfaces/IMakerMedianizer.sol";
+import "./UpDai.sol";
+import "./DownDai.sol";
+&nbsp;
+contract CFD {
+    using SafeMath for uint256;
+&nbsp;
+    /**************** PROTOCOL CONFIGURATION ****************/
+    // mainnet:
+    // rinkeby:
+    address public makerMedianizer;
+    // mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
+    // rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
+    address public uniswapFactory;
+    // mainnet:
+    // rinkeby:
+    address public daiToken;
+    /********************************************************/
+&nbsp;
+    UpDai public upDai;
+    DownDai public downDai;
+    address public uniswapUpDaiExchange;
+    address public uniswapDownDaiExchange;
+&nbsp;
+    uint256 public leverage;
+    uint256 public fee;
+    uint256 public settlementDate;
+&nbsp;
+    mapping(address =&gt; uint256) public providerLP;
+&nbsp;
+    /**
+     * @notice constructor
+     * @param _makerMedianizer maker medianizer address
+     * @param _uniswapFactory uniswap factory address
+     * @param _daiToken maker medianizer address
+     * @param _leverage leverage (1000000000000000x)
+     * @param _fee payout fee
+     * @param _settlementDate maker medianizer address
+     * @param _version maker medianizer address
+     */
+    constructor(
+        address _makerMedianizer,
+        address _uniswapFactory,
+        address _daiToken,
+        uint256 _leverage,
+        uint256 _fee,
+        uint256 _settlementDate,
+        uint256 _version
+    ) public {
+        makerMedianizer = _makerMedianizer;
+        uniswapFactory = _uniswapFactory;
+        daiToken = _daiToken;
+&nbsp;
+        leverage = _leverage;
+        fee = _fee;
+        settlementDate = _settlementDate;
+&nbsp;
+        upDai = new UpDai(_version);
+        downDai = new DownDai(_version);
+&nbsp;
+        uniswapUpDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
+            address(upDai)
+        );
+        uniswapDownDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
+            address(downDai)
+        );
+    }
+&nbsp;
+    /**
+     * @notice mint UP and DOWN DAI tokens
+     * @param _underlyingAmount amount of DAI to deposit
+     * @param _ethAmount amount of ETH as collateral for UP&amp;DOWN DAI Uniswap pools
+     */
+<span class="fstat-no" title="function not covered" >    function mint(uint256 _underlyingAmount, uint256 _ethAmount)</span>
+        public
+        payable
+    {
+<span class="cstat-no" title="statement not covered" >        (uint256 upDaiCollateral, uint256 downDaiCollateral) = getETHCollateralRequirements(</span>
+            _underlyingAmount
+        );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        require(</span>
+            (_ethAmount == msg.value) &amp;&amp;
+                (_ethAmount == upDaiCollateral + downDaiCollateral),
+            "CFD::error transfering ETH"
+        );
+<span class="cstat-no" title="statement not covered" >        require(</span>
+            IERC20(daiToken).transferFrom(
+                msg.sender,
+                address(this),
+                _underlyingAmount
+            ),
+            "CFD::error transfering underlying asset"
+        );
+&nbsp;
+        // mint UP&amp;DOWN tokens
+<span class="cstat-no" title="statement not covered" >        upDai.mint(msg.sender, _underlyingAmount.div(2))</span>;
+<span class="cstat-no" title="statement not covered" >        downDai.mint(msg.sender, _underlyingAmount.div(2))</span>;
+&nbsp;
+        // send liquidity to both uniswap pools
+<span class="cstat-no" title="statement not covered" >        uint256 upLP = IUniswapExchange(uniswapUpDaiExchange)</span>
+            .addLiquidity
+            .value(_ethAmount.div(2))(
+            _ethAmount.div(2),
+            _underlyingAmount.div(2),
+            now + 3600
+        );
+<span class="cstat-no" title="statement not covered" >        uint256 downLP = IUniswapExchange(uniswapDownDaiExchange)</span>
+            .addLiquidity
+            .value(_ethAmount.div(2))(
+            _ethAmount.div(2),
+            _underlyingAmount.div(2),
+            now + 3600
+        );
+<span class="cstat-no" title="statement not covered" >        providerLP[msg.sender] = providerLP[msg.sender].add(upLP.add(downLP))</span>;
+    }
+&nbsp;
+    /**
+     * @notice redeem a pair of UPDAI and DOWNDAI
+     * @dev this function can be called before the settlement date, an equal amount of UPDAI and DOWNDAI should be deposited
+     */
+<span class="fstat-no" title="function not covered" >    function redeem(uint256 _redeemAmount) publi</span>c {
+        // get DAI price
+<span class="cstat-no" title="statement not covered" >        uint256 daiUsdPrice = GetDaiPriceUSD();</span>
+&nbsp;
+        // burn UPDAI &amp; DOWNDAI from redeemer
+<span class="cstat-no" title="statement not covered" >        upDai.burnFrom(msg.sender, _redeemAmount)</span>;
+<span class="cstat-no" title="statement not covered" >        downDai.burnFrom(msg.sender, _redeemAmount)</span>;
+&nbsp;
+        // spread MONEY bitches
+<span class="cstat-no" title="statement not covered" >        _payout(</span>
+            msg.sender,
+            _redeemAmount,
+            _redeemAmount,
+            daiUsdPrice,
+            leverage,
+            fee
+        );
+    }
+&nbsp;
+    /**
+     * @notice redeem UPDAI or DOWNDAI token
+     * @dev this function can only be called after contract settlement
+     */
+<span class="fstat-no" title="function not covered" >    function redeemFinal() publi</span>c {
+<span class="cstat-no" title="statement not covered" >        require(now &gt;= settlementDate, "CFD::contract did not settle yet")</span>;
+&nbsp;
+        // get DAI price
+<span class="cstat-no" title="statement not covered" >        uint256 daiUsdPrice = GetDaiPriceUSD();</span>
+&nbsp;
+        // get upDai balance
+<span class="cstat-no" title="statement not covered" >        uint256 upDaiRedeemAmount = upDai.balanceOf(msg.sender);</span>
+        // get downDai balance
+<span class="cstat-no" title="statement not covered" >        uint256 downDaiRedeemAmount = downDai.balanceOf(msg.sender);</span>
+&nbsp;
+        // spread MONEY bitches
+<span class="cstat-no" title="statement not covered" >        _payout(</span>
+            msg.sender,
+            upDaiRedeemAmount,
+            downDaiRedeemAmount,
+            daiUsdPrice,
+            leverage,
+            fee
+        );
+&nbsp;
+        // burn upDai
+<span class="cstat-no" title="statement not covered" >        upDai.burnFrom(msg.sender, upDaiRedeemAmount)</span>;
+        // burn downDai
+<span class="cstat-no" title="statement not covered" >        downDai.burnFrom(msg.sender, downDaiRedeemAmount)</span>;
+    }
+&nbsp;
+    /**
+     * @notice $ payout function $
+     * @dev can only be called internally
+     * @param redeemer redeemer address
+     * @param upDai amount of UpDai
+     * @param downDai amount of DownDai
+     * @param p price of DAI in USD $$$
+     * @param l leverage
+     * @param f payout fee
+     */
+<span class="fstat-no" title="function not covered" >    function _payout(</span>
+        address redeemer,
+        uint256 upDai,
+        uint256 downDai,
+        uint256 p,
+        uint256 l,
+        uint256 f
+    ) internal {
+<span class="cstat-no" title="statement not covered" >        uint256 cash = upDai.mul(uint256(1).add(p.sub(1)).mul(l)).mul(</span>
+            uint256(1).sub(f)
+        ) +
+            downDai.mul(uint256(1).sub(p.sub(1)).mul(l)).mul(uint256(1).sub(f));
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        IERC20(daiToken).transfer(redeemer, cash)</span>;
+    }
+&nbsp;
+    /**
+     * @notice get the amount of ETH required to create a uniswap exchange
+     * @param _underlyingAmount the total amount of underlying to deposit (UP/DOWN DAI = _underlyingAmount/2)
+     */
+<span class="fstat-no" title="function not covered" >    function getETHCollateralRequirements(uint256 _underlyingAmount)</span>
+        public
+        returns (uint256, uint256)
+    {
+<span class="cstat-no" title="statement not covered" >        uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());</span>
+        // uint256 daiUsdPrice = GetDaiPriceUSD();
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return (1, 1);</span>
+    }
+&nbsp;
+    /**
+     * @notice get DAI price in USD
+     * @dev this function get the DAI/USD price by getting the price of ETH/USD from Maker medianizer and dividing it by the price of ETH/DAI from Uniswap.
+     */
+<span class="fstat-no" title="function not covered" >    function GetDaiPriceUSD() public returns (uint256</span>) {
+<span class="cstat-no" title="statement not covered" >        address uniswapExchangeAddress = IUniswapFactory(uniswapFactory)</span>
+            .getExchange(daiToken);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());</span>
+<span class="cstat-no" title="statement not covered" >        uint256 ethDaiPrice = IUniswapExchange(uniswapExchangeAddress)</span>
+            .getEthToTokenInputPrice(1 ether);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return ethUsdPrice.div(ethDaiPrice);</span>
+    }
+&nbsp;
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Feb 15 2020 12:21:11 GMT-0700 (Mountain Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
