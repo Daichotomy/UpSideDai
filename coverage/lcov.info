@@ -128,8 +128,8 @@ SF:/home/alex/projects/ethdenver/DaiHard/contracts/mocks/TokenMock.sol
 FN:14,constructor
 FNF:1
 FNH:1
-FNDA:3,constructor
-DA:19,3
+FNDA:5,constructor
+DA:19,5
 LF:1
 LH:1
 BRF:0
