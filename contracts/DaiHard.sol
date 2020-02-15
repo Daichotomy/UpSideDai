@@ -9,7 +9,7 @@ import "./CFD.sol";
  */
 contract DaiHard is Ownable {
 
-    address deployedCFD;
+    mapping(uint256 => address) public deployedCFD;
 
     event CFDeployed(
         address indexed CFD,
@@ -17,10 +17,6 @@ contract DaiHard is Ownable {
         uint256 indexed settlementDate,
         uint256 indexed version
     );
-
-    constructor() public {
-        deployedCFD = address(0);
-    }
 
     /**
      * @notice deploy a new CFD
@@ -42,9 +38,9 @@ contract DaiHard is Ownable {
         require(_daiToken != address(0), "CFD::invalid DAI token address");
         require(_settlementDate > now, "DaiHard::invalid settlement timestamp");
 
-        deployedCFD = address(new CFD(_makerMedianizer, _uniswapFactory, _daiToken, _version, _settlementDate));
+        deployedCFD[_version] = address(new CFD(_makerMedianizer, _uniswapFactory, _daiToken, _version, _settlementDate));
 
-        emit CFDeployed(deployedCFD, now, _settlementDate, _version);
+        emit CFDeployed(deployedCFD[_version], now, _settlementDate, _version);
     }
 
 }

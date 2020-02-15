@@ -63,8 +63,10 @@ contract CFD {
      * @notice mint UP and DOWN DAI tokens
      */
     function mint(uint256 _underlyingAmount, uint256 _ethAmount) public payable {
-        require(_ethAmount == msg.value, "CFD::error transfering ETH");
-        //(uint256) = getETHCollateralRequirements();
+        (uint256 upDaiCollateral, uint256 downDaiCollateral) = getETHCollateralRequirements(_underlyingAmount);
+
+        require((_ethAmount == msg.value) && (_ethAmount == upDaiCollateral+downDaiCollateral), "CFD::error transfering ETH");
+
     }
 
     /**
