@@ -1,3 +1,4 @@
+const contract = require("@truffle/contract");
 const {
     ether,
     BN
@@ -12,6 +13,7 @@ const ZERO_ADDR = '0x0000000000000000000000000000000000000000';
 
 const TokenMock = artifacts.require("TokenMock");
 const MakerMedianizerMock = artifacts.require("MakerMedianizerMock");
+const IUniswapExchange = artifacts.require("IUniswapExchange");
 const DaiHard = artifacts.require("DaiHard");
 const CFD = artifacts.require("CFD");
 
@@ -21,23 +23,28 @@ require('chai')
   .should();
 
 contract("DAI Hard", ([daiHardTeam, random]) => {
-    let dai, makerMedianizer, uniswapFactory, daiHard, cfd;
+    const daiAmountDeposit = ether(50);
+    let dai, makerMedianizer, uniswapFactory, daiHard, cfd, upDai, downDai;
 
     before(async() => {
-        // ERC20 token mock for testing
-        dai = await TokenMock.new(
-            "DAI",
-            "DAI",
-            18,
-            { from: daiHardTeam }
-        );
-
-        daiHard = await DaiHard.new({ from: daiHardTeam });
+        daiHard = await DaiHard.deployed();
+        cfd = await CFD.at(await daiHard.deployedCFD(1));
+        makerMedianizer = await MakerMedianizerMock.at(await cfd.makerMedianizer());
+        upDai = await cfd.upDai();
+        downDai = await cfd.downDai();
     });
     
     describe("CFD deployment", async() => {
-        it("create new CFD", async() => {
-            //
+        it("check deployment params", async() => {
+            assert.equal(upDai.totalSupply(), 0, "upDai total supply mismatch");
+            assert.equal(downDai.totalSupply(), 0, "upDai total supply mismatch");
+        });
+    });
+
+    describe("Liquidity provider", async() => {
+        it("get required ETH for up&down pool", async() => {
+            let upDaiCollateral = cfd.getETHCollateralRequirements(daiAmountDeposit);
+            console.log(upDaiCollateral);
         });
     });
 });

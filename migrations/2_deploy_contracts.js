@@ -27,11 +27,14 @@ const deploymentConfig = require("./deployment-config.json");
 module.exports = async (deployer, network, accounts) => {
 
     const [acc_default] = accounts;
+    const oneMonthInSeconds = 60 * 60 * 24 * 30;
+    const now = new Date().getTime() / 1000;
 
     if (network == "development") {
         // Deploy mock token / DAI
         await deployer.deploy(c_ERC20Mock, "Templator", "TMPLT", 1000000, { from: acc_default });
         const d_ERC20Mock = await c_ERC20Mock.deployed();
+        d_ERC20Mock.mint(acc_default, 500, { from: acc_default});
 
         // Medianizer mocks
         const ethPrice = 287 * 10**8;
@@ -55,6 +58,12 @@ module.exports = async (deployer, network, accounts) => {
         let d_UniswapFactory = await factory.new({ from : acc_default})
         await d_UniswapFactory.initializeFactory.sendTransaction(d_UniswapExchange.address, {from: acc_default});
 
+        let daiExchange = await exchange.new( { from : acc_default})
+        await daiExchange.setup.sendTransaction(d_ERC20Mock.address, {from: acc_default});
+        d_ERC20Mock.approve(daiExchange.address, 280, {from: acc_default});
+        // error down here --------------
+        //daiExchange.addLiquidity(280, 1, parseInt(now+oneMonthInSeconds), {from: acc_default, value: 1 * 10**18});
+
         // DaiHard contracts
         await deployer.deploy(c_DaiHard, { from: acc_default });
         
@@ -68,7 +77,6 @@ module.exports = async (deployer, network, accounts) => {
         // * @param _fee payout fee
         // * @param _settlementLength maker medianizer address
         // * @param _version maker medianizer address
-        const oneMonthInSeconds = 60 * 60 * 24 * 30;
         await d_DaiHard.newCFD(
             d_MakerMedianizerMock.address,
             d_UniswapFactory.address,
@@ -79,11 +87,11 @@ module.exports = async (deployer, network, accounts) => {
         1);
 
         // Grab CFD deets
-        const newCFD_address = await d_DaiHard.deployedCFD(1);
-        const d_CFD = await c_CFD.at(newCFD_address);
+        //const newCFD_address = await d_DaiHard.deployedCFD(1);
+        //const d_CFD = await c_CFD.at(newCFD_address);
 
-        const cfdDeets = await cfdDetails(d_CFD);
-        console.log(cfdDeets);
+        //const cfdDeets = await cfdDetails(d_CFD);
+        //console.log(cfdDeets);
     }
     else if (network == "rinkeby") {
         // DaiHard contracts
@@ -110,11 +118,11 @@ module.exports = async (deployer, network, accounts) => {
         1);
 
         // Grab CFD deets
-        const newCFD_address = await d_DaiHard.deployedCFD(1);
-        const d_CFD = await c_CFD.at(newCFD_address);
+        //const newCFD_address = await d_DaiHard.deployedCFD(1);
+        //const d_CFD = await c_CFD.at(newCFD_address);
 
-        const cfdDeets = await cfdDetails(d_CFD);
-        console.log(cfdDeets);
+        //const cfdDeets = await cfdDetails(d_CFD);
+        //console.log(cfdDeets);
     }
     else if (network == "kovan") {
         // DaiHard contracts
@@ -141,11 +149,11 @@ module.exports = async (deployer, network, accounts) => {
         1);
 
         // Grab CFD deets
-        const newCFD_address = await d_DaiHard.deployedCFD(1);
-        const d_CFD = await c_CFD.at(newCFD_address);
+        //const newCFD_address = await d_DaiHard.deployedCFD(1);
+        //const d_CFD = await c_CFD.at(newCFD_address);
 
-        const cfdDeets = await cfdDetails(d_CFD);
-        console.log(cfdDeets);
+        //const cfdDeets = await cfdDetails(d_CFD);
+        //console.log(cfdDeets);
     }
     else if (network == "mainnet") {
         // DaiHard contracts
@@ -172,10 +180,10 @@ module.exports = async (deployer, network, accounts) => {
         1);
 
         // Grab CFD deets
-        const newCFD_address = await d_DaiHard.deployedCFD(1);
-        const d_CFD = await c_CFD.at(newCFD_address);
+        //const newCFD_address = await d_DaiHard.deployedCFD(1);
+        //const d_CFD = await c_CFD.at(newCFD_address);
 
-        const cfdDeets = await cfdDetails(d_CFD);
-        console.log(cfdDeets);
+        //const cfdDeets = await cfdDetails(d_CFD);
+        //console.log(cfdDeets);
     }
 }
