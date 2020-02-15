@@ -1,17 +1,39 @@
 <template>
   <md-app id="app" md-mode="reveal" style="min-height: 100vh;">
-    <md-app-toolbar
-      md-elevation="0"
-      id="toolbar"
-      style="padding-top:25px;padding-bottom:50px"
-    >
+    <md-app-toolbar md-elevation="0" id="toolbar">
       <router-link class="logo" to="/">
         <img class="logo" src="./assets/Logo.png" />
       </router-link>
 
       <div class="md-toolbar-section-end">
-        <p style="padding-right:10px">{{ currentNetwork }}</p>
-        <clickable-address :eth-address="account" />
+        <ul class="nav-list-right" style="padding-right:20px">
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              :style="
+                $route.name == 'market' ? 'text-decoration:underline' : ''
+              "
+              to="market"
+              >Market</router-link
+            >
+          </li>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              :style="
+                $route.name == 'myAccount' ? 'text-decoration:underline' : ''
+              "
+              to="/myAccount"
+              >My account
+            </router-link>
+          </li>
+        </ul>
+        <span
+          ><clickable-address style="margin-top:10px" :eth-address="account" />
+          <p style="padding-right:10px  padding-top:5px; margin-top:4px">
+            {{ currentNetwork }}
+          </p></span
+        >
       </div>
     </md-app-toolbar>
 
@@ -45,7 +67,6 @@ export default {
   components: { ClickableAddress, MiningTransaction },
   data() {
     return {
-      logo: logo,
       web3Detected: true,
       menuVisible: false
     };
