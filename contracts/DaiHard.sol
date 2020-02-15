@@ -9,4 +9,26 @@ import "./CFD.sol";
  */
 contract DaiHard is Ownable {
 
+    address deployedCFD;
+
+    event CFDeployed(
+        address indexed CFD,
+        uint256 indexed creationDate,
+        uint256 indexed settlementDate
+    );
+
+    constructor() public {
+        deployedCFD = address(0);
+    }
+
+    function newCFD(
+        uint256 _settlementDate
+    ) public onlyOwner {
+        require(_settlementDate > now, "DaiHard::invalid settlement timestamp");
+
+        deployedCFD = address(new CFD(_settlementDate));
+
+        emit CFDeployed(deployedCFD, now, _settlementDate);
+    }
+
 }
