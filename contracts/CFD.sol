@@ -15,19 +15,19 @@ contract CFD {
     /**************** PROTOCOL CONFIGURATION ****************/
     // mainnet:
     // rinkeby:
-    address makerMedianizer;
+    address public makerMedianizer;
     // mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
     // rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
-    address uniswapFactory;
+    address public uniswapFactory;
     // mainnet:
     // rinkeby:
-    address daiToken;
+    address public daiToken;
     /********************************************************/
 
-    UpDai upDai;
-    DownDai downDai;
-    address uniswapUpDaiExchange;
-    address uniswapDownDaiExchange;
+    UpDai public upDai;
+    DownDai public downDai;
+    address public uniswapUpDaiExchange;
+    address public uniswapDownDaiExchange;
 
     uint256 public settlementDate;
 
