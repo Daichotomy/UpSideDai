@@ -1,0 +1,42 @@
+{
+  "name": "daihard",
+  "version": "1.0.0",
+  "description": "Dai hard or Dai trying",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^2.5.0"
+  },
+  "devDependencies": {
+    "@openzeppelin/test-helpers": "^0.5.4",
+    "bignumber.js": "^9.0.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-bignumber": "^3.0.0",
+    "decimal.js": "^10.2.0",
+    "prettier": "^1.18.2",
+    "prettier-plugin-solidity": "^1.0.0-alpha.34",
+    "solhint": "^2.3.0",
+    "solhint-plugin-prettier": "0.0.3",
+    "solidity-coverage": "^0.6.7"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daichotomy/DaiHard.git"
+  },
+  "keywords": [
+    "Solidity",
+    "Ethereum",
+    "DeFi"
+  ],
+  "author": "Daichotomy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Daichotomy/DaiHard/issues"
+  },
+  "homepage": "https://github.com/Daichotomy/DaiHard#readme"
+}
