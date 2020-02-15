@@ -2,8 +2,8 @@
   <div class="page-container">
     <div class="md-layout sections">
       <div class="md-layout-item"></div>
-      <div class="md-layout-item md-size-15" style="padding-top:75px">
-        <span class="infoText">Current Dai Price</span>
+      <div class="md-layout-item" style="padding-top:60px">
+        <span class="infoText">Current Dai price</span>
         <br />
         <br />
         <div class="priceBlob">
@@ -18,7 +18,7 @@
             <div class="md-layout-item" style="padding-top:70px">
               <span class="infoText">Dai</span>
               <br />
-              <span class="inputDai">
+              <span>
                 <md-field md-inline>
                   <label>To Deposit...</label>
                   <md-input
@@ -31,9 +31,12 @@
             </div>
 
             <div>
+              <div style="padding-top:30px">
+                <span class="infoText">Choose your position</span>
+              </div>
               <div class="md-layout">
                 <div class="md-layout-item" @click="changeDirection(true)">
-                  <div class="md-layout-item" style="padding-top:70px">
+                  <div class="md-layout-item" style="padding-top:15px">
                     <div
                       :class="
                         directionLong
@@ -43,13 +46,13 @@
                     >
                       <img
                         class="text-center finger"
-                        src="../assets/point.png"
+                        src="../../assets/point.png"
                       />
                     </div>
                   </div>
                 </div>
                 <div class="md-layout-item" @click="changeDirection(false)">
-                  <div class="md-layout-item" style="padding-top:70px">
+                  <div class="md-layout-item" style="padding-top:15px">
                     <div
                       :class="
                         !directionLong
@@ -59,7 +62,7 @@
                     >
                       <img
                         class="text-center fingerFlip"
-                        src="../assets/point.png"
+                        src="../../assets/point.png"
                       />
                     </div>
                   </div>
@@ -71,17 +74,26 @@
                 <span class="Question"
                   >?
                   <md-tooltip md-direction="bottom" class="toolTip"
-                    >Bet on a direction that you think Dai will move.</md-tooltip
+                    >Bet on a direction that you think Dai will
+                    move.</md-tooltip
                   >
                 </span>
                 <!-- <md-tooltip md-direction="bottom">Bottom</md-tooltip> -->
               </div>
             </div>
-            <div class="md-layout-item">
-              <md-button class="Deposit" @click="deposit()">Buy</md-button>
+            <div class="md-layout-item" style="padding-top:60px">
+              <span class="infoText"
+                >{{ directionLong ? "UpDAI" : "DownDAI" }}<br />
+                buy price</span
+              >
+              <br />
+              <span class="buyPrice">{{ buyPrice }}</span>
             </div>
           </div>
         </div>
+      </div>
+      <div class="md-layout-item">
+        <md-button class="Deposit" @click="deposit()">Buy</md-button>
       </div>
       <div class="md-layout-item"></div>
     </div>
@@ -97,8 +109,9 @@ export default {
   components: {},
   data() {
     return {
-      daiPrice: 420.69,
+      daiPrice: 1.0101,
       inputDaiAmount: 420.69,
+      buyPrice: 1.101,
       directionLong: true
     };
   },
@@ -115,7 +128,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables.scss";
+@import "../../styles/variables.scss";
 
 .sections {
   text-align: center;
@@ -141,7 +154,11 @@ export default {
   display: flex;
   align-items: center;
   text-align: center;
-  width: 250px;
+  width: 230px;
+  text-decoration: underline;
+  padding-top: 0px !important;
+  margin-top: 0px !important;
+  padding-left: 20 !important;
 }
 
 .priceBlobText {
@@ -183,6 +200,7 @@ export default {
   box-sizing: border-box;
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s;
 }
 .directionNotSelected {
   width: 85px;
@@ -192,6 +210,7 @@ export default {
   box-sizing: border-box;
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s;
 }
 .finger {
   padding-top: 5px;
@@ -208,7 +227,7 @@ export default {
 }
 .Deposit {
   background: #fece4d;
-  margin-top: 75px;
+  margin-top: 85px;
   border-radius: 15px;
   border: none;
   color: #473144;
@@ -221,7 +240,7 @@ export default {
   font-weight: 500;
 }
 .Question {
-  font-size: 20px;
+  font-size: 18px;
   // line-height: 18px;
   align-items: center;
   text-align: center;
@@ -231,11 +250,23 @@ export default {
   width: 64px;
   padding-top: 4px;
   padding-bottom: 4px;
-  padding-left: 11px;
-  padding-right: 11px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .toolTip {
   background-color: #c4c4c4;
   // padding-
+}
+.buyPrice {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 47px;
+  // display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #ffba01;
 }
 </style>
