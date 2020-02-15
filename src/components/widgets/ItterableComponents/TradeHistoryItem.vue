@@ -4,6 +4,7 @@
 
 <script>
 import router from "@/router";
+import Lottie from "vue-lottie";
 
 export default {
   name: "TradeHistory",
