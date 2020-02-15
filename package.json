@@ -2,11 +2,6 @@
     "name": "DaiHard",
     "version": "0.1.0",
     "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 vue-cli-service build",
-        "lint": "vue-cli-service lint"
-    },
     "dependencies": {
         "@statnett/vue-plotly": "^0.3.2",
         "apexcharts": "^3.6.7",
@@ -76,5 +71,43 @@
         "> 1%",
         "last 2 versions",
         "not ie <= 8"
-    ]
+    ],
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "ganache": "ganache-cli --port 8545",
+        "ganache-ci": "ganache-cli --port 8545 > /dev/null &",
+        "compile": "truffle compile --all",
+        "deploy": "truffle deploy",
+        "migrate:development": "truffle migrate --network development",
+        "migrate:rinkeby": "truffle migrate --network rinkeby",
+        "migrate:kovan": "truffle migrate --network kovan",
+        "migrate:mainnet": "truffle migrate --network mainnet",
+        "test": "truffle test",
+        "lint:tests": "eslint ./test --fix",
+        "lint:contracts": "prettier --write contracts/**/*.sol",
+        "coverage": "npx solidity-coverage",
+        "generate:doc": "truffle compile && solidoc ./ ./docs true"
+      },
+      "husky": {
+        "hooks": {
+          "pre-push": "npm run lint:contracts"
+        }
+      },
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Daichotomy/DaiHard.git"
+      },
+      "keywords": [
+        "Solidity",
+        "Ethereum",
+        "DeFi"
+      ],
+      "author": "Daichotomy",
+      "license": "ISC",
+      "bugs": {
+        "url": "https://github.com/Daichotomy/DaiHard/issues"
+      },
+      "homepage": "https://github.com/Daichotomy/DaiHard#readme"
 }
