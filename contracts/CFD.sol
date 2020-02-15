@@ -143,6 +143,7 @@ contract CFD {
 
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
         uint256 ethDaiPrice = IUniswapExchange(uniswapExchangeAddress).getEthToTokenInputPrice(1 ether);
+        
         return ethUsdPrice.div(ethDaiPrice);
     }
 
