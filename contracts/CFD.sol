@@ -8,9 +8,10 @@ import "./interfaces/IUniswapExchange.sol";
 import "./interfaces/IMakerMedianizer.sol";
 import "./UpDai.sol";
 import "./DownDai.sol";
+import "./StableMath.sol";
 
 contract CFD {
-    using SafeMath for uint256;
+    using StableMath for uint256;
 
     /**************** PROTOCOL CONFIGURATION ****************/
     address public makerMedianizer;
