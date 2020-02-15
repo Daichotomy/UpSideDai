@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  build:
+    # working_directory: ~/daihard
+    docker:
+      - image: circleci/node:10.15.3
+      # The secondary container is an instance of the second listed image which is run in a common network where ports exposed on the primary container are available on localhost.
+      - image: trufflesuite/ganache-cli
+        command: ganache-cli -p 8545 --gasLimit 9000000
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install packages
+          command: yarn
+      - run:
+          name: Migrate Contracts
+          command: yarn migrate
+      - run:
+          name: Lint Contracts
+          command: yarn lint:contracts
+      - run:
+          name: Test Contracts
+          command: yarn test 2>&1 | tee test_output
+      - store_artifacts:
+          path: /test_output
+      # NOTE -> This requires a paid CircleCI plan to increase the RAM size up to 6/8GB. Fails at current
+      - run:
+          name: Produce Coverage Report
+          command: yarn coverage
+      - store_artifacts:
+          path: /coverage
+      - store_artifacts:
+          path: /.coverage.json
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
