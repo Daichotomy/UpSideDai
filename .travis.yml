@@ -1,0 +1,20 @@
+sudo: required
+language: node_js
+cache:
+  directories:
+    - node_modules
+notifications:
+  email: false
+node_js:
+  - '12.13.1'
+env:
+  - TASK=lint:tests
+  - TASK=lint:contracts
+  - TASK=test
+before_script:
+  - npm run ganache-ci
+  - sleep 5
+script:
+  - travis_wait 60 npm run $TASK
+after_success:
+  - npm run coverage && cat coverage/lcov.info | coveralls
