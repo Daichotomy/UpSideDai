@@ -31,6 +31,8 @@ contract CFD {
 
     uint256 public settlementDate;
 
+    mapping(address => uint256) public providerLP;
+
     /**
      * @notice deploy a new CFD
      * @param _makerMedianizer maker medianizer address
@@ -69,7 +71,14 @@ contract CFD {
 
         require((_ethAmount == msg.value) && (_ethAmount == upDaiCollateral+downDaiCollateral), "CFD::error transfering ETH");
 
+        // mint UP&DOWN tokens
+        upDai.mint(msg.sender, _underlyingAmount.div(2));
+        downDai.mint(msg.sender, _underlyingAmount.div(2));
 
+        // send liquidity to both uniswap pools
+        uint256 upLP = IUniswapExchange(uniswapUpDaiExchange).addLiquidity.value(_ethAmount.div(2))(_ethAmount.div(2), _underlyingAmount.div(2), now+3600);
+        uint256 downLP = IUniswapExchange(uniswapDownDaiExchange).addLiquidity.value(_ethAmount.div(2))(_ethAmount.div(2), _underlyingAmount.div(2), now+3600);
+        providerLP[msg.sender] = providerLP[msg.sender].add(upLP.add(downLP));
     }
 
     /**
