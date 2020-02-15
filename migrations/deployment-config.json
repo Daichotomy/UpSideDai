@@ -1,17 +1,17 @@
 {
-  "DEVCHAIN": {
-    "MAKER_MEDIANIZER": "",
-    "UNISWAP_FACTORY": "",
-    "DAI_TOKEN": ""
-  },
-  "KOVAN": {
-    "MAKER_MEDIANIZER": "",
-    "UNISWAP_FACTORY": "",
-    "DAI_TOKEN": ""
-  },
-  "MAINNET": {
-    "MAKER_MEDIANIZER": "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95",
-    "UNISWAP_FACTORY": "",
-    "DAI_TOKEN": ""
-  }
+    "DEVCHAIN": {
+        "MAKER_MEDIANIZER": "",
+        "UNISWAP_FACTORY": "",
+        "DAI_TOKEN": ""
+    },
+    "KOVAN": {
+        "MAKER_MEDIANIZER": "0x9FfFE440258B79c5d6604001674A4722FfC0f7Bc",
+        "UNISWAP_FACTORY": "0xD3E51Ef092B2845f10401a0159B2B96e8B6c3D30",
+        "DAI_TOKEN": "0x4C38cDC08f1260F5c4b21685654393BB1e66a858"
+    },
+    "MAINNET": {
+        "MAKER_MEDIANIZER": "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95",
+        "UNISWAP_FACTORY": "",
+        "DAI_TOKEN": ""
+    }
 }
