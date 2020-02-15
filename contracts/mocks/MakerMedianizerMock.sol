@@ -1,7 +1,7 @@
 pragma solidity ^0.5.16;
 
 contract MakerMedianizerMock {
-    uint256 val;
+    uint256 val; // $1 == 1e8
 
     constructor(uint256 _etherPrice) public {
         val = _etherPrice;
