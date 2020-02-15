@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    Market page
+    trade page
   </div>
 </template>
 
@@ -9,7 +9,7 @@ import router from "@/router";
 import Lottie from "vue-lottie";
 
 export default {
-  name: "home",
+  name: "trade",
   components: {},
   data() {
     return {};
