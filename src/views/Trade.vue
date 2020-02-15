@@ -14,19 +14,72 @@
       </div>
       <div class="md-layout-item">
         <div class="tradeBox">
-          <div class="md-layout tradeBoxItem">
+          <div class="md-layout">
             <div class="md-layout-item" style="padding-top:70px">
               <span class="infoText">Dai</span>
               <br />
               <span class="inputDai">
                 <md-field md-inline>
                   <label>To Deposit...</label>
-                  <md-input v-model="inputDaiAmount" class="inputDai" type="number"></md-input>
+                  <md-input
+                    v-model="inputDaiAmount"
+                    class="inputDai"
+                    type="number"
+                  ></md-input>
                 </md-field>
               </span>
             </div>
-            <div class="md-layout-item">b</div>
-            <div class="md-layout-item">c</div>
+
+            <div>
+              <div class="md-layout">
+                <div class="md-layout-item" @click="changeDirection(true)">
+                  <div class="md-layout-item" style="padding-top:70px">
+                    <div
+                      :class="
+                        directionLong
+                          ? 'directionSelected'
+                          : 'directionNotSelected'
+                      "
+                    >
+                      <img
+                        class="text-center finger"
+                        src="../assets/point.png"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="md-layout-item" @click="changeDirection(false)">
+                  <div class="md-layout-item" style="padding-top:70px">
+                    <div
+                      :class="
+                        !directionLong
+                          ? 'directionSelected'
+                          : 'directionNotSelected'
+                      "
+                    >
+                      <img
+                        class="text-center fingerFlip"
+                        src="../assets/point.png"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <br />
+
+                <span class="Question"
+                  >?
+                  <md-tooltip md-direction="bottom" class="toolTip"
+                    >Bet on a direction that you think Dai will move.</md-tooltip
+                  >
+                </span>
+                <!-- <md-tooltip md-direction="bottom">Bottom</md-tooltip> -->
+              </div>
+            </div>
+            <div class="md-layout-item">
+              <md-button class="Deposit" @click="deposit()">Buy</md-button>
+            </div>
           </div>
         </div>
       </div>
@@ -45,10 +98,18 @@ export default {
   data() {
     return {
       daiPrice: 420.69,
-      inputDaiAmount: 420.69
+      inputDaiAmount: 420.69,
+      directionLong: true
     };
   },
-  methods: {},
+  methods: {
+    changeDirection(direction) {
+      this.directionLong = direction;
+    },
+    deposit() {
+      console.log("deposit");
+    }
+  },
   mounted() {}
 };
 </script>
@@ -80,6 +141,7 @@ export default {
   display: flex;
   align-items: center;
   text-align: center;
+  width: 250px;
 }
 
 .priceBlobText {
@@ -113,6 +175,67 @@ export default {
   // box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.25);
   border-radius: 30px;
 }
-.tradeBoxItem {
+.directionSelected {
+  width: 85px;
+  height: 85px;
+  background: #ffffff;
+  border: 2px solid #fece4d;
+  box-sizing: border-box;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.directionNotSelected {
+  width: 85px;
+  height: 85px;
+  background: #ffffff;
+  // border: 2px solid #fece4d;
+  box-sizing: border-box;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.finger {
+  padding-top: 5px;
+  position: relative;
+  width: 75px;
+  height: 75px;
+}
+.fingerFlip {
+  padding-top: 5px;
+  position: relative;
+  width: 75px;
+  height: 75px;
+  transform: rotate(180deg);
+}
+.Deposit {
+  background: #fece4d;
+  margin-top: 75px;
+  border-radius: 15px;
+  border: none;
+  color: #473144;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  height: 70px;
+  font-weight: 500;
+}
+.Question {
+  font-size: 20px;
+  // line-height: 18px;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  background: #c4c4c4;
+  border-radius: 50%;
+  width: 64px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 11px;
+  padding-right: 11px;
+}
+.toolTip {
+  background-color: #c4c4c4;
+  // padding-
 }
 </style>
