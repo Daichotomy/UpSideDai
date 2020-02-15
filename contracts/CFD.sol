@@ -24,8 +24,8 @@ contract CFD {
     address daiToken;
     /********************************************************/
 
-    address upDai;
-    address downDai;
+    UpDai upDai;
+    DownDai downDai;
     address uniswapUpDaiExchange;
     address uniswapDownDaiExchange;
 
@@ -52,20 +52,23 @@ contract CFD {
 
         settlementDate = _settlementDate;
 
-        upDai = address(new UpDai(_version));
-        downDai = address(new DownDai(_version));
+        upDai = new UpDai(_version);
+        downDai = new DownDai(_version);
 
-        uniswapUpDaiExchange = IUniswapFactory(uniswapFactory).createExchange(upDai);
-        uniswapDownDaiExchange = IUniswapFactory(uniswapFactory).createExchange(downDai);
+        uniswapUpDaiExchange = IUniswapFactory(uniswapFactory).createExchange(address(upDai));
+        uniswapDownDaiExchange = IUniswapFactory(uniswapFactory).createExchange(address(downDai));
     }
 
     /**
      * @notice mint UP and DOWN DAI tokens
+     * @param _underlyingAmount amount of DAI to deposit
+     * @param _ethAmount amount of ETH as collateral for UP&DOWN DAI Uniswap pools
      */
     function mint(uint256 _underlyingAmount, uint256 _ethAmount) public payable {
         (uint256 upDaiCollateral, uint256 downDaiCollateral) = getETHCollateralRequirements(_underlyingAmount);
 
         require((_ethAmount == msg.value) && (_ethAmount == upDaiCollateral+downDaiCollateral), "CFD::error transfering ETH");
+
 
     }
 
@@ -76,11 +79,11 @@ contract CFD {
     function redeem(uint256 _redeemAmount) public {
         // collect UPDAI & DOWNDAI from redeemer
         require(
-            IERC20(upDai).transferFrom(msg.sender, address(this), _redeemAmount),
+            upDai.transferFrom(msg.sender, address(this), _redeemAmount),
             "CFD::failed UPDAI transfer"
         );
         require(
-            IERC20(downDai).transferFrom(msg.sender, address(this), _redeemAmount),
+            downDai.transferFrom(msg.sender, address(this), _redeemAmount),
             "CFD::failed DOWNDAI transfer"
         );
 
@@ -99,11 +102,11 @@ contract CFD {
             "CFD::contract did not settle yet"
         );
         require(
-            (_tokenToRedeem == upDai) || (_tokenToRedeem == downDai),
+            (_tokenToRedeem == address(upDai)) || (_tokenToRedeem == address(downDai)),
             "CFD::invalid token to redeem"
         );
 
-        if(_tokenToRedeem == upDai) {
+        if(_tokenToRedeem == address(upDai)) {
             // UPDAI redeeming process
         }
         else {
