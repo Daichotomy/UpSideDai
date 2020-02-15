@@ -1,6 +1,6 @@
 pragma solidity ^0.5.16;
 
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+// import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 //import "openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IUniswapFactory.sol";
@@ -114,6 +114,7 @@ contract CFD {
             now + 3600
         );
         providerLP[msg.sender] = providerLP[msg.sender].add(upLP.add(downLP));
+
     }
 
     /**
@@ -214,29 +215,27 @@ contract CFD {
     {
         // TODO - validate that everything is denominated in the right decimal amounts
         // by running through an actual example with numbers on each step
-
         // get ETH price
-        uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
-        // get DAI price
-        uint256 daiUsdPrice = GetDaiPriceUSD();
-        // get the price of 1 UPDAI in DAI
-        uint256 upDaiDaiPrice = uint256(1).add(daiUsdPrice.sub(1)).mul(
-            leverage
-        );
-        // get the price of 1 DOWNDAI in DAI
-        uint256 downDaiDaiPrice = uint256(1).sub(daiUsdPrice.sub(1)).mul(
-            leverage
-        );
-        // ETH amount needed for the UPDAI pool
-        uint256 upDaiPoolEth = ((_underlyingAmount.div(2)).mul(upDaiDaiPrice))
-            .div(ethUsdPrice);
-        // ETH amount needed for the DOWNDAI pool
-        uint256 downDaiPoolEth = (
-            (_underlyingAmount.div(2)).mul(downDaiDaiPrice)
-        )
-            .div(ethUsdPrice);
-
-        return (upDaiPoolEth, downDaiPoolEth);
+        // uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
+        // // get DAI price
+        // uint256 daiUsdPrice = GetDaiPriceUSD();
+        // // get the price of 1 UPDAI in DAI
+        // uint256 upDaiDaiPrice = uint256(1).add(daiUsdPrice.sub(1)).mul(
+        //     leverage
+        // );
+        // // get the price of 1 DOWNDAI in DAI
+        // uint256 downDaiDaiPrice = uint256(1).sub(daiUsdPrice.sub(1)).mul(
+        //     leverage
+        // );
+        // // ETH amount needed for the UPDAI pool
+        // uint256 upDaiPoolEth = ((_underlyingAmount.div(2)).mul(upDaiDaiPrice))
+        //     .div(ethUsdPrice);
+        // // ETH amount needed for the DOWNDAI pool
+        // uint256 downDaiPoolEth = (
+        //     (_underlyingAmount.div(2)).mul(downDaiDaiPrice)
+        // )
+        //     .div(ethUsdPrice);
+        // return (upDaiPoolEth, downDaiPoolEth);
     }
 
     /**
