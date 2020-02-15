@@ -38,14 +38,14 @@ contract DaiHard is Ownable {
     ) public onlyOwner {
         require(
             _makerMedianizer != address(0),
-            "CFD::invalid maker medianizer address"
+            "DaiHard::invalid maker medianizer address"
         );
         require(
             _uniswapFactory != address(0),
-            "CFD::invalid uniswap factory address"
+            "DaiHard::invalid uniswap factory address"
         );
-        require(_daiToken != address(0), "CFD::invalid DAI token address");
-        require(_leverage > 0, "CFD::invalid leverage");
+        require(_daiToken != address(0), "DaiHard::invalid DAI token address");
+        require(_leverage > 0, "DaiHard::invalid leverage");
 
         require(_settlementLength > 0, "DaiHard::invalid settlement timestamp");
 
