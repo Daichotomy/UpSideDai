@@ -13,14 +13,8 @@ contract CFD {
     using SafeMath for uint256;
 
     /**************** PROTOCOL CONFIGURATION ****************/
-    // mainnet:
-    // rinkeby:
     address public makerMedianizer;
-    // mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
-    // rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
     address public uniswapFactory;
-    // mainnet:
-    // rinkeby:
     address public daiToken;
     /********************************************************/
 
@@ -29,11 +23,11 @@ contract CFD {
     address public uniswapUpDaiExchange;
     address public uniswapDownDaiExchange;
 
-    uint256 public leverage;
-    uint256 public fee;
-    uint256 public settlementDate;
+    uint256 public leverage; // 1x leverage == 1
+    uint256 public fee; // 1% fee == ?
+    uint256 public settlementDate; // In seconds
 
-    mapping(address => uint256) public providerLP;
+    mapping(address => uint256) public providerLP; // Total LP for a given staker
 
     /**
      * @notice constructor
@@ -194,6 +188,12 @@ contract CFD {
         uint256 l,
         uint256 f
     ) internal {
+        // daiReturnedLong=upDaiToRedeem(1+(DaiPriceFeed-1)Leverage)(1-fee)
+        // daiReturnedShort=downDaiToRedeem(1-(DaiPriceFeed-1)Leverage)(1-fee)
+
+        // TODO - switch out small numbers for `exact` numbers (i.e. 1 == 1e18), to avoid rounding errors
+        // occurring in things like `uint256(1).sub(f)`.. this is always going to be 0
+
         uint256 cash = upDai.mul(uint256(1).add(p.sub(1)).mul(l)).mul(
             uint256(1).sub(f)
         ) +
@@ -212,6 +212,9 @@ contract CFD {
         view
         returns (uint256, uint256)
     {
+        // TODO - validate that everything is denominated in the right decimal amounts
+        // by running through an actual example with numbers on each step
+
         // get ETH price
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
         // get DAI price
@@ -243,6 +246,9 @@ contract CFD {
     function GetDaiPriceUSD() public view returns (uint256) {
         address uniswapExchangeAddress = IUniswapFactory(uniswapFactory)
             .getExchange(daiToken);
+
+        // TODO - Check that these values both return the same decimal amount..
+        // i.e. $1 == 1e8 in both cases. else math will fail
 
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
         uint256 ethDaiPrice = IUniswapExchange(uniswapExchangeAddress)
