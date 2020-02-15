@@ -15,16 +15,16 @@ contract CFD {
     /**************** PROTOCOL CONFIGURATION ****************/
     // mainnet:
     // rinkeby:
-    address makerMedianizer = "";
+    address makerMedianizer;
     // mainnet:
     // rinkeby:
-    address uniswapDaiExchange = "";
+    address uniswapDaiExchange;
     // mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
     // rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
-    address uniswapFactory = "";
+    address uniswapFactory;
     // mainnet:
     // rinkeby:
-    address daiToken = "";
+    address daiToken;
     /********************************************************/
 
     address upDai;
@@ -35,8 +35,21 @@ contract CFD {
     uint256 public settlementDate;
 
     constructor(
+        address _makerMedianizer,
+        address _uniswapFactory,
+        address _uniswapExchange,
         uint256 _settlementDate
     ) public {
+        require(_makerMedianizer != address(0), "CFD::invalid maker medianizer address");
+        require(_uniswapFactory != address(0), "CFD::invalid uniswap factory address");
+        require(_uniswapExchange != address(0), "CFD::invalid uniswap exchange address");
+        require(daiToken != address(0), "CFD::invalid DAI token address");
+
+        makerMedianizer = _makerMedianizer;
+        uniswapDaiExchange = _uniswapDaiExchange;
+        uniswapFactory = _uniswapFactory;
+        daiToken = _daiToken;
+
         settlementDate = _settlementDate;
 
         upDai = address(new UpDai());

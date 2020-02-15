@@ -22,11 +22,14 @@ contract DaiHard is Ownable {
     }
 
     function newCFD(
+        address _makerMedianizer,
+        address _uniswapFactory,
+        address _uniswapExchange,
         uint256 _settlementDate
     ) public onlyOwner {
         require(_settlementDate > now, "DaiHard::invalid settlement timestamp");
 
-        deployedCFD = address(new CFD(_settlementDate));
+        deployedCFD = address(new CFD(_makerMedianizer, _uniswapFactory, _uniswapExchange, _settlementDate));
 
         emit CFDeployed(deployedCFD, now, _settlementDate);
     }
