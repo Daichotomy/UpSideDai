@@ -2,8 +2,8 @@ pragma solidity ^0.5.5;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 //import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/token/IERC20.sol";
-import "./IUniswapFactory.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./interfaces/IUniswapFactory.sol";
 import "./interfaces/IUniswapExchange.sol";
 import "./interfaces/IMakerMedianizer.sol";
 import "./UpDai.sol";
@@ -16,9 +16,6 @@ contract CFD {
     // mainnet:
     // rinkeby:
     address makerMedianizer;
-    // mainnet:
-    // rinkeby:
-    address uniswapDaiExchange;
     // mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
     // rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
     address uniswapFactory;
@@ -34,29 +31,32 @@ contract CFD {
 
     uint256 public settlementDate;
 
+    /**
+     * @notice deploy a new CFD
+     * @param _makerMedianizer maker medianizer address
+     * @param _uniswapFactory uniswap factory address
+     * @param _daiToken maker medianizer address
+     * @param _settlementDate maker medianizer address
+     * @param _version maker medianizer address
+     */
     constructor(
         address _makerMedianizer,
         address _uniswapFactory,
-        address _uniswapExchange,
-        uint256 _settlementDate
+        address _daiToken,
+        uint256 _settlementDate,
+        uint256 _version
     ) public {
-        require(_makerMedianizer != address(0), "CFD::invalid maker medianizer address");
-        require(_uniswapFactory != address(0), "CFD::invalid uniswap factory address");
-        require(_uniswapExchange != address(0), "CFD::invalid uniswap exchange address");
-        require(daiToken != address(0), "CFD::invalid DAI token address");
-
         makerMedianizer = _makerMedianizer;
-        uniswapDaiExchange = _uniswapDaiExchange;
         uniswapFactory = _uniswapFactory;
         daiToken = _daiToken;
 
         settlementDate = _settlementDate;
 
-        upDai = address(new UpDai());
-        downDai = address(new DownDai());
+        upDai = address(new UpDai(_version));
+        downDai = address(new DownDai(_version));
 
-        uniswapUpDaiExchange = IUniswapFactory(uniswapDaiExchange).createExchange(upDai);
-        uniswapDownDaiExchange = IUniswapFactory(uniswapDaiExchange).createExchange(downDai);
+        uniswapUpDaiExchange = IUniswapFactory(uniswapFactory).createExchange(upDai);
+        uniswapDownDaiExchange = IUniswapFactory(uniswapFactory).createExchange(downDai);
     }
 
     /**
@@ -64,7 +64,7 @@ contract CFD {
      */
     function mint(uint256 _underlyingAmount, uint256 _ethAmount) public payable {
         require(_ethAmount == msg.value, "CFD::error transfering ETH");
-        (uint256) = getETHCollateralRequirements();
+        //(uint256) = getETHCollateralRequirements();
     }
 
     /**
@@ -101,7 +101,7 @@ contract CFD {
             "CFD::invalid token to redeem"
         );
 
-        if(tokenToRedeem == upDai) {
+        if(_tokenToRedeem == upDai) {
             // UPDAI redeeming process
         }
         else {

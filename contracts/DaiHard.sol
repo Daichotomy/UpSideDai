@@ -13,25 +13,38 @@ contract DaiHard is Ownable {
 
     event CFDeployed(
         address indexed CFD,
-        uint256 indexed creationDate,
-        uint256 indexed settlementDate
+        uint256 creationDate,
+        uint256 indexed settlementDate,
+        uint256 indexed version
     );
 
     constructor() public {
         deployedCFD = address(0);
     }
 
+    /**
+     * @notice deploy a new CFD
+     * @param _makerMedianizer maker medianizer address
+     * @param _uniswapFactory uniswap factory address
+     * @param _daiToken maker medianizer address
+     * @param _settlementDate maker medianizer address
+     * @param _version maker medianizer address
+     */
     function newCFD(
         address _makerMedianizer,
         address _uniswapFactory,
-        address _uniswapExchange,
-        uint256 _settlementDate
+        address _daiToken,
+        uint256 _settlementDate,
+        uint256 _version
     ) public onlyOwner {
+        require(_makerMedianizer != address(0), "CFD::invalid maker medianizer address");
+        require(_uniswapFactory != address(0), "CFD::invalid uniswap factory address");
+        require(_daiToken != address(0), "CFD::invalid DAI token address");
         require(_settlementDate > now, "DaiHard::invalid settlement timestamp");
 
-        deployedCFD = address(new CFD(_makerMedianizer, _uniswapFactory, _uniswapExchange, _settlementDate));
+        deployedCFD = address(new CFD(_makerMedianizer, _uniswapFactory, _daiToken, _version, _settlementDate));
 
-        emit CFDeployed(deployedCFD, now, _settlementDate);
+        emit CFDeployed(deployedCFD, now, _settlementDate, _version);
     }
 
 }
