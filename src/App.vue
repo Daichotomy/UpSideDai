@@ -1,24 +1,46 @@
 <template>
   <md-app id="app" md-mode="reveal" style="min-height: 100vh;">
     <md-app-toolbar md-elevation="0" id="toolbar">
-      <a href="/">
-        <img :src="logo" class="logo-svg" alt="logo" />
-      </a>
+      <!-- <img :src="logo" class="logo-svg" alt="logo" /> -->
+
+      <ul class="nav-list-left">
+        <li style="max-width: 200px; margin-right: 2.25rem;">
+          <router-link class="logo" to="/">
+            <h1>⬆⬇UPSIDEDAI</h1>
+          </router-link>
+        </li>
+        <li class="nav-item" v-if="$route.name !='home'">
+          <router-link
+            class="nav-link"
+            :style="$route.name == 'trade' ? 'text-decoration:underline' : ''"
+            to="trade"
+            >Trade</router-link
+          >
+        </li>
+        <li class="nav-item" v-if="$route.name !='home'">
+          <router-link
+            class="nav-link"
+            :style="$route.name == 'pool' ? 'text-decoration:underline' : ''"
+            to="pool"
+            >Pool</router-link
+          >
+        </li>
+      </ul>
 
       <div class="md-toolbar-section-end">
-        <!-- {{currentNetwork}} -->
+        <p style="padding-right:10px">{{ currentNetwork }}</p>
         <clickable-address :eth-address="account" />
       </div>
     </md-app-toolbar>
-
+    
     <md-app-content id="content">
       <mining-transaction />
       <router-view />
       <div id="foot">
         <span>
-            💪
           <b>
-            <a href="https://github.com/Daichotomy/DaiHard">DaiHard</a> - made with ❤️ by Daichotomy ☯️
+            <a href="https://github.com/Daichotomy/DaiHard">DaiHard</a> - made
+            with ❤️ by Daichotomy ☯️
           </b>
         </span>
       </div>
@@ -114,19 +136,13 @@ export default {
 html,
 body {
   font-family: "Rubik", sans-serif;
-  background-color: $vanilla;
+  background-color: $white;
 }
 #app {
   color: #2c3e50;
 }
-.logo-svg {
-  width: 10vw;
-  min-width: 200px;
-  padding: 0 20px;
-  cursor: pointer;
-}
 #toolbar {
-  background-color: $vanilla;
+  background-color: $white;
   width: 100%;
   align-self: center;
 }
@@ -143,12 +159,12 @@ nav li.router-link-exact-active {
   cursor: pointer;
 }
 #foot {
-  background-color: $vanilla;
+  background-color: $white;
   padding: 25px;
   text-align: center;
 }
 #content {
-  background-color: $vanilla;
+  background-color: $white;
   padding: 0;
   height: auto;
 }
@@ -163,5 +179,50 @@ nav li.router-link-exact-active {
   #toolbar a {
     text-align: left;
   }
+}
+.nav {
+  padding-top: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.nav-list-left {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.nav-list-right {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.nav-item {
+  display: inline-block;
+  // margin-right: 2.25rem;
+}
+
+.nav-link {
+  color: black;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 25px;
+  padding: 15px
+}
+
+.nav-link:hover {
+  border-bottom: 1px solid #ffffff;
 }
 </style>
