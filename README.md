@@ -16,3 +16,15 @@ If you want to go short:
  - Supply the USDC for a loan to borrow more DAI (also on BZX)
  - Swap the DAI to USDC
  - Now our loan is easier to pay off if the DAI<>USDC ratio goes down
+
+
+running locally
+Requirements
+Vyper Requirements Pre requisite: python3
+
+Set up a virtual environment
+$ pip3 install virtualenv
+$ virtualenv -p python3 env
+$ source env/bin/activate
+Install dependencies
+pip install -r requirements.txt
