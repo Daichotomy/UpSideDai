@@ -13,7 +13,7 @@ The price that Dai can fluctuate around the peg is bounded by the leverage used 
 ## Team
 🇮🇪Alex - Smart contracts and integrations
 
-Diego Mazo - Product and front end design
+🇨🇴Diego Mazo - Product and front end design
 
 🇿🇦Chris Maree - Financial engineering and front end
 
