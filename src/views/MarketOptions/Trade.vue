@@ -20,7 +20,7 @@
               <br />
               <span>
                 <md-field md-inline>
-                  <label>To Deposit...</label>
+                  <label style="margin-left:80px">To Deposit...</label>
                   <md-input
                     v-model="inputDaiAmount"
                     class="inputDai"
@@ -28,6 +28,11 @@
                   ></md-input>
                 </md-field>
               </span>
+              <span class="SoftFont"
+                ><img class="text-center clock" src="../../assets/dai.png" />
+                Ballance:
+                {{ daiBallance }} Dai</span
+              >
             </div>
 
             <div>
@@ -88,6 +93,13 @@
               >
               <br />
               <span class="buyPrice">{{ buyPrice }}</span>
+              <br />
+              <span class="SoftFont">
+                <img class="text-center clock" src="../../assets/clock.png" />
+                Withdrawal Date:
+                <br />
+                <span class="yellowText">{{ maturity }}</span>
+              </span>
             </div>
           </div>
         </div>
@@ -112,7 +124,9 @@ export default {
       daiPrice: 1.0101,
       inputDaiAmount: 420.69,
       buyPrice: 1.101,
-      directionLong: true
+      directionLong: true,
+      daiBallance: 100.92,
+      maturity: "16th March"
     };
   },
   methods: {
@@ -152,13 +166,13 @@ export default {
   font-size: 30px !important;
   line-height: 47px;
   display: flex;
-  align-items: center;
-  text-align: center;
-  width: 230px;
+  //   align-items: center;
+  //   text-align: center;
+  width: 150px;
   text-decoration: underline;
   padding-top: 0px !important;
   margin-top: 0px !important;
-  padding-left: 20 !important;
+  margin-left: 80px !important;
 }
 
 .priceBlobText {
@@ -267,6 +281,22 @@ export default {
   align-items: center;
   text-align: center;
 
+  color: #ffba01;
+}
+.SoftFont {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  color: rgba(0, 0, 0, 0.5);
+}
+.clock {
+  width: 16px;
+}
+.yellowText {
+  font-size: 14px;
+  line-height: 16px;
   color: #ffba01;
 }
 </style>

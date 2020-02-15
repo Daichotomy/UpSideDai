@@ -3,14 +3,16 @@
     <!-- v-bind:style="'height: '+windowHeight*2+' !important'" -->
     <div class="inner-container">
       <h1 style="text-align: center">
-        Get Stable or Dai Trying
+        Get Stable or Dai Tryingz
       </h1>
       <h3>
         We are fixing dai, one call at a time.
       </h3>
     </div>
     <div class="call-to-action" style="text-align:center">
-      <md-button class="call-Button" style="margin-top:50px" @click="goToCreate">Leverage Dai</md-button>
+      <md-button class="call-Button" style="margin-top:50px" @click="goToCreate"
+        >Leverage Dai</md-button
+      >
     </div>
   </div>
 </template>
@@ -22,7 +24,7 @@ import Lottie from "vue-lottie";
 export default {
   name: "home",
   components: {
-    Lottie,
+    Lottie
   },
   data() {
     return {};
