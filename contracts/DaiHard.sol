@@ -1,11 +1,12 @@
 pragma solidity ^0.5.5;
 
-contract DaiHard {
+import "@openzeppelin/contracts/ownership/Ownable.sol";
+import "./CFD.sol";
 
-    address owner;
-
-    constructor() public {
-        owner = msg.sender;
-    }
+/**
+ * @notice DaiHard contract
+ * @dev Just a CFD factory
+ */
+contract DaiHard is Ownable {
 
 }
