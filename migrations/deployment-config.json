@@ -1,0 +1,22 @@
+{
+    "DEVCHAIN": {
+        "MAKER_MEDIANIZER": "",
+        "UNISWAP_FACTORY": "",
+        "DAI_TOKEN": ""
+    },
+    "RINKEBY": {
+        "MAKER_MEDIANIZER": "",
+        "UNISWAP_FACTORY": "",
+        "DAI_TOKEN": ""
+    },
+    "KOVAN": {
+        "MAKER_MEDIANIZER": "",
+        "UNISWAP_FACTORY": "",
+        "DAI_TOKEN": ""
+    },
+    "MAINNET": {
+        "MAKER_MEDIANIZER": "",
+        "UNISWAP_FACTORY": "",
+        "DAI_TOKEN": ""
+    }
+}

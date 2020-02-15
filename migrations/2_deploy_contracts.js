@@ -22,62 +22,160 @@ const cfdDetails = async (d_CFD) => {
   }
 }
 
+const deploymentConfig = require("./deployment-config.json");
+
 module.exports = async (deployer, network, accounts) => {
 
     const [acc_default] = accounts;
 
-    // Deploy mock token / DAI
-    await deployer.deploy(c_ERC20Mock, "Templator", "TMPLT", 1000000, { from: acc_default });
-    const d_ERC20Mock = await c_ERC20Mock.deployed();
+    if (network == "development") {
+        // Deploy mock token / DAI
+        await deployer.deploy(c_ERC20Mock, "Templator", "TMPLT", 1000000, { from: acc_default });
+        const d_ERC20Mock = await c_ERC20Mock.deployed();
 
-    // Medianizer mocks
-    const ethPrice = 287 * 10**8;
-    await deployer.deploy(c_MakerMedianizerMock, ethPrice, { from: acc_default });
-    const d_MakerMedianizerMock = await c_MakerMedianizerMock.deployed();
+        // Medianizer mocks
+        const ethPrice = 287 * 10**8;
+        await deployer.deploy(c_MakerMedianizerMock, ethPrice, { from: acc_default });
+        const d_MakerMedianizerMock = await c_MakerMedianizerMock.deployed();
 
-    // Uniswap testnet deployment
-    var exchange = contract({
-      abi: uniswap_exchange_abi,
-      unlinked_binary: exchangeABI
-    });
-    exchange.setProvider(deployer.provider);
-    let d_UniswapExchange = await exchange.new( { from : acc_default})
-    await d_UniswapExchange.setup.sendTransaction(d_ERC20Mock.address, {from: acc_default});
+        // Uniswap testnet deployment
+        var exchange = contract({
+        abi: uniswap_exchange_abi,
+        unlinked_binary: exchangeABI
+        });
+        exchange.setProvider(deployer.provider);
+        let d_UniswapExchange = await exchange.new( { from : acc_default})
+        await d_UniswapExchange.setup.sendTransaction(d_ERC20Mock.address, {from: acc_default});
 
-    var factory = contract({
-      abi: uniswap_factory_abi,
-      unlinked_binary: factoryABI
-    });
-    factory.setProvider(deployer.provider);
-    let d_UniswapFactory = await factory.new({ from : acc_default})
-    await d_UniswapFactory.initializeFactory.sendTransaction(d_UniswapExchange.address, {from: acc_default});
+        var factory = contract({
+        abi: uniswap_factory_abi,
+        unlinked_binary: factoryABI
+        });
+        factory.setProvider(deployer.provider);
+        let d_UniswapFactory = await factory.new({ from : acc_default})
+        await d_UniswapFactory.initializeFactory.sendTransaction(d_UniswapExchange.address, {from: acc_default});
 
-    // DaiHard contracts
-    await deployer.deploy(c_DaiHard, { from: acc_default });
-    const d_DaiHard = await c_DaiHard.deployed();
+        // DaiHard contracts
+        await deployer.deploy(c_DaiHard, { from: acc_default });
+        
+        const d_DaiHard = await c_DaiHard.deployed();
 
-    // Create the first CFD
-    // * @param _makerMedianizer maker medianizer address
-    // * @param _uniswapFactory uniswap factory address
-    // * @param _daiToken maker medianizer address
-    // * @param _leverage leverage (1000000000000000x)
-    // * @param _fee payout fee
-    // * @param _settlementLength maker medianizer address
-    // * @param _version maker medianizer address
-    const oneMonthInSeconds = 60 * 60 * 24 * 30;
-    await d_DaiHard.newCFD(
-      d_MakerMedianizerMock.address,
-      d_UniswapFactory.address,
-      d_ERC20Mock.address,
-      (20 * 10**18).toString(),
-      (3 * 10**16).toString(),
-      oneMonthInSeconds,
-      1);
+        // Create the first CFD
+        // * @param _makerMedianizer maker medianizer address
+        // * @param _uniswapFactory uniswap factory address
+        // * @param _daiToken maker medianizer address
+        // * @param _leverage leverage (1000000000000000x)
+        // * @param _fee payout fee
+        // * @param _settlementLength maker medianizer address
+        // * @param _version maker medianizer address
+        const oneMonthInSeconds = 60 * 60 * 24 * 30;
+        await d_DaiHard.newCFD(
+            d_MakerMedianizerMock.address,
+            d_UniswapFactory.address,
+            d_ERC20Mock.address,
+            (20 * 10**18).toString(),
+            (3 * 10**16).toString(),
+            oneMonthInSeconds,
+        1);
 
-    // Grab CFD deets
-    const newCFD_address = await d_DaiHard.deployedCFD(1);
-    const d_CFD = await c_CFD.at(newCFD_address);
+        // Grab CFD deets
+        const newCFD_address = await d_DaiHard.deployedCFD(1);
+        const d_CFD = await c_CFD.at(newCFD_address);
 
-    const cfdDeets = await cfdDetails(d_CFD);
-    console.log(cfdDeets);
+        const cfdDeets = await cfdDetails(d_CFD);
+        console.log(cfdDeets);
+    }
+    else if (network == "rinkeby") {
+        // DaiHard contracts
+        await deployer.deploy(c_DaiHard, { from: acc_default });
+
+        const d_DaiHard = await c_DaiHard.deployed();
+
+        // Create the first CFD
+        // * @param _makerMedianizer maker medianizer address
+        // * @param _uniswapFactory uniswap factory address
+        // * @param _daiToken maker medianizer address
+        // * @param _leverage leverage (1000000000000000x)
+        // * @param _fee payout fee
+        // * @param _settlementLength maker medianizer address
+        // * @param _version maker medianizer address
+        const oneMonthInSeconds = 60 * 60 * 24 * 30;
+        await d_DaiHard.newCFD(
+            deploymentConfig.MAKER_MEDIANIZER,
+            deploymentConfig.UNISWAP_FACTORY,
+            deploymentConfig.DAI_TOKEN,
+            (20 * 10**18).toString(),
+            (3 * 10**16).toString(),
+            oneMonthInSeconds,
+        1);
+
+        // Grab CFD deets
+        const newCFD_address = await d_DaiHard.deployedCFD(1);
+        const d_CFD = await c_CFD.at(newCFD_address);
+
+        const cfdDeets = await cfdDetails(d_CFD);
+        console.log(cfdDeets);
+    }
+    else if (network == "kovan") {
+        // DaiHard contracts
+        await deployer.deploy(c_DaiHard, { from: acc_default });
+
+        const d_DaiHard = await c_DaiHard.deployed();
+
+        // Create the first CFD
+        // * @param _makerMedianizer maker medianizer address
+        // * @param _uniswapFactory uniswap factory address
+        // * @param _daiToken maker medianizer address
+        // * @param _leverage leverage (1000000000000000x)
+        // * @param _fee payout fee
+        // * @param _settlementLength maker medianizer address
+        // * @param _version maker medianizer address
+        const oneMonthInSeconds = 60 * 60 * 24 * 30;
+        await d_DaiHard.newCFD(
+            deploymentConfig.MAKER_MEDIANIZER,
+            deploymentConfig.UNISWAP_FACTORY,
+            deploymentConfig.DAI_TOKEN,
+            (20 * 10**18).toString(),
+            (3 * 10**16).toString(),
+            oneMonthInSeconds,
+        1);
+
+        // Grab CFD deets
+        const newCFD_address = await d_DaiHard.deployedCFD(1);
+        const d_CFD = await c_CFD.at(newCFD_address);
+
+        const cfdDeets = await cfdDetails(d_CFD);
+        console.log(cfdDeets);
+    }
+    else if (network == "mainnet") {
+        // DaiHard contracts
+        await deployer.deploy(c_DaiHard, { from: acc_default });
+
+        const d_DaiHard = await c_DaiHard.deployed();
+
+        // Create the first CFD
+        // * @param _makerMedianizer maker medianizer address
+        // * @param _uniswapFactory uniswap factory address
+        // * @param _daiToken maker medianizer address
+        // * @param _leverage leverage (1000000000000000x)
+        // * @param _fee payout fee
+        // * @param _settlementLength maker medianizer address
+        // * @param _version maker medianizer address
+        const oneMonthInSeconds = 60 * 60 * 24 * 30;
+        await d_DaiHard.newCFD(
+            deploymentConfig.MAKER_MEDIANIZER,
+            deploymentConfig.UNISWAP_FACTORY,
+            deploymentConfig.DAI_TOKEN,
+            (20 * 10**18).toString(),
+            (3 * 10**16).toString(),
+            oneMonthInSeconds,
+        1);
+
+        // Grab CFD deets
+        const newCFD_address = await d_DaiHard.deployedCFD(1);
+        const d_CFD = await c_CFD.at(newCFD_address);
+
+        const cfdDeets = await cfdDetails(d_CFD);
+        console.log(cfdDeets);
+    }
 }
