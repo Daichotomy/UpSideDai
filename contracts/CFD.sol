@@ -13,18 +13,19 @@ contract CFD {
     using SafeMath for uint256;
 
     /**************** PROTOCOL CONFIGURATION ****************/
-    //mainnet:
-    //rinkeby:
+    // mainnet:
+    // rinkeby:
     address makerMedianizer = "";
-    //mainnet: 
-    //rinkeby: 
+    // mainnet:
+    // rinkeby:
     address uniswapExchange = "";
-    //mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
-    //rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
+    // mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
+    // rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
     address uniswapFactory = "";
-    //mainnet:
-    //rinkeby:
+    // mainnet:
+    // rinkeby:
     address daiToken = "";
+    /********************************************************/
 
     address upDai;
     address downDai;
@@ -42,8 +43,8 @@ contract CFD {
     /**
      * @notice mint UP and DOWN DAI tokens
      */
-    function mint() public payable {
-        
+    function mint(_underlyingAmount, _ethAmount) public payable {
+        require(_ethAmount == msg.data, "CFD::error transfering ETH");
     }
 
     /**
