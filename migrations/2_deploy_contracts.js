@@ -65,4 +65,5 @@ module.exports = async (deployer, network, accounts) => {
     const d_CFD = await c_CFD.at(newCFD_address);
 
     const cfdDeets = await cfdDetails(d_CFD);
+    console.log(cfdDeets);
 }
