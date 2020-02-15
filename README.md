@@ -1,30 +1,31 @@
 # DaiHard
+DaiHard is a highly leveraged contract for difference (CFD) built on Dai, Uniswap and Maker. This mechanism enables traders and speculators to bet on and hedge against price fluctuations of Dai by buying leveraged long or short positions in Dai. The CFD construction enables highly leverage (20x) while remaining capital efficient and not requiring high margin requirements (100% collateralalization). Positions are priced against the market observable Dai/Usd price by using a combination of the Maker oracle and Uniswap. 
 
-## What?
+DaiHard's CFD uses two tokens within the platform: UpDai and DownDai which represent long and short positions against the price of Dai. A market maker deposits 2 Dai into the platform to create 1 upDai and 1 downDai. When Dai is trading at par with the dollar (1Dai = 1Usd) then
+```
+ `1 upDai = 1 downDai = 1 Dai = 1 Usd
+```
 
-Taking out a long or a short position on DAI i.e. you think DAI is either going to go up or down and you want to profit
+As the price of Dai fluctuates around 1 Usd value flows between the upDai and downDai tokens. The sum of the upDai and downDai token is always equal, netting price action between the tokens This means that irrespective of the price of Dai a pair of upDai and downDai tokens yields 2 Dai in underlying. For example if the price of Dai is trading at 1.02 Usd then the long token is worth 1.4 Dai and the downDai is worth 0.6 Dai.
 
-## How?
+The price that Dai can fluctuate around the peg is bounded by the leverage used by the CFD. DaiHard's 20x leverage places a bound on the price of Dai between 1.05 and 0.95 Usd per Dai. This bound is reasonable as Dai has not broken this bound in over a year. However if Dai was to hit one of the bounds, say it's trading at 1.05, then the long token is worth 2 Dai and the short Dai is worth 0 Dai. If a wider bound is wanted then either less leverage should be used or more collateralization is required.
 
-Supply DAI borrow USDC at maximum leverage, then trade the USDC for DAI on curvefi or something equivalent. The position is held for you on the smart contract - you cant withdraw.
+## Team
+🇮🇪Alex
+Diego Mazo
+🇿🇦Chris Maree - Financial engineering and front end
+🇹🇳Haythem Sellami
 
-If you ant to unwind the position, you trade the DAI back to USDC and pay back the debt. It has to sit within the BZX platform in order for us to keep the leverage
+## Financial engineering
 
-If you want to go short:
- - DAI in
- - Swap the DAI for USDC on Curvefi or Kyber
- - Supply the USDC for a loan to borrow more DAI (also on BZX)
- - Swap the DAI to USDC
- - Now our loan is easier to pay off if the DAI<>USDC ratio goes down
+### On-chain price of Dai in USD
 
+### Calculating the settlement price of the CDF
 
-running locally
-Requirements
-Vyper Requirements Pre requisite: python3
+### Transaction flow between platforms
 
-Set up a virtual environment
-$ pip3 install virtualenv
-$ virtualenv -p python3 env
-$ source env/bin/activate
-Install dependencies
-pip install -r requirements.txt
+## Technical description
+
+### Smart contracts
+
+### running code locally
