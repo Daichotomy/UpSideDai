@@ -1,12 +1,12 @@
 const {
     ether,
     BN
-} = require("@openzeppelin/test-helpers");
+} = require("openzeppelin-test-helpers");
 
 const BigNumber = require('bignumber.js');
-const EVMRevert = require('./helpers/EVMRevert').EVMRevert;
-const increaseTime = require('./helpers/increaseTime');
-const increaseTimeTo = increaseTime.increaseTimeTo;
+// const EVMRevert = require('./helpers/EVMRevert').EVMRevert;
+// const increaseTime = require('./helpers/increaseTime');
+// const increaseTimeTo = increaseTime.increaseTimeTo;
 
 const ZERO_ADDR = '0x0000000000000000000000000000000000000000';
 

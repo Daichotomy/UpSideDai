@@ -15,11 +15,11 @@ module.exports = {
       network_id: "*", // Any network (default: none)
     },
     coverage: {
-      host: "localhost",
+      host: "127.0.0.1",
+      port: 7546,
       network_id: "*",
-      port: 8555, // <-- If you change this, also set the port option in .solcover.js.
       gas: 0xfffffffffff, // <-- Use this high gas value
-      gasPrice: 0x01 // <-- Use this low gas price
+      gasPrice: 0x01      // <-- Use this low gas price
     },
     rinkeby: {
       provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infuraKey}`),
@@ -42,6 +42,7 @@ module.exports = {
   mocha: {
     // timeout: 100000
   },
+  plugins: ["solidity-coverage"],
 
   compilers: {
     solc: {
