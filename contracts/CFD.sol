@@ -107,15 +107,15 @@ contract CFD {
         // send liquidity to both uniswap pools
         uint256 upLP = IUniswapExchange(uniswapUpDaiExchange)
             .addLiquidity
-            .value(_ethAmount.div(2))(
-            _ethAmount.div(2),
+            .value(upDaiCollateral)(
+            upDaiCollateral,
             _underlyingAmount.div(2),
             now + 3600
         );
         uint256 downLP = IUniswapExchange(uniswapDownDaiExchange)
             .addLiquidity
-            .value(_ethAmount.div(2))(
-            _ethAmount.div(2),
+            .value(downDaiCollateral)(
+            downDaiCollateral,
             _underlyingAmount.div(2),
             now + 3600
         );
@@ -205,22 +205,42 @@ contract CFD {
     /**
      * @notice get the amount of ETH required to create a uniswap exchange
      * @param _underlyingAmount the total amount of underlying to deposit (UP/DOWN DAI = _underlyingAmount/2)
+     * @return the amount of ETH needed for UPDAI pool and DOWNDAI pool
      */
     function getETHCollateralRequirements(uint256 _underlyingAmount)
         public
+        view
         returns (uint256, uint256)
     {
+        // get ETH price
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
-        // uint256 daiUsdPrice = GetDaiPriceUSD();
+        // get DAI price
+        uint256 daiUsdPrice = GetDaiPriceUSD();
+        // get the price of 1 UPDAI in DAI
+        uint256 upDaiDaiPrice = uint256(1).add(daiUsdPrice.sub(1)).mul(
+            leverage
+        );
+        // get the price of 1 DOWNDAI in DAI
+        uint256 downDaiDaiPrice = uint256(1).sub(daiUsdPrice.sub(1)).mul(
+            leverage
+        );
+        // ETH amount needed for the UPDAI pool
+        uint256 upDaiPoolEth = ((_underlyingAmount.div(2)).mul(upDaiDaiPrice))
+            .div(ethUsdPrice);
+        // ETH amount needed for the DOWNDAI pool
+        uint256 downDaiPoolEth = (
+            (_underlyingAmount.div(2)).mul(downDaiDaiPrice)
+        )
+            .div(ethUsdPrice);
 
-        return (1, 1);
+        return (upDaiPoolEth, downDaiPoolEth);
     }
 
     /**
      * @notice get DAI price in USD
      * @dev this function get the DAI/USD price by getting the price of ETH/USD from Maker medianizer and dividing it by the price of ETH/DAI from Uniswap.
      */
-    function GetDaiPriceUSD() public returns (uint256) {
+    function GetDaiPriceUSD() public view returns (uint256) {
         address uniswapExchangeAddress = IUniswapFactory(uniswapFactory)
             .getExchange(daiToken);
 
