@@ -43,10 +43,8 @@ A key element of DaiHard is an incentive mechanism to encourage liquidity provis
 
 These three sources of revenue makes being a liquidity provider for DaiHard more profitable than investing in the money market or DSR while having minimum risk.
 
-### Transaction flow between platforms
-DaiHard mints 
-
 ## Technical description
+DaiHard consists of 
 
 ### Smart contracts
 
