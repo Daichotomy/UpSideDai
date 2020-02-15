@@ -9,6 +9,9 @@
         We are fixing dai, one call at a time.
       </h3>
     </div>
+    <div class="call-to-action" style="text-align:center">
+      <md-button class="call-Button" style="margin-top:50px" @click="goToCreate">Leverage Dai</md-button>
+    </div>
   </div>
 </template>
 
@@ -47,7 +50,7 @@ export default {
 @import "../styles/variables.scss";
 
 .page-container {
-  background: rgba($vanilla, 1);
+  background: rgba($white, 1);
 }
 .page-container img {
   width: 75vw;

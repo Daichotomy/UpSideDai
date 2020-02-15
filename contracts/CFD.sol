@@ -16,9 +16,6 @@ contract CFD {
     // mainnet:
     // rinkeby:
     address makerMedianizer;
-    // mainnet:
-    // rinkeby:
-    address uniswapDaiExchange;
     // mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
     // rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
     address uniswapFactory;
@@ -27,59 +24,86 @@ contract CFD {
     address daiToken;
     /********************************************************/
 
-    address upDai;
-    address downDai;
+    UpDai upDai;
+    DownDai downDai;
     address uniswapUpDaiExchange;
     address uniswapDownDaiExchange;
 
     uint256 public settlementDate;
 
+    mapping(address => uint256) public providerLP;
+
+    /**
+     * @notice deploy a new CFD
+     * @param _makerMedianizer maker medianizer address
+     * @param _uniswapFactory uniswap factory address
+     * @param _daiToken maker medianizer address
+     * @param _settlementDate maker medianizer address
+     * @param _version maker medianizer address
+     */
     constructor(
         address _makerMedianizer,
         address _uniswapFactory,
-        address _uniswapExchange,
         address _daiToken,
-        uint256 _settlementDate
+        uint256 _settlementDate,
+        uint256 _version
     ) public {
-        require(
-            _makerMedianizer != address(0),
-            "CFD::invalid maker medianizer address"
-        );
-        require(
-            _uniswapFactory != address(0),
-            "CFD::invalid uniswap factory address"
-        );
-        require(
-            _uniswapExchange != address(0),
-            "CFD::invalid uniswap exchange address"
-        );
-        require(daiToken != address(0), "CFD::invalid DAI token address");
-
         makerMedianizer = _makerMedianizer;
-        uniswapDaiExchange = _uniswapExchange;
         uniswapFactory = _uniswapFactory;
         daiToken = _daiToken;
 
         settlementDate = _settlementDate;
 
-        upDai = address(new UpDai());
-        downDai = address(new DownDai());
+        upDai = new UpDai(_version);
+        downDai = new DownDai(_version);
 
-        uniswapUpDaiExchange = IUniswapFactory(uniswapDaiExchange)
-            .createExchange(upDai);
-        uniswapDownDaiExchange = IUniswapFactory(uniswapDaiExchange)
-            .createExchange(downDai);
+        uniswapUpDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
+            address(upDai)
+        );
+        uniswapDownDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
+            address(downDai)
+        );
     }
 
     /**
      * @notice mint UP and DOWN DAI tokens
+     * @param _underlyingAmount amount of DAI to deposit
+     * @param _ethAmount amount of ETH as collateral for UP&DOWN DAI Uniswap pools
      */
     function mint(uint256 _underlyingAmount, uint256 _ethAmount)
         public
         payable
     {
-        require(_ethAmount == msg.value, "CFD::error transfering ETH");
-        (uint256 that, uint256 that1) = getETHCollateralRequirements(1);
+        (uint256 upDaiCollateral, uint256 downDaiCollateral) = getETHCollateralRequirements(
+            _underlyingAmount
+        );
+
+        require(
+            (_ethAmount == msg.value) &&
+                (_ethAmount == upDaiCollateral + downDaiCollateral),
+            "CFD::error transfering ETH"
+        );
+
+        // mint UP&DOWN tokens
+        upDai.mint(msg.sender, _underlyingAmount.div(2));
+        downDai.mint(msg.sender, _underlyingAmount.div(2));
+
+        // send liquidity to both uniswap pools
+        uint256 upLP = IUniswapExchange(uniswapUpDaiExchange)
+            .addLiquidity
+            .value(_ethAmount.div(2))(
+            _ethAmount.div(2),
+            _underlyingAmount.div(2),
+            now + 3600
+        );
+        uint256 downLP = IUniswapExchange(uniswapDownDaiExchange)
+            .addLiquidity
+            .value(_ethAmount.div(2))(
+            _ethAmount.div(2),
+            _underlyingAmount.div(2),
+            now + 3600
+        );
+        providerLP[msg.sender] = providerLP[msg.sender].add(upLP.add(downLP));
     }
 
     /**
@@ -89,19 +113,11 @@ contract CFD {
     function redeem(uint256 _redeemAmount) public {
         // collect UPDAI & DOWNDAI from redeemer
         require(
-            IERC20(upDai).transferFrom(
-                msg.sender,
-                address(this),
-                _redeemAmount
-            ),
+            upDai.transferFrom(msg.sender, address(this), _redeemAmount),
             "CFD::failed UPDAI transfer"
         );
         require(
-            IERC20(downDai).transferFrom(
-                msg.sender,
-                address(this),
-                _redeemAmount
-            ),
+            downDai.transferFrom(msg.sender, address(this), _redeemAmount),
             "CFD::failed DOWNDAI transfer"
         );
 
@@ -114,11 +130,12 @@ contract CFD {
     function redeemFinal(address _tokenToRedeem, uint256 _redeemAmount) public {
         require(now >= settlementDate, "CFD::contract did not settle yet");
         require(
-            (_tokenToRedeem == upDai) || (_tokenToRedeem == downDai),
+            (_tokenToRedeem == address(upDai)) ||
+                (_tokenToRedeem == address(downDai)),
             "CFD::invalid token to redeem"
         );
 
-        if (_tokenToRedeem == upDai) {
+        if (_tokenToRedeem == address(upDai)) {
             // UPDAI redeeming process
         } else {
             // DOWNDAI redeeming process
@@ -150,6 +167,7 @@ contract CFD {
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
         uint256 ethDaiPrice = IUniswapExchange(uniswapExchangeAddress)
             .getEthToTokenInputPrice(1 ether);
+
         return ethUsdPrice.div(ethDaiPrice);
     }
 

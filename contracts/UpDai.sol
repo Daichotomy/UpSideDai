@@ -7,5 +7,12 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
  * @notice UpDai erc20 token
  */
 contract UpDai is ERC20Detailed, ERC20Mintable {
-    constructor() public ERC20Detailed("UpDai", "UPDAI", 18) {}
+    uint256 public version;
+
+    constructor(uint256 _version)
+        public
+        ERC20Detailed("Down Dai", "DOWNDAI", 18)
+    {
+        version = _version;
+    }
 }
