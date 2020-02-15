@@ -2,8 +2,8 @@ var contract = require("@truffle/contract");
 
 var c_ERC20Mock = artifacts.require("TokenMock");
 var c_MakerMedianizerMock = artifacts.require("MakerMedianizerMock");
-var uniswap_exchange_abi = require("../contracts/uniswap/abi/uniswap_exchange.json");
-var uniswap_factory_abi = require("../contracts/uniswap/abi/uniswap_factory.json");
+var uniswap_exchange_abi = require("./uniswap/abi/uniswap_exchange.json");
+var uniswap_factory_abi = require("./uniswap/abi/uniswap_factory.json");
 var c_DaiHard = artifacts.require("DaiHard");
 var c_CFD = artifacts.require("CFD");
 
