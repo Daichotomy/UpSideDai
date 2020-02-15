@@ -18,7 +18,7 @@ contract CFD {
     address makerMedianizer = "";
     // mainnet:
     // rinkeby:
-    address uniswapExchange = "";
+    address uniswapDaiExchange = "";
     // mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
     // rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
     address uniswapFactory = "";
@@ -29,6 +29,9 @@ contract CFD {
 
     address upDai;
     address downDai;
+    address uniswapUpDaiExchange;
+    address uniswapDownDaiExchange;
+
     uint256 public settlementDate;
 
     constructor(
@@ -38,13 +41,17 @@ contract CFD {
 
         upDai = address(new UpDai());
         downDai = address(new DownDai());
+
+        uniswapUpDaiExchange = IUniswapFactory(uniswapDaiExchange).createExchange(upDai);
+        uniswapDownDaiExchange = IUniswapFactory(uniswapDaiExchange).createExchange(downDai);
     }
 
     /**
      * @notice mint UP and DOWN DAI tokens
      */
-    function mint(_underlyingAmount, _ethAmount) public payable {
-        require(_ethAmount == msg.data, "CFD::error transfering ETH");
+    function mint(uint256 _underlyingAmount, uint256 _ethAmount) public payable {
+        require(_ethAmount == msg.value, "CFD::error transfering ETH");
+        (uint256) = getETHCollateralRequirements();
     }
 
     /**
@@ -88,6 +95,17 @@ contract CFD {
             // DOWNDAI redeeming process
         }
     }
+
+    /**
+     * @notice get the amount of ETH required to create a uniswap exchange
+     * @param _underlyingAmount the total amount of underlying to deposit (UP/DOWN DAI = _underlyingAmount/2)
+     */
+    function getETHCollateralRequirements(uint256 _underlyingAmount) public returns (uint256, uint256) {
+        uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
+        uint256 daiUsdPrice = GetDaiPriceUSD();
+
+        return (1,1);
+    }
     
     /**
      * @notice get DAI price in USD
@@ -97,10 +115,7 @@ contract CFD {
         address uniswapExchangeAddress = IUniswapFactory(uniswapFactory).getExchange(daiToken);
 
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
-        //!!!!!!!!not sure about the following!!!!!!!
-        uint256 ethDaiPrice = (
-            (IUniswapExchange(uniswapExchangeAddress).getEthToTokenInputPrice(1)).div(IUniswapExchange(uniswapExchangeAddress).getTokenToEthOutputPrice(1))
-        );
+        uint256 ethDaiPrice = IUniswapExchange(uniswapExchangeAddress).getEthToTokenInputPrice(1 ether);
         return ethUsdPrice.div(ethDaiPrice);
     }
 
