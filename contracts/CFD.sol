@@ -86,17 +86,18 @@ contract CFD {
             _underlyingAmount
         );
 
-<<<<<<< HEAD
-        require((_ethAmount == msg.value) && (_ethAmount == upDaiCollateral+downDaiCollateral), "CFD::error transfering ETH");
-        require(
-            IERC20(daiToken).transferFrom(msg.sender, address(this), _underlyingAmount),
-            "CFD::error transfering underlying asset"
-=======
         require(
             (_ethAmount == msg.value) &&
                 (_ethAmount == upDaiCollateral + downDaiCollateral),
             "CFD::error transfering ETH"
->>>>>>> 13400707dccb3ebc0148d5f8cf9c9b2eda98d8cf
+        );
+        require(
+            IERC20(daiToken).transferFrom(
+                msg.sender,
+                address(this),
+                _underlyingAmount
+            ),
+            "CFD::error transfering underlying asset"
         );
 
         // mint UP&DOWN tokens
@@ -134,19 +135,22 @@ contract CFD {
         downDai.burnFrom(msg.sender, _redeemAmount);
 
         // spread MONEY bitches
-        _payout(msg.sender, _redeemAmount, _redeemAmount, daiUsdPrice, leverage, fee);
+        _payout(
+            msg.sender,
+            _redeemAmount,
+            _redeemAmount,
+            daiUsdPrice,
+            leverage,
+            fee
+        );
     }
 
     /**
      * @notice redeem UPDAI or DOWNDAI token
      * @dev this function can only be called after contract settlement
      */
-<<<<<<< HEAD
     function redeemFinal() public {
-        require(
-            now >= settlementDate,
-            "CFD::contract did not settle yet"
-        );
+        require(now >= settlementDate, "CFD::contract did not settle yet");
 
         // get DAI price
         uint256 daiUsdPrice = GetDaiPriceUSD();
@@ -157,14 +161,21 @@ contract CFD {
         uint256 downDaiRedeemAmount = downDai.balanceOf(msg.sender);
 
         // spread MONEY bitches
-        _payout(msg.sender, upDaiRedeemAmount, downDaiRedeemAmount, daiUsdPrice, leverage, fee);
+        _payout(
+            msg.sender,
+            upDaiRedeemAmount,
+            downDaiRedeemAmount,
+            daiUsdPrice,
+            leverage,
+            fee
+        );
 
         // burn upDai
         upDai.burnFrom(msg.sender, upDaiRedeemAmount);
         // burn downDai
         downDai.burnFrom(msg.sender, downDaiRedeemAmount);
     }
-    
+
     /**
      * @notice $ payout function $
      * @dev can only be called internally
@@ -175,26 +186,20 @@ contract CFD {
      * @param l leverage
      * @param f payout fee
      */
-    function _payout(address redeemer, uint256 upDai, uint256 downDai, uint256 p, uint256 l, uint256 f) internal {
-        uint256 cash = upDai.mul(uint256(1).add(p.sub(1)).mul(l)).mul(uint256(1).sub(f))
-        + downDai.mul(uint256(1).sub(p.sub(1)).mul(l)).mul(uint256(1).sub(f));
+    function _payout(
+        address redeemer,
+        uint256 upDai,
+        uint256 downDai,
+        uint256 p,
+        uint256 l,
+        uint256 f
+    ) internal {
+        uint256 cash = upDai.mul(uint256(1).add(p.sub(1)).mul(l)).mul(
+            uint256(1).sub(f)
+        ) +
+            downDai.mul(uint256(1).sub(p.sub(1)).mul(l)).mul(uint256(1).sub(f));
 
         IERC20(daiToken).transfer(redeemer, cash);
-=======
-    function redeemFinal(address _tokenToRedeem, uint256 _redeemAmount) public {
-        require(now >= settlementDate, "CFD::contract did not settle yet");
-        require(
-            (_tokenToRedeem == address(upDai)) ||
-                (_tokenToRedeem == address(downDai)),
-            "CFD::invalid token to redeem"
-        );
-
-        if (_tokenToRedeem == address(upDai)) {
-            // UPDAI redeeming process
-        } else {
-            // DOWNDAI redeeming process
-        }
->>>>>>> 13400707dccb3ebc0148d5f8cf9c9b2eda98d8cf
     }
 
     /**
