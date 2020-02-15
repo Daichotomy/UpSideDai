@@ -28,7 +28,7 @@
                   ></md-input>
                 </md-field>
               </span>
-              <div style="padding-top:20px" />
+              <div style="padding-top:10px" />
               <div class="md-layout">
                 <div class="md-layout-item">
                   <span class="SoftFont"
@@ -45,7 +45,7 @@
                       class="text-center ethLogo"
                       src="../../assets/eth.png"
                     />
-                    Required Eth:
+                     Required Eth:
                     {{ ethBallance }} Eth</span
                   >
                 </div>
@@ -155,7 +155,7 @@ export default {
 }
 .tradeBox {
   margin: 15px;
-  width: 400px;
+  width: 450px;
   height: 208px;
   left: 508px;
   top: 240px;
