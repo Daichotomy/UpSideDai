@@ -1,8 +1,8 @@
-pragma solidity ^0.5.5;
+pragma solidity ^0.5.16;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
-//import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+//import "openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IUniswapFactory.sol";
 import "./interfaces/IUniswapExchange.sol";
 import "./interfaces/IMakerMedianizer.sol";
@@ -15,19 +15,19 @@ contract CFD {
     /**************** PROTOCOL CONFIGURATION ****************/
     // mainnet:
     // rinkeby:
-    address makerMedianizer;
+    address public makerMedianizer;
     // mainnet: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
     // rinkeby: 0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36
-    address uniswapFactory;
+    address public uniswapFactory;
     // mainnet:
     // rinkeby:
-    address daiToken;
+    address public daiToken;
     /********************************************************/
 
-    UpDai upDai;
-    DownDai downDai;
-    address uniswapUpDaiExchange;
-    address uniswapDownDaiExchange;
+    UpDai public upDai;
+    DownDai public downDai;
+    address public uniswapUpDaiExchange;
+    address public uniswapDownDaiExchange;
 
     uint256 public leverage;
     uint256 public fee;
@@ -65,8 +65,12 @@ contract CFD {
         upDai = new UpDai(_version);
         downDai = new DownDai(_version);
 
-        uniswapUpDaiExchange = IUniswapFactory(uniswapFactory).createExchange(address(upDai));
-        uniswapDownDaiExchange = IUniswapFactory(uniswapFactory).createExchange(address(downDai));
+        uniswapUpDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
+            address(upDai)
+        );
+        uniswapDownDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
+            address(downDai)
+        );
     }
 
     /**
@@ -74,13 +78,25 @@ contract CFD {
      * @param _underlyingAmount amount of DAI to deposit
      * @param _ethAmount amount of ETH as collateral for UP&DOWN DAI Uniswap pools
      */
-    function mint(uint256 _underlyingAmount, uint256 _ethAmount) public payable {
-        (uint256 upDaiCollateral, uint256 downDaiCollateral) = getETHCollateralRequirements(_underlyingAmount);
+    function mint(uint256 _underlyingAmount, uint256 _ethAmount)
+        public
+        payable
+    {
+        (uint256 upDaiCollateral, uint256 downDaiCollateral) = getETHCollateralRequirements(
+            _underlyingAmount
+        );
 
+<<<<<<< HEAD
         require((_ethAmount == msg.value) && (_ethAmount == upDaiCollateral+downDaiCollateral), "CFD::error transfering ETH");
         require(
             IERC20(daiToken).transferFrom(msg.sender, address(this), _underlyingAmount),
             "CFD::error transfering underlying asset"
+=======
+        require(
+            (_ethAmount == msg.value) &&
+                (_ethAmount == upDaiCollateral + downDaiCollateral),
+            "CFD::error transfering ETH"
+>>>>>>> 13400707dccb3ebc0148d5f8cf9c9b2eda98d8cf
         );
 
         // mint UP&DOWN tokens
@@ -88,8 +104,20 @@ contract CFD {
         downDai.mint(msg.sender, _underlyingAmount.div(2));
 
         // send liquidity to both uniswap pools
-        uint256 upLP = IUniswapExchange(uniswapUpDaiExchange).addLiquidity.value(_ethAmount.div(2))(_ethAmount.div(2), _underlyingAmount.div(2), now+3600);
-        uint256 downLP = IUniswapExchange(uniswapDownDaiExchange).addLiquidity.value(_ethAmount.div(2))(_ethAmount.div(2), _underlyingAmount.div(2), now+3600);
+        uint256 upLP = IUniswapExchange(uniswapUpDaiExchange)
+            .addLiquidity
+            .value(_ethAmount.div(2))(
+            _ethAmount.div(2),
+            _underlyingAmount.div(2),
+            now + 3600
+        );
+        uint256 downLP = IUniswapExchange(uniswapDownDaiExchange)
+            .addLiquidity
+            .value(_ethAmount.div(2))(
+            _ethAmount.div(2),
+            _underlyingAmount.div(2),
+            now + 3600
+        );
         providerLP[msg.sender] = providerLP[msg.sender].add(upLP.add(downLP));
     }
 
@@ -113,6 +141,7 @@ contract CFD {
      * @notice redeem UPDAI or DOWNDAI token
      * @dev this function can only be called after contract settlement
      */
+<<<<<<< HEAD
     function redeemFinal() public {
         require(
             now >= settlementDate,
@@ -151,29 +180,49 @@ contract CFD {
         + downDai.mul(uint256(1).sub(p.sub(1)).mul(l)).mul(uint256(1).sub(f));
 
         IERC20(daiToken).transfer(redeemer, cash);
+=======
+    function redeemFinal(address _tokenToRedeem, uint256 _redeemAmount) public {
+        require(now >= settlementDate, "CFD::contract did not settle yet");
+        require(
+            (_tokenToRedeem == address(upDai)) ||
+                (_tokenToRedeem == address(downDai)),
+            "CFD::invalid token to redeem"
+        );
+
+        if (_tokenToRedeem == address(upDai)) {
+            // UPDAI redeeming process
+        } else {
+            // DOWNDAI redeeming process
+        }
+>>>>>>> 13400707dccb3ebc0148d5f8cf9c9b2eda98d8cf
     }
 
     /**
      * @notice get the amount of ETH required to create a uniswap exchange
      * @param _underlyingAmount the total amount of underlying to deposit (UP/DOWN DAI = _underlyingAmount/2)
      */
-    function getETHCollateralRequirements(uint256 _underlyingAmount) public returns (uint256, uint256) {
+    function getETHCollateralRequirements(uint256 _underlyingAmount)
+        public
+        returns (uint256, uint256)
+    {
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
         uint256 daiUsdPrice = GetDaiPriceUSD();
 
-        return (1,1);
+        return (1, 1);
     }
-    
+
     /**
      * @notice get DAI price in USD
      * @dev this function get the DAI/USD price by getting the price of ETH/USD from Maker medianizer and dividing it by the price of ETH/DAI from Uniswap.
      */
     function GetDaiPriceUSD() public returns (uint256) {
-        address uniswapExchangeAddress = IUniswapFactory(uniswapFactory).getExchange(daiToken);
+        address uniswapExchangeAddress = IUniswapFactory(uniswapFactory)
+            .getExchange(daiToken);
 
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
-        uint256 ethDaiPrice = IUniswapExchange(uniswapExchangeAddress).getEthToTokenInputPrice(1 ether);
-        
+        uint256 ethDaiPrice = IUniswapExchange(uniswapExchangeAddress)
+            .getEthToTokenInputPrice(1 ether);
+
         return ethUsdPrice.div(ethDaiPrice);
     }
 

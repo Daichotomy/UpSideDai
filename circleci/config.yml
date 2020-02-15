@@ -6,8 +6,8 @@ jobs:
       - image: circleci/python:3-node
       - image: trufflesuite/ganache-cli
         command: ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30
-    steps: 
-      - checkout 
+    steps:
+      - checkout
       - restore_cache:
           name: Restore NPM Package Cache
           key: dependency-cache-{{ checksum "package-lock.json" }}
@@ -24,14 +24,14 @@ jobs:
           command: npm run lint:tests
       - run:
           name: Lint contracts
-          command: npm run lint:contracts      
+          command: npm run lint:contracts
       - run:
           name: Dai Hard Or Die Trying
           command: npm run test
       - store_artifacts:
           path: test-results.xml
           prefix: tests
-      - store_artifacts: 
+      - store_artifacts:
           path: coverage
           prefix: coverage
       - store_test_results:
