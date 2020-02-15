@@ -36,54 +36,44 @@
             </div>
 
             <div>
-              <div style="padding-top:30px">
-                <span class="infoText">Choose your position</span>
+              <div style="padding-top:30px; padding-bottom:10px">
+                <span class="infoText"
+                  >Choose your<br />
+                  position
+                  <span class="Question"
+                    >?
+                    <md-tooltip md-direction="top" class="toolTip"
+                      >Bet on a direction that you think Dai will
+                      move.</md-tooltip
+                    >
+                  </span></span
+                >
               </div>
               <div class="md-layout">
-                <div class="md-layout-item" @click="changeDirection(true)">
-                  <div class="md-layout-item" style="padding-top:15px">
-                    <div
-                      :class="
-                        directionLong
-                          ? 'directionSelected'
-                          : 'directionNotSelected'
-                      "
-                    >
+                <div
+                  class="md-layout-item"
+                  @click="changeDirection(directionLong)"
+                >
+                  <div
+                    class="md-layout-item"
+                    :class="
+                      !directionLong ? 'spinClockwise' : 'spinCounterClockwise'
+                    "
+                  >
+                    <div>
                       <img
+                        style="margin-top:15px"
                         class="text-center finger"
                         src="../../assets/point.png"
                       />
                     </div>
                   </div>
                 </div>
-                <div class="md-layout-item" @click="changeDirection(false)">
-                  <div class="md-layout-item" style="padding-top:15px">
-                    <div
-                      :class="
-                        !directionLong
-                          ? 'directionSelected'
-                          : 'directionNotSelected'
-                      "
-                    >
-                      <img
-                        class="text-center fingerFlip"
-                        src="../../assets/point.png"
-                      />
-                    </div>
-                  </div>
-                </div>
               </div>
-              <div>
-                <br />
-
-                <span class="Question"
-                  >?
-                  <md-tooltip md-direction="bottom" class="toolTip"
-                    >Bet on a direction that you think Dai will
-                    move.</md-tooltip
-                  >
-                </span>
-                <!-- <md-tooltip md-direction="bottom">Bottom</md-tooltip> -->
+              <div style="padding-top:10px">
+                <span class="yellowText">{{
+                  directionLong ? "UpDAI" : "DownDAI"
+                }}</span>
               </div>
             </div>
             <div class="md-layout-item" style="padding-top:30px">
@@ -131,7 +121,7 @@ export default {
   },
   methods: {
     changeDirection(direction) {
-      this.directionLong = direction;
+      this.directionLong = !this.directionLong;
     },
     deposit() {
       console.log("deposit");
@@ -225,13 +215,13 @@ export default {
   transition: 0.3s;
 }
 .finger {
-  padding-top: 5px;
+  padding: 0px;
   position: relative;
-  width: 75px;
-  height: 75px;
+  width: 65px;
+  height: 65px;
 }
 .fingerFlip {
-  padding-top: 5px;
+  padding-top: 0px;
   position: relative;
   width: 75px;
   height: 75px;
@@ -252,7 +242,7 @@ export default {
   font-weight: 500;
 }
 .Question {
-  font-size: 18px;
+  font-size: 12px;
   // line-height: 18px;
   align-items: center;
   text-align: center;
@@ -262,8 +252,8 @@ export default {
   width: 64px;
   padding-top: 4px;
   padding-bottom: 4px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 7px;
+  padding-right: 7px;
 }
 .toolTip {
   background-color: #c4c4c4;
@@ -295,5 +285,37 @@ export default {
   font-size: 14px;
   line-height: 16px;
   color: #ffba01;
+}
+.spinClockwise {
+  animation-name: spinClockwise;
+  animation-duration: 500ms;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes spinClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+.spinCounterClockwise {
+  animation-name: spinCounterClockwise;
+  animation-duration: 500ms;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes spinCounterClockwise {
+  from {
+    transform: rotate(-180deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
 }
 </style>

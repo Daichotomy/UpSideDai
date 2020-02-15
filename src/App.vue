@@ -1,6 +1,10 @@
 <template>
   <md-app id="app" md-mode="reveal" style="min-height: 100vh;">
-    <md-app-toolbar md-elevation="0" id="toolbar">
+    <md-app-toolbar
+      md-elevation="0"
+      id="toolbar"
+      style="padding-top:25px;padding-bottom:50px"
+    >
       <router-link class="logo" to="/">
         <img class="logo" src="./assets/Logo.png" />
       </router-link>
