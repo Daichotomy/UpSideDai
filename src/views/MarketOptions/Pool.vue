@@ -20,7 +20,7 @@
               <br />
               <span>
                 <md-field md-inline>
-                  <label>To Deposit...</label>
+                  <label style="margin-left:80px">To Deposit...</label>
                   <md-input
                     v-model="inputDaiAmount"
                     class="inputDai"
@@ -28,12 +28,45 @@
                   ></md-input>
                 </md-field>
               </span>
+              <div style="padding-top:20px" />
+              <div class="md-layout">
+                <div class="md-layout-item">
+                  <span class="SoftFont"
+                    ><img
+                      class="text-center clock"
+                      src="../../assets/dai.png"
+                    />
+                    Ballance:
+                    {{ daiBallance }} Dai</span
+                  >
+                  <br />
+                  <span class="SoftFont"
+                    ><img
+                      class="text-center ethLogo"
+                      src="../../assets/eth.png"
+                    />
+                    Required Eth:
+                    {{ ethBallance }} Eth</span
+                  >
+                </div>
+                <div class="md-layout-item">
+                  <span class="SoftFont">
+                    <img
+                      class="text-center clock"
+                      src="../../assets/clock.png"
+                    />
+                    Withdrawal Date:
+                    <br />
+                    <span class="yellowText">{{ maturity }}</span>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="md-layout-item">
-        <md-button class="Deposit" @click="deposit()">Buy</md-button>
+        <md-button class="Deposit" @click="deposit()">Pool</md-button>
       </div>
       <div class="md-layout-item"></div>
     </div>
@@ -49,10 +82,11 @@ export default {
   components: {},
   data() {
     return {
-      daiPrice: 1.0101,
+      daiPrice: 1.069,
       inputDaiAmount: 420.69,
-      buyPrice: 1.101,
-      directionLong: true
+      daiBallance: 101.69,
+      ethBallance: 12.42,
+      maturity: "16th March"
     };
   },
   methods: {
@@ -100,7 +134,6 @@ export default {
   margin-top: 0px !important;
   padding-left: 20 !important;
 }
-
 .priceBlobText {
   font-family: Roboto;
   font-style: normal;
@@ -122,7 +155,7 @@ export default {
 }
 .tradeBox {
   margin: 15px;
-  width: 694px;
+  width: 400px;
   height: 208px;
   left: 508px;
   top: 240px;
@@ -206,7 +239,25 @@ export default {
   // display: flex;
   align-items: center;
   text-align: center;
-
+  color: #ffba01;
+}
+.SoftFont {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  color: rgba(12, 1, 1, 0.5);
+}
+.clock {
+  width: 16px;
+}
+.ethLogo {
+  width: 12px;
+}
+.yellowText {
+  font-size: 14px;
+  line-height: 16px;
   color: #ffba01;
 }
 </style>

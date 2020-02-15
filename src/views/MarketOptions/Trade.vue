@@ -166,8 +166,6 @@ export default {
   font-size: 30px !important;
   line-height: 47px;
   display: flex;
-  //   align-items: center;
-  //   text-align: center;
   width: 150px;
   text-decoration: underline;
   padding-top: 0px !important;
@@ -280,7 +278,6 @@ export default {
   // display: flex;
   align-items: center;
   text-align: center;
-
   color: #ffba01;
 }
 .SoftFont {
@@ -289,7 +286,7 @@ export default {
   font-weight: normal;
   font-size: 14px;
   line-height: 16px;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(12, 1, 1, 0.5);
 }
 .clock {
   width: 16px;
