@@ -16,7 +16,7 @@ jobs:
           command: yarn
       - run:
           name: Migrate Contracts
-          command: yarn migrate
+          command: yarn migrate:development
       - run:
           name: Lint Contracts
           command: yarn lint:contracts
