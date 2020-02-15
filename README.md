@@ -20,6 +20,7 @@ The price that Dai can fluctuate around the peg is bounded by the leverage used 
 🇹🇳Haythem Sellami - Smart contracts and front end
 
 ## Financial engineering
+A contract for difference is a contract between two parties stipulating that the buyer will pay to the seller the difference between the current value of an asset and its value at contract time. DaiHard's implementation pays out the difference relative to the price of Dai. A CFD is a synthetic contract, representing synthetic price exposure to an underlying fictitious asset. As such it requires a maturity at which tokens can be redeemed for underlying. This ensures that the price of the token in the secondary market has a low tracking error to the underlying price feed.
 
 ### On-chain price of Dai in USD
 
