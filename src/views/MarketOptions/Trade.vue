@@ -16,10 +16,18 @@
         <div class="tradeBox">
           <div class="md-layout">
             <div class="md-layout-item" style="padding-top:30px">
-              <span class="infoText">Dai to spend</span>
+              <span class="infoText"
+                >Input Dai<br />
+                to send</span
+              >
               <br />
               <span>
-                <md-field md-inline>
+                <md-field
+                  md-inline
+                  style="
+    padding-top: 5px;
+    margin-bottom: 5px;"
+                >
                   <label style="margin-left:80px">To Deposit...</label>
                   <md-input
                     v-model="inputDaiAmount"
@@ -34,7 +42,6 @@
                 {{ daiBallance }} Dai</span
               >
             </div>
-
             <div>
               <div style="padding-top:30px; padding-bottom:10px">
                 <span class="infoText"
@@ -50,14 +57,15 @@
                 >
               </div>
               <div class="md-layout">
-                <div
-                  class="md-layout-item"
-                  @click="changeDirection(directionLong)"
-                >
+                <div class="md-layout-item" @click="changeDirection()">
                   <div
                     class="md-layout-item"
                     :class="
-                      !directionLong ? 'spinClockwise' : 'spinCounterClockwise'
+                      direction == null
+                        ? ''
+                        : direction == 'down'
+                        ? 'spinClockwise'
+                        : 'spinCounterClockwise'
                     "
                   >
                     <div>
@@ -70,15 +78,17 @@
                   </div>
                 </div>
               </div>
-              <div style="padding-top:10px">
+              <div style="padding-top:0px">
                 <span class="yellowText">{{
-                  directionLong ? "UpDAI" : "DownDAI"
+                  direction == "up" || direction == null ? "UpDAI" : "DownDAI"
                 }}</span>
               </div>
             </div>
             <div class="md-layout-item" style="padding-top:30px">
               <span class="infoText"
-                >{{ directionLong ? "UpDAI" : "DownDAI" }}<br />
+                >{{
+                  direction == "up" || direction == null ? "UpDAI" : "DownDAI"
+                }}<br />
                 buy price</span
               >
               <br />
@@ -114,14 +124,25 @@ export default {
       daiPrice: 1.0101,
       inputDaiAmount: 420.69,
       buyPrice: 1.101,
-      directionLong: true,
+      direction: null,
       daiBallance: 100.92,
       maturity: "16th March"
     };
   },
   methods: {
-    changeDirection(direction) {
-      this.directionLong = !this.directionLong;
+    changeDirection() {
+      if (this.direction == null) {
+        this.direction = "down";
+        return;
+      }
+      if (this.direction == "up") {
+        this.direction = "down";
+        return;
+      }
+      if (this.direction == "down") {
+        this.direction = "up";
+        return;
+      }
     },
     deposit() {
       console.log("deposit");
@@ -154,7 +175,7 @@ export default {
 .inputDai {
   font-weight: 300;
   font-size: 30px !important;
-  line-height: 47px;
+  line-height: 40px;
   display: flex;
   width: 150px;
   text-decoration: underline;
@@ -184,7 +205,7 @@ export default {
 }
 .tradeBox {
   margin: 15px;
-  width: 694px;
+  width: 600px;
   height: 208px;
   left: 508px;
   top: 240px;
@@ -217,8 +238,8 @@ export default {
 .finger {
   padding: 0px;
   position: relative;
-  width: 65px;
-  height: 65px;
+  width: 80px;
+  height: 80px;
 }
 .fingerFlip {
   padding-top: 0px;

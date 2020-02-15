@@ -16,7 +16,16 @@
         <div class="tradeBox">
           <div class="md-layout">
             <div class="md-layout-item" style="padding-top:30px">
-              <span class="infoText">Dai to pool</span>
+              <span class="infoText"
+                >Input Dai<br />
+                to pool
+                <span class="Question"
+                  >?
+                  <md-tooltip md-direction="top" class="toolTip"
+                    >Add dai to the UpsideDai liquidity pool.</md-tooltip
+                  >
+                </span></span
+              >
               <br />
               <span>
                 <md-field md-inline>
@@ -28,7 +37,7 @@
                   ></md-input>
                 </md-field>
               </span>
-              <div style="padding-top:10px" />
+              <div style="padding-top:0px" />
               <div class="md-layout">
                 <div class="md-layout-item">
                   <span class="SoftFont"
@@ -45,7 +54,7 @@
                       class="text-center ethLogo"
                       src="../../assets/eth.png"
                     />
-                     Required Eth:
+                    Required Eth:
                     {{ ethBallance }} Eth</span
                   >
                 </div>
@@ -213,7 +222,7 @@ export default {
   font-weight: 500;
 }
 .Question {
-  font-size: 18px;
+  font-size: 12px;
   // line-height: 18px;
   align-items: center;
   text-align: center;
@@ -223,8 +232,8 @@ export default {
   width: 64px;
   padding-top: 4px;
   padding-bottom: 4px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 7px;
+  padding-right: 7px;
 }
 .toolTip {
   background-color: #c4c4c4;
