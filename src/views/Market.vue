@@ -61,14 +61,14 @@ export default {
 
 .SelectToggle {
   position: absolute;
-  width: 530px;
+  width: 600px;
   height: 60px;
   background: #e5e5e5;
   border-radius: 20px;
   //   text-align: center;
   display: inline-block;
   vertical-align: middle;
-  margin-left: 50px;
+  margin-left: 20px;
 }
 
 .selectedSection {

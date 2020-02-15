@@ -26,9 +26,14 @@
                   >
                 </span></span
               >
-              <br />
+
               <span>
-                <md-field md-inline>
+                <md-field
+                  md-inline
+                  style="
+    padding-top: 5px;
+    margin-bottom: 5px;"
+                >
                   <label style="margin-left:80px">To Deposit...</label>
                   <md-input
                     v-model="inputDaiAmount"
@@ -39,33 +44,29 @@
               </span>
               <div style="padding-top:0px" />
               <div class="md-layout">
-                <div class="md-layout-item">
-                  <span class="SoftFont"
-                    ><img
-                      class="text-center clock"
-                      src="../../assets/dai.png"
-                    />
+                <div
+                  class="md-layout-item"
+                  style="text-align: left; padding-left:30px"
+                >
+                  <span class="SoftFont">
                     Ballance:
-                    {{ daiBallance }} Dai</span
+                    <img class="clock" src="../../assets/dai.png" /> {{
+                      daiBallance
+                    }}</span
                   >
-                  <br />
-                  <span class="SoftFont"
-                    ><img
-                      class="text-center ethLogo"
-                      src="../../assets/eth.png"
-                    />
-                    Required Eth:
-                    {{ ethBallance }} Eth</span
+                  <div style="padding-top:5px" />
+                  <span class="SoftFont">
+                    Required:
+                    <img class="ethLogo" src="../../assets/eth.png" /> {{
+                      ethBallance
+                    }}</span
                   >
                 </div>
-                <div class="md-layout-item">
+                <div class="md-layout-item" style="text-align: center;">
                   <span class="SoftFont">
-                    <img
-                      class="text-center clock"
-                      src="../../assets/clock.png"
-                    />
+                    <img class="clock" src="../../assets/clock.png" />
                     Withdrawal Date:
-                    <br />
+                    <div style="padding-top:5px" />
                     <span class="yellowText">{{ maturity }}</span>
                   </span>
                 </div>
@@ -138,7 +139,6 @@ export default {
   align-items: center;
   text-align: center;
   width: 230px;
-  text-decoration: underline;
   padding-top: 0px !important;
   margin-top: 0px !important;
   padding-left: 20 !important;
@@ -146,15 +146,14 @@ export default {
 .priceBlobText {
   font-family: Roboto;
   font-style: normal;
-  font-weight: 300;
-  font-size: 45px;
-  line-height: 53px;
-  // display: flex;
+  font-weight: 200 !important;
+  font-size: 35px;
+  line-height: 60px;
+ 
   align-items: center;
   text-align: center;
-  padding: 10px;
-
-  color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  color: #ffba01;
   width: 216px;
   height: 80px;
   left: 238px;

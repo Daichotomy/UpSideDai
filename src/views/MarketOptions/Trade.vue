@@ -36,14 +36,14 @@
                   ></md-input>
                 </md-field>
               </span>
-              <span class="SoftFont"
-                ><img class="text-center clock" src="../../assets/dai.png" />
+              <span class="SoftFont">
                 Ballance:
-                {{ daiBallance }} Dai</span
+                <img class="text-center clock" src="../../assets/dai.png" />
+                {{ daiBallance }}</span
               >
             </div>
             <div>
-              <div style="padding-top:30px; padding-bottom:10px">
+              <div style="padding-top:30px; padding-bottom:0px">
                 <span class="infoText"
                   >Choose your<br />
                   position
@@ -93,7 +93,7 @@
               >
               <br />
               <span class="buyPrice">{{ buyPrice }}</span>
-              <br />
+              <div style="padding-top:7px" />
               <span class="SoftFont">
                 <img class="text-center clock" src="../../assets/clock.png" />
                 Withdrawal Date:
@@ -173,12 +173,11 @@ export default {
   line-height: 21px;
 }
 .inputDai {
-  font-weight: 300;
+  font-weight: 200 !important;
   font-size: 30px !important;
   line-height: 40px;
   display: flex;
   width: 150px;
-  text-decoration: underline;
   padding-top: 0px !important;
   margin-top: 0px !important;
   margin-left: 80px !important;
@@ -187,15 +186,13 @@ export default {
 .priceBlobText {
   font-family: Roboto;
   font-style: normal;
-  font-weight: 300;
-  font-size: 45px;
-  line-height: 53px;
-  // display: flex;
+  font-weight: 200 !important;
+  font-size: 35px;
+  line-height: 60px;
   align-items: center;
   text-align: center;
-  padding: 10px;
-
-  color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  color: #ffba01;
   width: 216px;
   height: 80px;
   left: 238px;
