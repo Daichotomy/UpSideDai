@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="page-container" style="padding-top:50px">
     <div class="md-layout sections">
       <div class="md-layout-item"></div>
       <div class="md-layout-item">
@@ -27,8 +27,10 @@
       </div>
       <div class="md-layout-item"></div>
     </div>
-    <Trade v-if="mode == 'trade'" />
-    <Pool v-if="mode == 'pool'" />
+    <div style="padding-top:20px">
+      <Trade v-if="mode == 'trade'" />
+      <Pool v-if="mode == 'pool'" />
+    </div>
   </div>
 </template>
 
@@ -66,6 +68,7 @@ export default {
   //   text-align: center;
   display: inline-block;
   vertical-align: middle;
+  margin-left: 50px;
 }
 
 .selectedSection {

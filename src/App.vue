@@ -1,38 +1,16 @@
 <template>
   <md-app id="app" md-mode="reveal" style="min-height: 100vh;">
     <md-app-toolbar md-elevation="0" id="toolbar">
-      <!-- <img :src="logo" class="logo-svg" alt="logo" /> -->
-
-      <ul class="nav-list-left">
-        <li style="max-width: 200px; margin-right: 2.25rem;">
-          <router-link class="logo" to="/">
-            <h1>⬆⬇UPSIDEDAI</h1>
-          </router-link>
-        </li>
-        <li class="nav-item" v-if="$route.name !='home'">
-          <router-link
-            class="nav-link"
-            :style="$route.name == 'trade' ? 'text-decoration:underline' : ''"
-            to="trade"
-            >Trade</router-link
-          >
-        </li>
-        <li class="nav-item" v-if="$route.name !='home'">
-          <router-link
-            class="nav-link"
-            :style="$route.name == 'pool' ? 'text-decoration:underline' : ''"
-            to="pool"
-            >Pool</router-link
-          >
-        </li>
-      </ul>
+      <router-link class="logo" to="/">
+        <img class="logo" src="./assets/Logo.png" />
+      </router-link>
 
       <div class="md-toolbar-section-end">
         <p style="padding-right:10px">{{ currentNetwork }}</p>
         <clickable-address :eth-address="account" />
       </div>
     </md-app-toolbar>
-    
+
     <md-app-content id="content">
       <mining-transaction />
       <router-view />
@@ -57,10 +35,6 @@ import * as mutations from "@/store/mutation-types";
 import ClickableAddress from "@/components/widgets/ClickableAddress";
 import { mapActions, mapState } from "vuex";
 import router from "@/router";
-
-// import logo from "@/assets/SnapLogo.svg";
-// import logo from "@/assets/SnapLogo.svg";
-// import logo from "@/assets/logo.svg";
 
 export default {
   name: "app",
@@ -219,10 +193,16 @@ nav li.router-link-exact-active {
   font-weight: bold;
   font-size: 18px;
   line-height: 25px;
-  padding: 15px
+  padding: 15px;
 }
 
 .nav-link:hover {
   border-bottom: 1px solid #ffffff;
+}
+.logo {
+  width: 300px;
+  position: absolute;
+  right: 36%;
+  top: 30%;
 }
 </style>

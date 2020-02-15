@@ -15,8 +15,8 @@
       <div class="md-layout-item">
         <div class="tradeBox">
           <div class="md-layout">
-            <div class="md-layout-item" style="padding-top:70px">
-              <span class="infoText">Dai</span>
+            <div class="md-layout-item" style="padding-top:30px">
+              <span class="infoText">Dai to spend</span>
               <br />
               <span>
                 <md-field md-inline>
