@@ -211,7 +211,7 @@ contract CFD {
         returns (uint256, uint256)
     {
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
-        uint256 daiUsdPrice = GetDaiPriceUSD();
+        // uint256 daiUsdPrice = GetDaiPriceUSD();
 
         return (1, 1);
     }
