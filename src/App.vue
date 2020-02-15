@@ -2,7 +2,8 @@
   <md-app id="app" md-mode="reveal" style="min-height: 100vh;">
     <md-app-toolbar md-elevation="0" id="toolbar">
       <a href="/">
-        <img :src="logo" class="logo-svg" alt="logo" />
+        <!-- <img :src="logo" class="logo-svg" alt="logo" /> -->
+        <h1>⬆⬇UPSIDEDAI</h1>
       </a>
 
       <div class="md-toolbar-section-end">
@@ -16,7 +17,7 @@
       <router-view />
       <div id="foot">
         <span>
-            💪
+          
           <b>
             <a href="https://github.com/Daichotomy/DaiHard">DaiHard</a> - made with ❤️ by Daichotomy ☯️
           </b>
@@ -114,7 +115,7 @@ export default {
 html,
 body {
   font-family: "Rubik", sans-serif;
-  background-color: $vanilla;
+  background-color: $white;
 }
 #app {
   color: #2c3e50;
@@ -126,7 +127,7 @@ body {
   cursor: pointer;
 }
 #toolbar {
-  background-color: $vanilla;
+  background-color: $white;
   width: 100%;
   align-self: center;
 }
@@ -143,12 +144,12 @@ nav li.router-link-exact-active {
   cursor: pointer;
 }
 #foot {
-  background-color: $vanilla;
+  background-color: $white;
   padding: 25px;
   text-align: center;
 }
 #content {
-  background-color: $vanilla;
+  background-color: $white;
   padding: 0;
   height: auto;
 }
