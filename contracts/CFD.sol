@@ -34,9 +34,10 @@ contract CFD {
     uint256 public daiPriceAtSettlement; // $1 == 1e18
     uint256 public upDaiRateAtSettlement; // 1:1 == 1e18
     uint256 public downDaiRateAtSettlement; // 1:1 == 1e18
+    uint256 public totalLP;
 
-    mapping(address => uint256) public providerLP; // Total LP for a given staker
-    uint256 totalLP;
+    mapping(address => uint256) public UPLP; // Total LP for the UPDAI pool
+    mapping(address => uint256) public DPLP; // Total LP for the DOWNDAI pool
 
     /**
      * @notice constructor
@@ -128,8 +129,8 @@ contract CFD {
         );
         uint256 totalETHCollateral = upDaiEthUnits.add(downDaiEthUnits);
         require(msg.value >= totalETHCollateral, "CFD::error transfering ETH");
-        if(msg.value > totalETHCollateral) {
-            msg.sender.transfer(msg.value-totalETHCollateral)
+        if (msg.value > totalETHCollateral) {
+            msg.sender.transfer(msg.value - totalETHCollateral);
         }
 
         // Step 3. Mint the up/down DAI tokens
@@ -146,7 +147,8 @@ contract CFD {
 
         // Step 5. Store the LP and log the mint volume
         uint256 newLP = upLP.add(downLP);
-        providerLP[msg.sender] = providerLP[msg.sender].add(newLP);
+        UPLP[msg.sender] = UPLP[msg.sender].add(upLP);
+        DPLP[msg.sender] = DPLP[msg.sender].add(downLP);
         totalLP = totalLP.add(newLP);
 
         // TODO - add a time element here to incentivise early stakers to provide liquidity
@@ -161,7 +163,6 @@ contract CFD {
      */
     function getETHCollateralRequirements(uint256 _daiDeposit)
         public
-        view
         returns (uint256, uint256)
     {
         uint256 individualDeposits = _daiDeposit.div(2);
