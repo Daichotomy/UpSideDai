@@ -8,7 +8,11 @@
         <br />
         <div class="priceBlob">
           <span class="priceBlobText">
-            {{ daiPrice }}
+            {{
+              cfdState.daiPrice
+                ? parseFloat(cfdState.daiPrice).toFixed(4)
+                : "Loading..."
+            }}
           </span>
         </div>
       </div>
@@ -50,15 +54,21 @@
                 >
                   <span class="SoftFont">
                     Ballance:
-                    <img class="clock" src="../../assets/dai.png" /> {{
-                      daiBallance
+                    <img class="clock" src="../../assets/dai.png" />
+                    {{
+                      userInfo.daiBallance
+                        ? parseFloat(userInfo.daiBallance).toFixed(2)
+                        : "Loading..."
                     }}</span
                   >
                   <div style="padding-top:5px" />
                   <span class="SoftFont">
                     Required:
-                    <img class="ethLogo" src="../../assets/eth.png" /> {{
-                      ethBallance
+                    <img class="ethLogo" src="../../assets/eth.png" />
+                    {{
+                      userInfo.ethBallance
+                        ? parseFloat(userInfo.ethBallance).toFixed(2)
+                        : "Loading..."
                     }}</span
                   >
                 </div>
@@ -86,6 +96,7 @@
 <script>
 import router from "@/router";
 import Lottie from "vue-lottie";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "pool",
@@ -107,7 +118,10 @@ export default {
       console.log("deposit");
     }
   },
-  mounted() {}
+  mounted() {},
+  computed: {
+    ...mapState(["cfdState", "userInfo"])
+  }
 };
 </script>
 
@@ -149,7 +163,7 @@ export default {
   font-weight: 200 !important;
   font-size: 35px;
   line-height: 60px;
- 
+
   align-items: center;
   text-align: center;
   padding: 20px;
@@ -177,7 +191,7 @@ export default {
   width: 85px;
   height: 85px;
   background: #ffffff;
-  border: 2px solid #FFBA00;
+  border: 2px solid #ffba00;
   box-sizing: border-box;
   border-radius: 10px;
   cursor: pointer;
@@ -207,7 +221,7 @@ export default {
   transform: rotate(180deg);
 }
 .Deposit {
-  background: #FFBA00;
+  background: #ffba00;
   margin-top: 85px;
   border-radius: 15px;
   border: none;
