@@ -3,7 +3,6 @@
 
 import { UpSideDaiContract } from "./../types/generated/index.d";
 import { assert } from "chai";
-
 import { ether, BN } from "openzeppelin-test-helpers";
 
 const UpSideDai: UpSideDaiContract = artifacts.require("UpSideDai");
