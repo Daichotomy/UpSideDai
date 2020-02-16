@@ -33,6 +33,7 @@ export default new Vuex.Store({
     cfd: null,
     uniswap: null,
     upSideDai: null,
+    dai: null,
     upDai: null,
     downDai: null,
     miningTransactionObject: {
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     },
     cfdState: {
       daiPrice: null
+    },
+    userInfo: {
+      daiBallance: null
     }
   },
   mutations: {
@@ -70,6 +74,9 @@ export default new Vuex.Store({
     },
     [mutations.SET_UNISWAPDOWNDAI]: async function(state, uniswapDownDai) {
       state.uniswapDownDai = uniswapDownDai;
+    },
+    [mutations.SET_DAI]: async function(state, dai) {
+      state.dai = dai;
     },
     [mutations.SET_UPDAI]: async function(state, upDai) {
       state.upDai = upDai;
@@ -126,6 +133,12 @@ export default new Vuex.Store({
       console.log(cfd);
       commit(mutations.SET_CFD, cfd);
 
+      let daiAddress = await cfd.daiToken();
+      let dai = await Erc20Token.at(daiAddress);
+      console.log("contract dai");
+      console.log(dai);
+      commit(mutations.SET_DAI, dai);
+
       let upDaiAddress = await cfd.uniswapUpDaiExchange();
       let upDai = await Erc20Token.at(upDaiAddress);
       console.log("contract upDai");
@@ -153,6 +166,12 @@ export default new Vuex.Store({
       let daiPrice = await cfd.GetDaiPriceUSD();
       console.log("daiPrice", web3.utils.fromWei(daiPrice).toString());
       state.cfdState.daiPrice = web3.utils.fromWei(daiPrice).toString();
+
+      let userDaiBallance = await dai.balanceOf.call(account);
+      console.log("userdaiBallance", userDaiBallance);
+      state.userInfo.daiBallance = web3.utils
+        .fromWei(userDaiBallance)
+        .toString();
     },
     // [actions.COMMIT]: async function ({
     //   commit,

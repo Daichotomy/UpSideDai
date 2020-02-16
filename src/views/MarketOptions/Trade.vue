@@ -2,6 +2,7 @@
   <div class="page-container">
     <div class="md-layout sections">
       {{ cfdState }}
+      {{ userInfo }}
       <div class="md-layout-item"></div>
       <div class="md-layout-item" style="padding-top:60px">
         <span class="infoText">Current Dai price</span>
@@ -11,7 +12,7 @@
           <span class="priceBlobText">
             {{
               cfdState.daiPrice
-                ? parseFloat(cfdState.daiPrice).toFixed(3)
+                ? parseFloat(cfdState.daiPrice).toFixed(4)
                 : "Loading..."
             }}
           </span>
@@ -44,8 +45,12 @@
               <span class="SoftFont">
                 Ballance:
                 <img class="text-center clock" src="../../assets/dai.png" />
-                {{ daiBallance }}</span
-              >
+                {{
+                  userInfo.daiBallance
+                    ? parseFloat(userInfo.daiBallance).toFixed(4)
+                    : "Loading..."
+                }}
+              </span>
             </div>
             <div>
               <div style="padding-top:30px; padding-bottom:0px">
@@ -156,7 +161,7 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapState(["cfdState"])
+    ...mapState(["cfdState", "userInfo"])
   }
 };
 </script>
