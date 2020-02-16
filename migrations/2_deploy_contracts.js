@@ -16,6 +16,7 @@ const oneMonthInSeconds = 60 * 60 * 24 * 30;
 
 const cfdDetails = async (d_CFD) => {
   return {
+    address: d_CFD.address,
     upDai: await d_CFD.upDai(),
     downDai: await d_CFD.downDai(),
     uniswapUpDaiExchange: await d_CFD.uniswapUpDaiExchange(),
@@ -90,7 +91,8 @@ module.exports = async (deployer, network, accounts) => {
             (50).toString(),
             (3 * 10**16).toString(),
             oneMonthInSeconds,
-        1);
+            1
+        );
 
         // Grab CFD deets
         //const newCFD_address = await d_DaiHard.deployedCFD(1);
@@ -114,13 +116,14 @@ module.exports = async (deployer, network, accounts) => {
         // * @param _settlementLength maker medianizer address
         // * @param _version maker medianizer address
         await d_DaiHard.newCFD(
-            deploymentConfig.MAKER_MEDIANIZER,
-            deploymentConfig.UNISWAP_FACTORY,
-            deploymentConfig.DAI_TOKEN,
+            deploymentConfig.KOVAN.MAKER_MEDIANIZER,
+            deploymentConfig.KOVAN.UNISWAP_FACTORY,
+            deploymentConfig.KOVAN.DAI_TOKEN,
             (50).toString(),
             (3 * 10**16).toString(),
             oneMonthInSeconds,
-        1);
+            1
+        );
 
         // Grab CFD deets
         //const newCFD_address = await d_DaiHard.deployedCFD(1);
@@ -144,13 +147,14 @@ module.exports = async (deployer, network, accounts) => {
         // * @param _settlementLength maker medianizer address
         // * @param _version maker medianizer address
         await d_DaiHard.newCFD(
-            deploymentConfig.MAKER_MEDIANIZER,
-            deploymentConfig.UNISWAP_FACTORY,
-            deploymentConfig.DAI_TOKEN,
+            deploymentConfig.MAINNET.MAKER_MEDIANIZER,
+            deploymentConfig.MAINNET.UNISWAP_FACTORY,
+            deploymentConfig.MAINNET.DAI_TOKEN,
             (20 * 10**18).toString(),
             (3 * 10**16).toString(),
             oneMonthInSeconds,
-        1);
+            1
+        );
 
         // Grab CFD deets
         //const newCFD_address = await d_DaiHard.deployedCFD(1);
