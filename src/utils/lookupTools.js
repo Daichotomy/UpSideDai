@@ -1,5 +1,5 @@
-const getNetIdString = () => {
-    return window.web3.eth.net.getId()
+const getNetIdString = (web3) => {
+    return web3.eth.net.getId()
         .then((id) => {
             switch (id) {
                 case 1:
@@ -19,8 +19,8 @@ const getNetIdString = () => {
         });
 };
 
-const getEtherscanAddress = () => {
-    return window.web3.eth.net.getId()
+const getEtherscanAddress = (web3) => {
+    return web3.eth.net.getId()
         .then((id) => {
             switch (id) {
                 case 1:

@@ -91,11 +91,11 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    [actions.GET_CURRENT_NETWORK]: function({ commit, dispatch, state }) {
-      getNetIdString().then(currentNetwork => {
+    [actions.GET_CURRENT_NETWORK]: function({ commit, dispatch, state }, web3) {
+      getNetIdString(web3).then(currentNetwork => {
         commit(mutations.SET_CURRENT_NETWORK, currentNetwork);
       });
-      getEtherscanAddress().then(etherscanBase => {
+      getEtherscanAddress(web3).then(etherscanBase => {
         commit(mutations.SET_ETHERSCAN_NETWORK, etherscanBase);
       });
     },
@@ -113,7 +113,7 @@ export default new Vuex.Store({
       });
       console.log("set");
 
-      dispatch(actions.GET_CURRENT_NETWORK);
+      dispatch(actions.GET_CURRENT_NETWORK, web3);
 
       let accounts = await web3.eth.getAccounts();
       let account = accounts[0];
