@@ -104,52 +104,56 @@ contract CFD {
 
     /**
      * @notice mint UP and DOWN DAI tokens
-     * @param _underlyingAmount amount of DAI to deposit
+     * @param _daiDeposit amount of DAI to deposit
      * @param _ethAmount amount of ETH as collateral for UP&DOWN DAI Uniswap pools
      */
-    function mint(uint256 _underlyingAmount, uint256 _ethAmount)
+    function mint(uint256 _daiDeposit, uint256 _ethAmount)
         external
         payable
         notInSettlementPeriod
     {
-        (uint256 upDaiCollateral, uint256 downDaiCollateral) = getETHCollateralRequirements(
-            _underlyingAmount
+        // Step 1. Take the DAI
+        require(
+            IERC20(daiToken).transferFrom(
+                msg.sender,
+                address(this),
+                _daiDeposit
+            ),
+            "CFD::error transfering underlying asset"
         );
 
+        // Step 2. Mint the up/down DAI tokens
+        upDai.mint(address(this), _daiDeposit.div(2));
+        downDai.mint(address(this), _daiDeposit.div(2));
+
+        // Step 3. Calculate the value of these tokens, and how much ETH that is
+        (uint256 upDaiEthUnits, uint256 downDaiEthUnits) = getETHCollateralRequirements(
+            _daiDeposit
+        );
+        // >>>>>>>>>>>>> IM HERE
         require(
             (_ethAmount == msg.value) &&
                 (_ethAmount == upDaiCollateral + downDaiCollateral),
             "CFD::error transfering ETH"
         );
-        require(
-            IERC20(daiToken).transferFrom(
-                msg.sender,
-                address(this),
-                _underlyingAmount
-            ),
-            "CFD::error transfering underlying asset"
-        );
 
-        // mint UP&DOWN tokens
-        upDai.mint(msg.sender, _underlyingAmount.div(2));
-        downDai.mint(msg.sender, _underlyingAmount.div(2));
-
-        // send liquidity to both uniswap pools
+        // Step 4. Contribute to Uniswap
         uint256 upLP = IUniswapExchange(uniswapUpDaiExchange)
             .addLiquidity
             .value(upDaiCollateral)(
             upDaiCollateral,
-            _underlyingAmount.div(2),
+            _daiDeposit.div(2),
             now + 3600
         );
         uint256 downLP = IUniswapExchange(uniswapDownDaiExchange)
             .addLiquidity
             .value(downDaiCollateral)(
             downDaiCollateral,
-            _underlyingAmount.div(2),
+            _daiDeposit.div(2),
             now + 3600
         );
 
+        // Step 5. Store the LP and log the mint volume
         // TODO - add a time element here to incentivise early stakers to provide liquidity
         // This will affect the proportionate amount of rewards they receive at the end
 
@@ -160,39 +164,33 @@ contract CFD {
 
     /**
      * @notice get the amount of ETH required to create a uniswap exchange
-     * @param _underlyingAmount the total amount of underlying to deposit (UP/DOWN DAI = _underlyingAmount/2)
+     * @param _daiDeposit the total amount of underlying to deposit (UP/DOWN DAI = _daiDeposit/2)
      * @return the amount of ETH needed for UPDAI pool and DOWNDAI pool
      */
-    function getETHCollateralRequirements(uint256 _underlyingAmount)
+    function getETHCollateralRequirements(uint256 _daiDeposit)
         public
         view
         returns (uint256, uint256)
     {
-        // TODO - validate that everything is denominated in the right decimal amounts
-        // by running through an actual example with numbers on each step
-
+        uint256 individualDeposits = _daiDeposit.div(2);
         // get ETH price, where $200 == 200e18
         uint256 ethUsdPrice = GetETHUSDPriceFromMedianizer();
         // get DAI price, where $1 == 1e18
-        uint256 daiUsdPrice = GetDaiPriceUSD();
+        uint256 daiPriceUsd = GetDaiPriceUSD();
 
-        // // get the price of 1 UPDAI in DAI, where 1:1 == 1e18
-        // uint256 upDaiDaiPrice = uint256(1e18).add(daiUsdPrice.sub(1)).mul(
-        //     leverage
-        // );
-        // // get the price of 1 DOWNDAI in DAI
-        // uint256 downDaiDaiPrice = uint256(1).sub(daiUsdPrice.sub(1)).mul(
-        //     leverage
-        // );
-        // // ETH amount needed for the UPDAI pool
-        // uint256 upDaiPoolEth = ((_underlyingAmount.div(2)).mul(upDaiDaiPrice))
-        //     .div(ethUsdPrice);
-        // // ETH amount needed for the DOWNDAI pool
-        // uint256 downDaiPoolEth = (
-        //     (_underlyingAmount.div(2)).mul(downDaiDaiPrice)
-        // )
-        //     .div(ethUsdPrice);
-        return (1, 1);
+        // Rate 1:1 == 1e18, 1.2:1 == 12e17
+        (uint256 upDaiRate, uint256 downDaiRate) = _getCurrentDaiRates(
+            daiPriceUsd
+        );
+        // e.g. (11e17 * 1e18) / 1e18 = 11e17
+        uint256 totalUpDaiValue = upDaiRate.mulTruncate(individualDeposits);
+        uint256 totalDownDaiValue = downDaiRate.mulTruncate(individualDeposits);
+
+        // ETH amount needed for the UPDAI pool
+        // e.g. (11e17 * 1e18) / 287e18 = 11e35 / 287e18 = 3e15 ETH
+        uint256 upDaiPoolEth = totalUpDaiValue.divPrecisely(ethUsdPrice);
+        uint256 downDaiPoolEth = totalDownDaiValue.divPrecisely(ethUsdPrice);
+        return (upDaiPoolEth, downDaiPoolEth);
     }
 
     function claimRewards() external onlyInSettlementPeriod {
