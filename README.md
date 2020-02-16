@@ -1,4 +1,4 @@
-# UpsideDai     [![CircleCI](https://circleci.com/gh/Daichotomy/UpSideDai/tree/master.svg?style=svg)](https://circleci.com/gh/Daichotomy/UpSideDai/tree/master)
+# UpsideDai     [![CircleCI](https://circleci.com/gh/Daichotomy/UpSideDai/tree/master.svg?style=svg)](https://circleci.com/gh/Daichotomy/UpSideDai/tree/master) [![Coverage Status](https://coveralls.io/repos/github/Daichotomy/UpSideDai/badge.svg?branch=master)](https://coveralls.io/github/Daichotomy/UpSideDai?branch=master)
 
 UpsideDai is a highly leveraged contract for difference (CFD) built on Dai, Uniswap and Maker. This mechanism enables traders and speculators to bet on and hedge against price fluctuations of Dai by buying leveraged long or short positions. The CFD construction enables highly leverage (20x) while remaining capital efficient and not requiring high margin requirements (100% collateralalization). Positions are priced against the market observable Dai/Usd price by using a combination of the Maker oracle and Uniswap.
 
