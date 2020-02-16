@@ -1,6 +1,7 @@
 pragma solidity ^0.5.16;
 
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "./StableMath.sol";
 import "./CFD.sol";
 
 /**
@@ -8,6 +9,8 @@ import "./CFD.sol";
  * @dev Just a CFD factory
  */
 contract UpSideDai is Ownable {
+    using StableMath for uint256;
+
     mapping(uint256 => address) public deployedCFD;
 
     event CFDeployed(
@@ -49,7 +52,7 @@ contract UpSideDai is Ownable {
 
         require(_settlementLength > 0, "DaiHard::invalid settlement timestamp");
 
-        uint256 settlementDate = now + _settlementLength;
+        uint256 settlementDate = now.add(_settlementLength);
 
         deployedCFD[_version] = address(
             new CFD(
@@ -58,8 +61,8 @@ contract UpSideDai is Ownable {
                 _daiToken,
                 _leverage,
                 _fee,
-                _version,
-                settlementDate
+                settlementDate,
+                _version
             )
         );
 

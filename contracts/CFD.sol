@@ -9,35 +9,54 @@ import "./tokens/DownDai.sol";
 import "./StableMath.sol";
 
 /**
-  * @title CFD
-  * @author Daichotomy
+  * @title CFD - take a 20x leveraged position on the future price of DAI.. or provide
+  * liquidity to the market and earn staking rewards. Liquidation prices at 20x are 0.95<>1.05
+  * @author Daichotomy team
+  * @dev Check out all this sweet code!
   */
 contract CFD {
     using StableMath for uint256;
 
-    /**************** PROTOCOL CONFIGURATION ****************/
+    /***************************************
+                  CONNECTIONS
+    ****************************************/
+
     address public makerMedianizer;
     address public uniswapFactory;
     address public daiToken;
-    /********************************************************/
+
+    /***************************************
+                    CONFIG
+    ****************************************/
 
     UpDai public upDai;
     DownDai public downDai;
-    address public uniswapUpDaiExchange;
-    address public uniswapDownDaiExchange;
+    IUniswapExchange public uniswapUpDaiExchange;
+    IUniswapExchange public uniswapDownDaiExchange;
 
     uint256 public leverage; // 1x leverage == 1e18
     uint256 public feeRate; // 100% fee == 1e18, 0.3% fee == 3e15
     uint256 public settlementDate; // In seconds
 
+    /***************************************
+              STAKING & SETTLEMENT
+    ****************************************/
+
     bool public inSettlementPeriod = false;
     uint256 public daiPriceAtSettlement; // $1 == 1e18
     uint256 public upDaiRateAtSettlement; // 1:1 == 1e18
     uint256 public downDaiRateAtSettlement; // 1:1 == 1e18
-    uint256 public totalLP;
 
-    mapping(address => uint256) public UPLP; // Total LP for the UPDAI pool
-    mapping(address => uint256) public DPLP; // Total LP for the DOWNDAI pool
+    uint256 public totalMintVolumeInDai;
+
+    struct Stake {
+        uint256 upLP; // Total LP for the UPDAI pool
+        uint256 downLP; // Total LP for the UPDAI pool
+        uint256 mintVolume; // Total mint volume in DA units
+        bool liquidated; // Has this staker withdrawn his funds?
+    }
+
+    mapping(address => Stake) public stakes;
 
     event NeededEthCollateral(
         address indexed depositor,
@@ -77,11 +96,20 @@ contract CFD {
         upDai = new UpDai(_version);
         downDai = new DownDai(_version);
 
-        uniswapUpDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
-            address(upDai)
+        uniswapUpDaiExchange = IUniswapExchange(
+            IUniswapFactory(uniswapFactory).createExchange(address(upDai))
         );
-        uniswapDownDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
-            address(downDai)
+        uniswapDownDaiExchange = IUniswapExchange(
+            IUniswapFactory(uniswapFactory).createExchange(address(downDai))
+        );
+
+        require(
+            upDai.approve(address(uniswapUpDaiExchange), uint256(-1)),
+            "Approval of upDai failed"
+        );
+        require(
+            downDai.approve(address(uniswapDownDaiExchange), uint256(-1)),
+            "Approval of downDai failed"
         );
     }
 
@@ -141,18 +169,23 @@ contract CFD {
         downDai.mint(address(this), _daiDeposit.div(2));
 
         // Step 4. Contribute to Uniswap
-        uint256 upLP = IUniswapExchange(uniswapUpDaiExchange)
-            .addLiquidity
-            .value(upDaiEthUnits)(1, _daiDeposit.div(2), now + 3600);
-        uint256 downLP = IUniswapExchange(uniswapDownDaiExchange)
-            .addLiquidity
-            .value(downDaiEthUnits)(1, _daiDeposit.div(2), now + 3600);
+        uint256 upLP = uniswapUpDaiExchange.addLiquidity.value(upDaiEthUnits)(
+            1,
+            _daiDeposit.div(2),
+            now.add(3600)
+        );
+        uint256 downLP = uniswapDownDaiExchange.addLiquidity.value(
+            downDaiEthUnits
+        )(1, _daiDeposit.div(2), now + 3600);
 
         // Step 5. Store the LP and log the mint volume
-        uint256 newLP = upLP.add(downLP);
-        UPLP[msg.sender] = UPLP[msg.sender].add(upLP);
-        DPLP[msg.sender] = DPLP[msg.sender].add(downLP);
-        totalLP = totalLP.add(newLP);
+        totalMintVolumeInDai = totalMintVolumeInDai.add(_daiDeposit);
+        stakes[msg.sender] = Stake({
+            upLP: stakes[msg.sender].upLP.add(upLP),
+            downLP: stakes[msg.sender].downLP.add(downLP),
+            mintVolume: stakes[msg.sender].mintVolume.add(_daiDeposit),
+            liquidated: false
+        });
 
         // TODO - add a time element here to incentivise early stakers to provide liquidity
         // This will affect the proportionate amount of rewards they receive at the end
@@ -198,12 +231,41 @@ contract CFD {
         return (upDaiPoolEth, downDaiPoolEth);
     }
 
+    /**
+     * @notice Claims all rewards that a staker is eligable for
+     */
     function claimRewards() external onlyInSettlementPeriod {
+        Stake memory stake = stakes[msg.sender];
+        require(
+            stake.mintVolume > 0 && !stake.liquidated,
+            "Must be a valid staker"
+        );
+        stakes[msg.sender].liquidated = true;
+
         // 1. Claim Redemption Fees (proportionate to LP)
+        // e.g. (1e27 * 3e15)/1e18 = 3e42/1e18 = 3e24
+        uint256 totalRedemptionFees = totalMintVolumeInDai.mulTruncate(feeRate);
+        require(
+            IERC20(daiToken).transfer(msg.sender, totalRedemptionFees),
+            "Must receive the fees"
+        );
+
         // 2. Redeem or withdraw LP
-        //    - Get the LP, convert to L/S DAi
-        //    - Send back to user
-        // 3. Claim rDAI interest?
+        // 2.1. Get everything from Uniswap
+        (uint256 ethRedeemedUp, uint256 upDaiRedeemed) = uniswapUpDaiExchange
+            .removeLiquidity(stake.upLP, 1, 1, now + 3600);
+        (uint256 ethRedeemedDown, uint256 downDaiRedeemed) = uniswapDownDaiExchange
+            .removeLiquidity(stake.downLP, 1, 1, now + 3600);
+        // 2.2. Redeem all the tokens
+        _payout(
+            msg.sender,
+            upDaiRedeemed,
+            downDaiRedeemed,
+            upDaiRateAtSettlement,
+            downDaiRateAtSettlement
+        );
+        // 2.3. Transfer the eth to the user
+        msg.sender.transfer(ethRedeemedUp.add(ethRedeemedDown));
     }
 
     /***************************************
@@ -303,7 +365,7 @@ contract CFD {
      * @return downDaiRate where 1:1 == 1e18
      */
     function _getCurrentDaiRates(uint256 daiUsdPrice)
-        private
+        public
         returns (uint256 upDaiRate, uint256 downDaiRate)
     {
         // (1 + ((DaiPriceFeed-1) *  Leverage))
@@ -311,17 +373,17 @@ contract CFD {
         // (1 + (delta * leverage)), to find the up multiplier
         uint256 one = 1e18;
         bool priceIsPositive = daiUsdPrice > one;
-        // Get price delta, e.g. if daiUsdPrice == 99e16, delta == 1e16
+        // Get price delta, e.g. if daiUsdPrice == 1007e15, delta == 7e15
         uint256 delta = priceIsPositive
             ? daiUsdPrice.sub(one)
             : one.sub(daiUsdPrice);
         // Consider 20x leverage == 20e18 == 2e19, then
-        // e.g. 1e16 * 2e19 == 2e35, then truncate to 2e17
+        // e.g. 7e15 * 2e19 == 14e34, then truncate to 4e16
         uint256 deltaWithLeverage = delta.mulTruncate(leverage);
-        // e.g. 1e18 + 2e17 = 12e17
+        // e.g. 1e18 + 4e16 = 104e16
         uint256 winRate = one.add(deltaWithLeverage);
         // If the price has hit the roof, settle the contract
-        if (winRate >= 2) {
+        if (winRate >= uint256(2e18)) {
             inSettlementPeriod = true;
             daiPriceAtSettlement = daiUsdPrice;
             // If Price is positive, Up wins and is worth 2:1, where Down is worth 0:1

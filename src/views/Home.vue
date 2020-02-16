@@ -7,7 +7,7 @@
       </div>
       <div class="md-layout-item text-center" style="padding-top:100px">
         <span class="landingText"
-          >Do you have lows and highs daily?<br />
+          >Do you have highs and lows daily?<br />
           Everyone does.
           <span style="font-weight: bold;">Even </span>
           <span style="font-weight: bold; color:#FFC221">DAI.</span></span
@@ -48,7 +48,7 @@
         <br />
         <span class="memeTextSecondary">
           We help you to trade on DAI’s price <br />
-          variability leveraging 20x price exposure.</span
+          leveraging <b>20x</b> price exposure!</span
         >
       </div>
       <div class="md-layout-item">
@@ -58,19 +58,21 @@
         <br />
         <br />
         <span class="memeTextSecondary">
-          Either you want to trade or add liquidity,<br />
-          we help you to get profit on your bets.</span
+          Stake DAI to mint up/down DAI and auto supply it to<br />
+          Uniswap to get juicy rewards<br />
+          Traders -> take your position and profit on the volatility.</span
         >
       </div>
       <div class="md-layout-item">
         <img class="memeImage" src="../assets/meme3.png" />
         <br />
-        <span class="memeTextMain">30 day period withdraw</span>
+        <span class="memeTextMain">SETTLEMENT</span>
         <br />
         <br />
         <span class="memeTextSecondary">
-          After 30 days you will be able to sell your<br />
-          trades and to withdraw your assets.</span
+          Settlement: When DAI price hits the roof/floor or after 30 days<br />
+          <br />
+          Redeem your up/down DAI and take that profit</span
         >
       </div>
     </div>
@@ -184,7 +186,7 @@ export default {
   font-family: Roboto;
   font-style: normal;
   font-weight: 300;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 25px;
   align-items: center;
   text-align: center;

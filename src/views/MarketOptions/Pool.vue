@@ -8,7 +8,11 @@
         <br />
         <div class="priceBlob">
           <span class="priceBlobText">
-            {{ daiPrice }}
+            {{
+              cfdState.daiPrice
+                ? parseFloat(cfdState.daiPrice).toFixed(4)
+                : "Loading..."
+            }}
           </span>
         </div>
       </div>
@@ -50,17 +54,19 @@
                 >
                   <span class="SoftFont">
                     Ballance:
-                    <img class="clock" src="../../assets/dai.png" /> {{
-                      daiBallance
+                    <img class="clock" src="../../assets/dai.png" />
+                    {{
+                      userInfo.daiBallance
+                        ? parseFloat(userInfo.daiBallance).toFixed(2)
+                        : "Loading..."
                     }}</span
                   >
                   <div style="padding-top:5px" />
                   <span class="SoftFont">
                     Required:
-                    <img class="ethLogo" src="../../assets/eth.png" /> {{
-                      ethBallance
-                    }}</span
-                  >
+                    <img class="ethLogo" src="../../assets/eth.png" />
+                    {{ requiredEth }}
+                  </span>
                 </div>
                 <div class="md-layout-item" style="text-align: center;">
                   <span class="SoftFont">
@@ -86,6 +92,7 @@
 <script>
 import router from "@/router";
 import Lottie from "vue-lottie";
+import { mapGetters, mapState, mapActions } from "vuex";
 
 export default {
   name: "pool",
@@ -93,21 +100,29 @@ export default {
   data() {
     return {
       daiPrice: 1.069,
-      inputDaiAmount: 420.69,
+      inputDaiAmount: null,
       daiBallance: 101.69,
       ethBallance: 12.42,
       maturity: "16th March"
     };
   },
   methods: {
+    ...mapActions(["POOL"]),
     changeDirection(direction) {
       this.directionLong = direction;
     },
     deposit() {
       console.log("deposit");
+      this.POOL({ daiDeposit: this.inputDaiAmount });
     }
   },
-  mounted() {}
+  mounted() {},
+  computed: {
+    ...mapState(["cfdState", "userInfo"]),
+    requiredEth() {
+      return ((this.inputDaiAmount / 271.23)).toFixed(6);
+    }
+  }
 };
 </script>
 
@@ -149,7 +164,7 @@ export default {
   font-weight: 200 !important;
   font-size: 35px;
   line-height: 60px;
- 
+
   align-items: center;
   text-align: center;
   padding: 20px;
@@ -177,7 +192,7 @@ export default {
   width: 85px;
   height: 85px;
   background: #ffffff;
-  border: 2px solid #FFBA00;
+  border: 2px solid #ffba00;
   box-sizing: border-box;
   border-radius: 10px;
   cursor: pointer;
@@ -207,7 +222,7 @@ export default {
   transform: rotate(180deg);
 }
 .Deposit {
-  background: #FFBA00;
+  background: #ffba00;
   margin-top: 85px;
   border-radius: 15px;
   border: none;

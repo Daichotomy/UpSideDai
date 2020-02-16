@@ -8,7 +8,11 @@
         <br />
         <div class="priceBlob">
           <span class="priceBlobText">
-            {{ daiPrice }}
+            {{
+              cfdState.daiPrice
+                ? parseFloat(cfdState.daiPrice).toFixed(4)
+                : "Loading..."
+            }}
           </span>
         </div>
       </div>
@@ -37,10 +41,14 @@
                 </md-field>
               </span>
               <span class="SoftFont">
-                Ballance:
+                Balance:
                 <img class="text-center clock" src="../../assets/dai.png" />
-                {{ daiBallance }}</span
-              >
+                {{
+                  userInfo.daiBallance
+                    ? parseFloat(userInfo.daiBallance).toFixed(4)
+                    : "Loading..."
+                }}
+              </span>
             </div>
             <div>
               <div style="padding-top:30px; padding-bottom:0px">
@@ -105,7 +113,7 @@
         </div>
       </div>
       <div class="md-layout-item">
-        <md-button class="Deposit" @click="deposit()">Buy</md-button>
+        <md-button class="Deposit" @click="trade()">Buy</md-button>
       </div>
       <div class="md-layout-item"></div>
     </div>
@@ -115,6 +123,7 @@
 <script>
 import router from "@/router";
 import Lottie from "vue-lottie";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "trade",
@@ -122,14 +131,15 @@ export default {
   data() {
     return {
       daiPrice: 1.0101,
-      inputDaiAmount: 420.69,
-      buyPrice: 1.101,
+      inputDaiAmount: null,
+      //   buyPrice: 1.101,
       direction: null,
       daiBallance: 100.92,
       maturity: "16th March"
     };
   },
   methods: {
+    ...mapActions(["TRADE"]),
     changeDirection() {
       if (this.direction == null) {
         this.direction = "down";
@@ -144,11 +154,27 @@ export default {
         return;
       }
     },
-    deposit() {
-      console.log("deposit");
+    trade() {
+      console.log("TRADING");
+      this.TRADE({
+        direction: this.direction ? this.direction : "up",
+        inputDaiAmount: this.inputDaiAmount
+      });
     }
   },
-  mounted() {}
+  mounted() {},
+  computed: {
+    ...mapState(["cfdState", "userInfo"]),
+    buyPrice() {
+      //(1+(price-1)*20
+      let alpha = this.direction == null || this.direction == "up" ? 1 : -1;
+
+      let value = this.cfdState.daiPrice
+        ? 1 + alpha * (parseFloat(this.cfdState.daiPrice).toFixed(6) - 1) * 20
+        : "Loading...";
+      return value.toFixed(4);
+    }
+  }
 };
 </script>
 
