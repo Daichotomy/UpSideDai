@@ -10,10 +10,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20Burnable.sol";
 contract UpDai is ERC20Detailed, ERC20Mintable, ERC20Burnable {
     uint256 public version;
 
-    constructor(uint256 _version)
-        public
-        ERC20Detailed("Down Dai", "DOWNDAI", 18)
-    {
+    constructor(uint256 _version) public ERC20Detailed("Up Dai", "UPDAI", 18) {
         version = _version;
     }
 }
