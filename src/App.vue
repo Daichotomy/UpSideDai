@@ -22,12 +22,10 @@
             >My account</router-link>
           </li>
         </ul>
-        <span
-          ><clickable-address style="margin-top:20px" :eth-address="account" />
-          <p style="padding-top:5px; margin-top:4px; text-align: right">
-            {{ currentNetwork }}
-          </p></span
-        >
+        <span>
+          <clickable-address style="margin-top:20px" :eth-address="account" />
+          <p style="padding-top:5px; margin-top:4px; text-align: right">{{ currentNetwork }}</p>
+        </span>
       </div>
     </md-app-toolbar>
 
@@ -63,6 +61,7 @@ export default {
   components: { ClickableAddress, MiningTransaction },
   data() {
     return {
+      web3: null,
       web3Detected: true,
       menuVisible: false
     };
