@@ -170,9 +170,12 @@ export default {
       let alpha = this.direction == null || this.direction == "up" ? 1 : -1;
 
       let value = this.cfdState.daiPrice
-        ? 1 + alpha * (parseFloat(this.cfdState.daiPrice).toFixed(6) - 1) * 20
+        ? (
+            1 +
+            alpha * (parseFloat(this.cfdState.daiPrice).toFixed(6) - 1) * 20
+          ).toFixed(4)
         : "Loading...";
-      return value.toFixed(4);
+      return value;
     }
   }
 };
