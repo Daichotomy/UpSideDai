@@ -9,8 +9,10 @@ import "./tokens/DownDai.sol";
 import "./StableMath.sol";
 
 /**
-  * @title CFD
-  * @author Daichotomy
+  * @title CFD - take a 20x leveraged position on the future price of DAI.. or provide
+  * liquidity to the market and earn staking rewards. Liquidation prices at 20x are 0.95<>1.05
+  * @author Daichotomy team
+  * @dev Check out all this sweet code!
   */
 contract CFD {
     using StableMath for uint256;

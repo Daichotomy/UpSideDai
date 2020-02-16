@@ -8,14 +8,10 @@ pragma solidity ^0.5.16;
 library StableMath {
     /** @dev Scaling units for use in specific calculations */
     uint256 private constant fullScale = 1e18;
-    uint256 private constant percentScale = 1e16; // 1% == 1e16
 
     /** @dev Getters */
     function getScale() internal pure returns (uint256) {
         return fullScale;
-    }
-    function getPercent() internal pure returns (uint256) {
-        return percentScale;
     }
 
     /** @dev Scaled a given integer to the power of the full scale. */
@@ -63,19 +59,7 @@ library StableMath {
         return mulTruncate(a, b, fullScale);
     }
 
-    /** @dev Multiplies two numbers and truncates to ceil */
-    function mulTruncateCeil(uint256 a, uint256 b)
-        internal
-        pure
-        returns (uint256 c)
-    {
-        uint256 scaled = mul(a, b);
-        uint256 ceil = add(scaled, sub(fullScale, 1));
-        c = div(ceil, fullScale);
-    }
-
-    /** @dev Returns the integer division of two unsigned integers. Reverts on
-     * division by zero. The result is rounded towards zero. */
+    /** @dev Returns the integer division of two unsigned integers */
     function div(uint256 a, uint256 b) internal pure returns (uint256 c) {
         require(b > 0, "StableMath: division by zero");
         c = a / b;
@@ -89,22 +73,5 @@ library StableMath {
     {
         uint256 d = mul(a, fullScale);
         c = div(d, b);
-    }
-
-    /** @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * Reverts when dividing by zero. */
-    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-        require(b != 0, "StableMath: modulo by zero");
-        return a % b;
-    }
-
-    /** @dev Returns minimum of two numbers */
-    function min(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a > b ? b : a;
-    }
-
-    /** @dev Returns maximum of two numbers */
-    function max(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a > b ? a : b;
     }
 }
