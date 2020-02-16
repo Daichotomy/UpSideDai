@@ -333,7 +333,7 @@ contract CFD {
             return (finalUpDaiRate, finalDownDaiRate);
         }
         // e.g. 1e18 - 2e17 = 8e17
-        uint256 loseRate = one.sub(deltaWithLeverage);
+        uint256 loseRate = (uint256(2e18)).sub(deltaWithLeverage);
         // If price is positive, upDaiRate should be better :)
         return priceIsPositive ? (winRate, loseRate) : (loseRate, winRate);
     }

@@ -21,6 +21,7 @@ import {
 import * as chai from "chai";
 import chaiBN from "chai-bn";
 import { ether, BN } from "openzeppelin-test-helpers";
+import truffleAssert from "truffle-assertions";
 
 chai.use(chaiBN(BN));
 const { assert, expect } = chai;
@@ -81,9 +82,13 @@ contract("CFD", ([upSideDaiTeam, random]) => {
 
     describe("Liquidity provider", async () => {
         it("get required ETH for up&down pool", async () => {
-            let upDaiCollateral = await cfd.getETHCollateralRequirements(
-                daiAmountDeposit
-            );
+            let tx = await cfd.getETHCollateralRequirements(daiAmountDeposit);
+            truffleAssert.eventEmitted(tx, 'NeededEthCollateral', (ev) => {
+                console.log("eeeeeeevvvv");
+                console.log(ev);
+                console.log(ev.upDaiPoolEth.toString());
+                return ev;
+            });
         });
     });
 
