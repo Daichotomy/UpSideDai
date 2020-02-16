@@ -15,10 +15,13 @@ import truffleContract from "truffle-contract";
 import CFDABI from "../../build/CFD.json";
 import UniSwapABI from "../../build/IUniswapFactory.json";
 import UpSideDaiABI from "../../build/UpSideDai.json";
+import Erc20TokenABI from "../../build/ERC20.json";
 
 const Cfd = truffleContract(CFDABI);
 const UniSwap = truffleContract(UniSwapABI);
 const UpSideDai = truffleContract(UpSideDaiABI);
+const Erc20Token = truffleContract(Erc20TokenABI);
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -29,6 +32,9 @@ export default new Vuex.Store({
     etherscanBase: null,
     cfd: null,
     uniswap: null,
+    upSideDai: null,
+    upDai: null,
+    downDai: null,
     miningTransactionObject: {
       status: null,
       txHash: ""
@@ -56,8 +62,17 @@ export default new Vuex.Store({
     [mutations.SET_CFD]: async function(state, cfd) {
       state.cfd = cfd;
     },
-    [mutations.SET_UNISWAP]: async function(state, uniswap) {
-      state.uniswap = uniswap;
+    [mutations.SET_UNISWAPUPDAI]: async function(state, uniswapUpDai) {
+      state.uniswapUpDai = uniswapUpDai;
+    },
+    [mutations.SET_UNISWAPDOWNDAI]: async function(state, uniswapDownDai) {
+      state.uniswapDownDai = uniswapDownDai;
+    },
+    [mutations.SET_UPDAI]: async function(state, upDai) {
+      state.upDai = upDai;
+    },
+    [mutations.SET_DOWNDAI]: async function(state, downDai) {
+      state.downDai = downDai;
     },
     [mutations.SET_MINING_TRANSACTION_OBJECT](state, miningTransactionObject) {
       state.miningTransactionObject = miningTransactionObject;
@@ -78,6 +93,7 @@ export default new Vuex.Store({
       Cfd.setProvider(web3.currentProvider);
       UniSwap.setProvider(web3.currentProvider);
       UpSideDai.setProvider(web3.currentProvider);
+      Erc20Token.setProvider(web3.currentProvider);
       console.log("IN STORE");
       console.log(web3);
       commit(mutations.SET_WEB3, {
@@ -107,10 +123,29 @@ export default new Vuex.Store({
       console.log(cfd);
       commit(mutations.SET_CFD, cfd);
 
-      //   let uniswap = await UniSwap.deployed();
-      //   console.log("contract uniswap");
-      //   console.log(uniswap);
-      //   commit(mutations.SET_UNISWAP, uniswap);
+      let upDaiAddress = await cfd.uniswapUpDaiExchange();
+      let upDai = await Erc20Token.at(upDaiAddress);
+      console.log("contract upDai");
+      console.log(upDai);
+      commit(mutations.SET_UPDAI, upDai);
+
+      let downDaiAddress = await cfd.uniswapDownDaiExchange();
+      let downDai = await Erc20Token.at(downDaiAddress);
+      console.log("contract downDai");
+      console.log(downDai);
+      commit(mutations.SET_DOWNDAI, downDai);
+
+      let uniSwapUpDaiAddress = await cfd.uniswapUpDaiExchange();
+      let uniSwapUpDai = await Erc20Token.at(uniSwapUpDaiAddress);
+      console.log("contract upDaiUniswap");
+      console.log(uniSwapUpDai);
+      commit(mutations.SET_UNISWAPUPDAI, uniSwapUpDai);
+
+      let uniSwapDownDaiAddress = await cfd.uniswapDownDaiExchange();
+      let uniSwapDownDai = await Erc20Token.at(uniSwapDownDaiAddress);
+      console.log("contract DownDaiUniswap");
+      console.log(uniSwapDownDai);
+      commit(mutations.SET_UNISWAPDOWNDAI, uniSwapDownDai);
     },
     // [actions.COMMIT]: async function ({
     //   commit,
