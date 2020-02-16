@@ -23,6 +23,14 @@ module.exports = async function(callback) {
         console.log("DAI token");
         console.log(tx);
 
+        tx = await cfd.upDai();
+        console.log("UPDAI token");
+        console.log(tx);
+
+        tx = await cfd.downDai();
+        console.log("DOWNDAI token");
+        console.log(tx);
+
         tx = await cfd.uniswapUpDaiExchange();
         console.log("UPDAI Uniswap exchange");
         console.log(tx);

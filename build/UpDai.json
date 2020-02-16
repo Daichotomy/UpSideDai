@@ -1168,7 +1168,8 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-02-16T14:12:16.123Z",
+  "updatedAt": "2020-02-16T14:35:19.501Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {
       "allowance(address,address)": {

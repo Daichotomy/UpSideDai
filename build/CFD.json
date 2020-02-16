@@ -25505,7 +25505,8 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-02-16T14:12:16.089Z",
+  "updatedAt": "2020-02-16T14:35:19.517Z",
+  "networkType": "ethereum",
   "devdoc": {
     "author": "Daichotomy team",
     "details": "Check out all this sweet code!",

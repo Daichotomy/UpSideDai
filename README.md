@@ -81,7 +81,7 @@ These three sources of revenue makes being a liquidity provider for UpsideDai mo
 
 ### Transaction Flow
 
-- At the time of depositing 
+- At the time of providing liquidity into the protocol as a market maker, the deposited asset (DAI) 
 
 ## Technical Description
 
@@ -144,12 +144,12 @@ The contract addresses deployed on `Mainnet` Mainnet:
 
 | Contract                  | Address                                                                                                               |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| UpSideDai                 | [0xE62D238db69cCdD2F177bd8a370043Dac162d6C8](https://etherscan.io/address/0xE62D238db69cCdD2F177bd8a370043Dac162d6C8) |
-| CFD                       | [0x8039a64414786a66b35d2793C2982c62E9fB02C8](https://etherscan.io/address/0x8039a64414786a66b35d2793C2982c62E9fB02C8) |
-| UPDAI                     | [0xEf51576000b972569154e4372e8f636cAf810784](https://etherscan.io/address/0xEf51576000b972569154e4372e8f636cAf810784) |
-| DOWNDAI                   | [0xa1845C1bB4f76E8dfAb032A0f2F6b237c114ECc2](https://etherscan.io/address/0xa1845C1bB4f76E8dfAb032A0f2F6b237c114ECc2) |
-| UPDAI Uniswap Exchange    | [0xCB34BB3bea8E133a4a1B33c33C94224ABDeC93c8](https://etherscan.io/address/0xCB34BB3bea8E133a4a1B33c33C94224ABDeC93c8) |
-| DOWNDAI Uniswap Exchange  | [0xb3aB20695CB498698Da938A7Bab828F5ebD5ae48](https://etherscan.io/address/0xb3aB20695CB498698Da938A7Bab828F5ebD5ae48) |
+| UpSideDai                 | [0xaE2F528965280278A4653dC0092779d3016fcDA6](https://etherscan.io/address/0xaE2F528965280278A4653dC0092779d3016fcDA6) |
+| CFD                       | [0xdb3ff384bAFf85A734DEf4888576Fa54010050D4](https://etherscan.io/address/0xdb3ff384bAFf85A734DEf4888576Fa54010050D4) |
+| UPDAI                     | [0x78FF871EcDbC2DAb4212772192b48cAE1ec74b8E](https://etherscan.io/address/0x78FF871EcDbC2DAb4212772192b48cAE1ec74b8E) |
+| DOWNDAI                   | [0xBC95FD0847E5982052f246402c9ca07D6B147139](https://etherscan.io/address/0xBC95FD0847E5982052f246402c9ca07D6B147139) |
+| UPDAI Uniswap Exchange    | [0x1F4488E2569b78C5Df38c0EEfdbc25a205931305](https://etherscan.io/address/0x1F4488E2569b78C5Df38c0EEfdbc25a205931305) |
+| DOWNDAI Uniswap Exchange  | [0x70e76de7A90A77F2bdaa3a6fE7950C247591C5BA](https://etherscan.io/address/0x70e76de7A90A77F2bdaa3a6fE7950C247591C5BA) |
 | Uniswap Factory           | [0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95](https://etherscan.io/address/0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95) |
 | MakerDAO Medianizer       | [0xE3774Af455602C5a0EACC1b0f93e3cE0f65236ce](https://etherscan.io/address/0xE3774Af455602C5a0EACC1b0f93e3cE0f65236ce) |
 

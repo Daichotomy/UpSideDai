@@ -4,7 +4,7 @@ const config = require("./config.json");
 
 module.exports = async function(callback) {
     try {
-        if(config.upSideDai == '') {
+        if(config.ge == '') {
         console.log("Specify a UpSideDai contract address in the config file");
         return;
         }

@@ -3686,126 +3686,13 @@
         }
       },
       "links": {},
-      "address": "0xE62D238db69cCdD2F177bd8a370043Dac162d6C8",
-      "transactionHash": "0xdddbfe7fac244ac0159e2978f315e55c1d5050bdb5503de385d58431d787fc0b"
-    },
-    "1581843745097": {
-      "events": {
-        "0x5d150dd53a2d89d347748e6a2a9cd1fee651d7dd3740ab18ca8375e48b84a5ab": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "CFD",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "creationDate",
-              "type": "uint256"
-            },
-            {
-              "indexed": true,
-              "internalType": "uint256",
-              "name": "settlementDate",
-              "type": "uint256"
-            },
-            {
-              "indexed": true,
-              "internalType": "uint256",
-              "name": "version",
-              "type": "uint256"
-            }
-          ],
-          "name": "CFDeployed",
-          "type": "event"
-        },
-        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "previousOwner",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "name": "OwnershipTransferred",
-          "type": "event"
-        }
-      },
-      "links": {},
-      "address": "0x570cbADe5c366a97D0C564E5aB7Fd6fbEb67A191",
-      "transactionHash": "0x88e311f64e41fd90015401c348df34a95135a641a7fe850976b28104302aa48e"
-    },
-    "1581857423025": {
-      "events": {
-        "0x5d150dd53a2d89d347748e6a2a9cd1fee651d7dd3740ab18ca8375e48b84a5ab": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "CFD",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "creationDate",
-              "type": "uint256"
-            },
-            {
-              "indexed": true,
-              "internalType": "uint256",
-              "name": "settlementDate",
-              "type": "uint256"
-            },
-            {
-              "indexed": true,
-              "internalType": "uint256",
-              "name": "version",
-              "type": "uint256"
-            }
-          ],
-          "name": "CFDeployed",
-          "type": "event"
-        },
-        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "previousOwner",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "name": "OwnershipTransferred",
-          "type": "event"
-        }
-      },
-      "links": {},
-      "address": "0xF1b4368FfbaC8F840108c2b21c0d9e7649778dC9",
-      "transactionHash": "0xc6def054021e78d1de72a8ed8dd9ddf8db0a9830556e3de69a1af44904e7b867"
+      "address": "0xaE2F528965280278A4653dC0092779d3016fcDA6",
+      "transactionHash": "0x6df16a9eac98f1b323f24c802c3c841396ec8b7fc52c3075c3aa8c6d1f7facfd"
     }
   },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-02-16T14:12:16.103Z",
+  "updatedAt": "2020-02-16T14:35:19.506Z",
+  "networkType": "ethereum",
   "devdoc": {
     "details": "Just a CFD factory",
     "methods": {
