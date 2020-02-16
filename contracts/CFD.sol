@@ -8,6 +8,10 @@ import "./tokens/UpDai.sol";
 import "./tokens/DownDai.sol";
 import "./StableMath.sol";
 
+/**
+  * @title x
+  * @author Daichotomy
+  */
 contract CFD {
     using StableMath for uint256;
 
@@ -23,10 +27,13 @@ contract CFD {
     address public uniswapDownDaiExchange;
 
     uint256 public leverage; // 1x leverage == 1e18
-    uint256 public fee; // 100% fee == 1e18, 0.3% fee == 3e15
+    uint256 public feeRate; // 100% fee == 1e18, 0.3% fee == 3e15
     uint256 public settlementDate; // In seconds
 
     bool public inSettlementPeriod = false;
+    uint256 public daiPriceAtSettlement; // $1 == 1e18
+    uint256 public upDaiRateAtSettlement; // 1:1 == 1e18
+    uint256 public downDaiRateAtSettlement; // 1:1 == 1e18
 
     mapping(address => uint256) public providerLP; // Total LP for a given staker
     uint256 totalLP;
@@ -55,7 +62,7 @@ contract CFD {
         daiToken = _daiToken;
 
         leverage = _leverage;
-        fee = _fee;
+        feeRate = _fee;
         settlementDate = _settlementDate;
 
         upDai = new UpDai(_version);
@@ -74,10 +81,12 @@ contract CFD {
     ****************************************/
 
     modifier notInSettlementPeriod() {
-        require(!inSettlementPeriod, "Must not be in settlement period");
-        if (settlementDate > now) {
-            // settle
+        if (now > settlementDate) {
+            inSettlementPeriod = true;
+            daiPriceAtSettlement = GetDaiPriceUSD();
+
         }
+        require(!inSettlementPeriod, "Must not be in settlement period");
         _;
     }
 
@@ -137,6 +146,10 @@ contract CFD {
             _underlyingAmount.div(2),
             now + 3600
         );
+
+        // TODO - add a time element here to incentivise early stakers to provide liquidity
+        // This will affect the proportionate amount of rewards they receive at the end
+
         uint256 newLP = upLP.add(downLP);
         providerLP[msg.sender] = providerLP[msg.sender].add(newLP);
         totalLP = totalLP.add(newLP);
@@ -194,22 +207,12 @@ contract CFD {
      * @dev this function can be called before the settlement date, an equal amount of UPDAI and DOWNDAI should be deposited
      */
     function redeem(uint256 _redeemAmount) public notInSettlementPeriod {
-        // get DAI price
-        uint256 daiUsdPrice = GetDaiPriceUSD();
-
         // burn UPDAI & DOWNDAI from redeemer
         upDai.burnFrom(msg.sender, _redeemAmount);
         downDai.burnFrom(msg.sender, _redeemAmount);
 
         // spread MONEY bitches
-        _payout(
-            msg.sender,
-            _redeemAmount,
-            _redeemAmount,
-            daiUsdPrice,
-            leverage,
-            fee
-        );
+        _payout(msg.sender, _redeemAmount, _redeemAmount);
     }
 
     /**
@@ -217,30 +220,18 @@ contract CFD {
      * @dev this function can only be called after contract settlement
      */
     function redeemFinal() public onlyInSettlementPeriod {
-        require(now >= settlementDate, "CFD::contract did not settle yet");
-
-        // get DAI price
-        uint256 daiUsdPrice = GetDaiPriceUSD();
-
         // get upDai balance
         uint256 upDaiRedeemAmount = upDai.balanceOf(msg.sender);
         // get downDai balance
         uint256 downDaiRedeemAmount = downDai.balanceOf(msg.sender);
 
-        // spread MONEY bitches
-        _payout(
-            msg.sender,
-            upDaiRedeemAmount,
-            downDaiRedeemAmount,
-            daiUsdPrice,
-            leverage,
-            fee
-        );
-
         // burn upDai
         upDai.burnFrom(msg.sender, upDaiRedeemAmount);
         // burn downDai
         downDai.burnFrom(msg.sender, downDaiRedeemAmount);
+
+        // spread MONEY bitches
+        _payout(msg.sender, upDaiRedeemAmount, downDaiRedeemAmount);
     }
 
     /***************************************
@@ -251,32 +242,28 @@ contract CFD {
      * @notice $ payout function $
      * @dev can only be called internally
      * @param redeemer redeemer address
-     * @param upDai amount of UpDai
-     * @param downDai amount of DownDai
-     * @param p price of DAI in USD $$$
-     * @param l leverage
-     * @param f payout fee
+     * @param upDai units of UpDai
+     * @param downDai units of DownDai
      */
-    function _payout(
-        address redeemer,
-        uint256 upDai,
-        uint256 downDai,
-        uint256 p,
-        uint256 l,
-        uint256 f
-    ) internal {
-        // daiReturnedLong=upDaiToRedeem(1+(DaiPriceFeed-1)Leverage)(1-fee)
-        // daiReturnedShort=downDaiToRedeem(1-(DaiPriceFeed-1)Leverage)(1-fee)
-
-        // TODO - switch out small numbers for `exact` numbers (i.e. 1 == 1e18), to avoid rounding errors
-        // occurring in things like `uint256(1).sub(f)`.. this is always going to be 0
-
-        uint256 cash = upDai.mul(uint256(1).add(p.sub(1)).mul(l)).mul(
-            uint256(1).sub(f)
-        ) +
-            downDai.mul(uint256(1).sub(p.sub(1)).mul(l)).mul(uint256(1).sub(f));
-
-        IERC20(daiToken).transfer(redeemer, cash);
+    function _payout(address redeemer, uint256 upDaiUnits, uint256 downDaiUnits)
+        internal
+    {
+        uint256 daiPriceUsd = GetDaiPriceUSD();
+        // Rate 1:1 == 1e18, 1.2:1 == 12e17
+        (bool success, uint256 upDaiRate, uint256 downDaiRate) = _getCurrentDaiRates(
+            daiPriceUsd
+        );
+        if (success) {
+            // e.g. (12e17 * 100e18) / 1e18 = 12e37 / 1e18 = 120e18
+            uint256 convertedUpDai = upDaiRate.mulTruncate(upDaiUnits);
+            // e.g. (8e17 * 100e18) / 1e18 = 8e37 / 1e18 = 80e18
+            uint256 convertedDownDai = downDaiRate.mulTruncate(downDaiUnits);
+            // if feeRate = 3e15, (2e20*3e15)/1e18 = 6e17
+            uint256 totalDaiPayout = (convertedUpDai.add(convertedDownDai))
+                .mulTruncate(feeRate);
+            // Pay the moola
+            IERC20(daiToken).transfer(redeemer, totalDaiPayout);
+        }
     }
 
     /***************************************
@@ -289,7 +276,7 @@ contract CFD {
     function _getCurrentDaiRates(uint256 daiUsdPrice)
         private
         view
-        returns (uint256 upDaiRate, uint256 downDaiRate)
+        returns (bool success, uint256 upDaiRate, uint256 downDaiRate)
     {
         // (1 + ((DaiPriceFeed-1) *  Leverage))
         // Given that price is reflected absolutely on both sides.. then
@@ -306,12 +293,17 @@ contract CFD {
         // e.g. 1e18 + 2e17 = 12e17
         uint256 winRate = one.add(deltaWithLeverage);
         if (winRate >= 2) {
-            // TODO - the contract is now over.. this should be settlement time
+            daiPriceAtSettlement = daiUsdPrice;
+            inSettlementPeriod = true;
+            return (false, 0, 0);
         }
         // e.g. 1e18 - 2e17 = 8e17
         uint256 loseRate = one.sub(deltaWithLeverage);
         // If price is positive, upDaiRate should be better :)
-        return priceIsPositive ? (winRate, loseRate) : (loseRate, winRate);
+        return
+            priceIsPositive
+                ? (true, winRate, loseRate)
+                : (true, loseRate, winRate);
     }
 
     /**
