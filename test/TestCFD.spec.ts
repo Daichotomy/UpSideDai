@@ -70,28 +70,27 @@ contract("CFD", ([upSideDaiTeam, random]) => {
   describe("CFD deployment", async () => {
     it("check deployment params", async () => {
       expect(await upDai.totalSupply()).bignumber.eq(
-        new BN(0),
+        new BN((50 * 10 ** 18).toString()),
         "upDai total supply mismatch"
       );
       expect(await downDai.totalSupply()).bignumber.eq(
-        new BN(0),
+        new BN((50 * 10 ** 18).toString()),
         "downDai total supply mismatch"
       );
     });
   });
 
-    describe("Liquidity provider", async () => {
-        it("get required ETH for up&down pool", async () => {
-            let ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
-            let daiPrice = await cfd.GetDaiPriceUSD();
+  describe("Liquidity provider", async () => {
+    it("get required ETH for up&down pool", async () => {
+      let ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
+      let daiPrice = await cfd.GetDaiPriceUSD();
 
-            let tx = await cfd.getETHCollateralRequirements(daiAmountDeposit);
-            truffleAssert.eventEmitted(tx, "NeededEthCollateral", ev => {
-                console.log(ev.downDaiPoolEth.toString());
-                console.log(ev.upDaiPoolEth.toString());
-                return ev;
-            });
-        });
+      let tx = await cfd.getETHCollateralRequirements(daiAmountDeposit);
+      truffleAssert.eventEmitted(tx, "NeededEthCollateral", ev => {
+        console.log(ev.downDaiPoolEth.toString());
+        console.log(ev.upDaiPoolEth.toString());
+        return ev;
+      });
     });
   });
 
