@@ -3,7 +3,7 @@
     <div class="rowObject">
       <div
         class="md-layout sections"
-        style="padding-left:25px;padding-top:15px"
+        style="padding-left:25px;padding-top:20px"
       >
         <div class="md-layout-item">
           <span class="rowDetails rowDetailsItem">DAI</span>
@@ -20,12 +20,28 @@
         </div>
         <div class="md-layout-item">
           <span class="rowDetails rowDetailsItem">Amount</span>
-          <br />
-          <span class="detailedItem"> {{ historyItem.amount }}</span>
+          <div style="margin-top:10px" />
+          <span class="detailedItem" style="margin-top:15px">
+            {{ historyItem.amount }}</span
+          >
         </div>
-        <div class="md-layout-item"></div>
-        <div class="md-layout-item"></div>
-        <div class="md-layout-item"></div>
+        <div class="md-layout-item">
+          <span class="rowDetails rowDetailsItem">Buy Price</span>
+          <div style="margin-top:10px" />
+          <span class="detailedItem" style="margin-top:15px">
+            {{ historyItem.amount }}</span
+          >
+        </div>
+        <div class="md-layout-item">
+          <span class="rowDetails rowDetailsItem">WithDrawal Date</span>
+          <div style="margin-top:10px" />
+          <span class="detailedItem" style="margin-top:15px">
+            {{ historyItem.amount }}</span
+          >
+        </div>
+        <div class="md-layout-item">
+          <md-button class="withdrawalButton" @click="deposit()">Buy</md-button>
+        </div>
       </div>
 
       <!-- {{ historyItem }} -->
@@ -99,16 +115,30 @@ export default {
 .finger {
   padding: 0px;
   position: relative;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   margin-bottom: 10px;
 }
 .fingerFlip {
   padding-top: 0px;
   position: relative;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   transform: rotate(180deg);
   margin-bottom: 10px;
+}
+.withdrawalButton {
+  background: #fece4d;
+  margin-top: 85px;
+  border-radius: 15px;
+  border: none;
+  color: #473144;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  height: 70px;
+  font-weight: 500;
 }
 </style>
