@@ -141,13 +141,13 @@ export default new Vuex.Store({
       console.log(dai);
       commit(mutations.SET_DAI, dai);
 
-      let upDaiAddress = await cfd.uniswapUpDaiExchange();
+      let upDaiAddress = await cfd.upDai();
       let upDai = await Erc20Token.at(upDaiAddress);
       console.log("contract upDai");
       console.log(upDai);
       commit(mutations.SET_UPDAI, upDai);
 
-      let downDaiAddress = await cfd.uniswapDownDaiExchange();
+      let downDaiAddress = await cfd.downDai();
       let downDai = await Erc20Token.at(downDaiAddress);
       console.log("contract downDai");
       console.log(downDai);
@@ -258,13 +258,13 @@ export default new Vuex.Store({
       console.log("walletApproval", walletApproval.toString());
       let timestamp = Math.floor(Date.now() / 1000) + 1000;
 
-      await state.dai.approve(
-        uniswapExchange.address,
-        state.web3.web3.utils.toWei("100000"),
-        { from: state.account }
-      );
-
       if (walletApproval.toString() == "0") {
+        console.log("upOrDownDai", upOrDownDai);
+        await upOrDownDai.approve(
+          uniswapExchange.address,
+          state.web3.web3.utils.toWei("100000"),
+          { from: state.account }
+        );
         await state.dai.approve(
           uniswapExchange.address,
           state.web3.web3.utils.toWei("100000"),
@@ -272,14 +272,13 @@ export default new Vuex.Store({
         );
         console.log("passedApprove");
         let txHash = await uniswapExchange.tokenToTokenSwapInput(
-          state.web3.web3.utils.toWei("100000000"),
+          state.web3.web3.utils.toWei("10000000"),
           1,
           1,
           timestamp,
           state.dai.address,
           {
-            from: state.account,
-            value: state.web3.web3.utils.toWei("1")
+            from: state.account
           }
         );
 
@@ -292,14 +291,13 @@ export default new Vuex.Store({
       } else {
         console.log("passedApprove");
         let txHash = await uniswapExchange.tokenToTokenSwapInput(
-          state.web3.web3.utils.toWei("100000000"),
+          state.web3.web3.utils.toWei("10000000"),
           1,
           1,
           timestamp,
           state.dai.address,
           {
-            from: state.account,
-            value: state.web3.web3.utils.toWei("1")
+            from: state.account
           }
         );
 
