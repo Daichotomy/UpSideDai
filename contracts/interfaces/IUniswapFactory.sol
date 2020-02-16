@@ -1,7 +1,5 @@
 pragma solidity ^0.5.16;
 
-// Solidity Interface
-
 contract IUniswapFactory {
     // Public Variables
     address public exchangeTemplate;
