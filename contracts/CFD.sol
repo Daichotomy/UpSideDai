@@ -130,36 +130,25 @@ contract CFD {
         (uint256 upDaiEthUnits, uint256 downDaiEthUnits) = getETHCollateralRequirements(
             _daiDeposit
         );
-        // >>>>>>>>>>>>> IM HERE
-        require(
-            (_ethAmount == msg.value) &&
-                (_ethAmount == upDaiCollateral + downDaiCollateral),
-            "CFD::error transfering ETH"
-        );
+        uint256 totalETHCollateral = upDaiEthUnits.add(downDaiEthUnits);
+        require(msg.value >= totalETHCollateral, "CFD::error transfering ETH");
 
         // Step 4. Contribute to Uniswap
         uint256 upLP = IUniswapExchange(uniswapUpDaiExchange)
             .addLiquidity
-            .value(upDaiCollateral)(
-            upDaiCollateral,
-            _daiDeposit.div(2),
-            now + 3600
-        );
+            .value(upDaiEthUnits)(1, _daiDeposit.div(2), now + 3600);
         uint256 downLP = IUniswapExchange(uniswapDownDaiExchange)
             .addLiquidity
-            .value(downDaiCollateral)(
-            downDaiCollateral,
-            _daiDeposit.div(2),
-            now + 3600
-        );
+            .value(downDaiEthUnits)(1, _daiDeposit.div(2), now + 3600);
 
         // Step 5. Store the LP and log the mint volume
-        // TODO - add a time element here to incentivise early stakers to provide liquidity
-        // This will affect the proportionate amount of rewards they receive at the end
-
         uint256 newLP = upLP.add(downLP);
         providerLP[msg.sender] = providerLP[msg.sender].add(newLP);
         totalLP = totalLP.add(newLP);
+
+        // TODO - add a time element here to incentivise early stakers to provide liquidity
+        // This will affect the proportionate amount of rewards they receive at the end
+
     }
 
     /**
