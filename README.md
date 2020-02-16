@@ -19,6 +19,8 @@
   - [Transaction Flow](#transaction-flow)
 - [Technical Description](#technical-description)
   - [Local Development Setup](#local-development-setup)
+    - [Testing](#testing)
+    - [Code Linting](#code-linting)
   - [Smart Contracts](#smart-contracts)
 
 ---
@@ -92,6 +94,45 @@ As a pre-requisite, you need:
 - Node.js
 - npm
 
+Clone the project and install all dependencies:
+
+    git clone git@github.com:Daichotomy/UpSideDai.git
+    cd UpSideDai/
+
+    # install project dependencies
+    $ npm i
+
+Compile the solidity contracts:
+
+    $ npm run compile
+
+In a new terminal, launch an Ethereum RPC client, we use the default ganache-cli command to configure and run a local development ganache:
+
+    $ npm run ganache
+
+Switch back to your other terminal and deploy the contracts:
+
+    $ npm run migrate:development
+
+Make sure to setup the deployments parameters in `./migrations/deployment-config.json` file
+
+#### Testing
+
+Run tests with:
+
+    $ npm run test
+
+#### Code Linting
+
+Linting is setup for `JavaScript` with [ESLint](https://eslint.org) & Solidity with [Solhint](https://protofire.github.io/solhint/) 
+
+    # lint solidity contracts
+    $ npm run lint:contracts
+
+    # lint tests
+    $ npm run lint:tests
+
+Code style is enforced through the CI test process, builds will fail if there're any linting errors.
 
 ### Smart Contracts
 
