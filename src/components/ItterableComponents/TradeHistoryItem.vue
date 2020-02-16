@@ -1,9 +1,9 @@
 <template>
   <div class="page-container">
-    <div class="rowObject">
+    <div class="rowObject" :class="historyItem.disabled ? 'disabled' : ''">
       <div
         class="md-layout sections"
-        style="padding-left:25px;padding-top:20px"
+        style="padding-left:10px;padding-right:10px;padding-top:20px"
       >
         <div class="md-layout-item">
           <span class="rowDetails rowDetailsItem">Direction</span>
@@ -39,7 +39,7 @@
             {{ historyItem.amount }}</span
           >
         </div>
-        <div class="md-layout-item">
+        <div class="md-layout-item" v-if="!historyItem.disabled">
           <md-button class="withdrawalButton" @click="deposit()"
             >withdraw</md-button
           >
@@ -137,8 +137,12 @@ export default {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 20px;
+  font-size: 16px;
+  padding: 15px;
   height: 50px;
   font-weight: 500;
+}
+.disabled {
+  background-color: #f4f3f3;
 }
 </style>

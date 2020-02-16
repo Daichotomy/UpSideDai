@@ -17,7 +17,7 @@
           class="rowItem"
         />
 
-        <div style="padding-top:75px" />
+        <div style="padding-top:50px" />
         <span class="SectionHeading">My Historical trades</span>
         <div style="padding-top:10px" />
         <span class="SectionDetails">
@@ -25,7 +25,7 @@
         >
         <div style="padding-top:10px" />
         <TradeHistoryItem
-          v-for="item in tableData"
+          v-for="item in tableDataHistory"
           :historyItem="item"
           class="rowItem"
         />
@@ -57,6 +57,28 @@ export default {
           amount: 3507,
           buyPrice: 1.01,
           RedemptionDate: "15.02.2019"
+        },
+        {
+          direction: "up",
+          amount: 420.69,
+          buyPrice: 0.98,
+          RedemptionDate: "15.02.2019"
+        }
+      ],
+      tableDataHistory: [
+        {
+          direction: "up",
+          amount: 2507,
+          buyPrice: 0.97,
+          RedemptionDate: "15.02.2019",
+          disabled: true
+        },
+        {
+          direction: "down",
+          amount: 3507,
+          buyPrice: 1.01,
+          RedemptionDate: "15.02.2019",
+          disabled: true
         }
       ]
     };
