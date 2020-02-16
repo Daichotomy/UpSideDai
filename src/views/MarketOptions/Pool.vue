@@ -53,7 +53,7 @@
                   style="text-align: left; padding-left:30px"
                 >
                   <span class="SoftFont">
-                    Balance:
+                    Ballance:
                     <img class="clock" src="../../assets/dai.png" />
                     {{
                       userInfo.daiBallance
@@ -122,7 +122,8 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapState(["cfdState", "userInfo"])
+    ...mapState(["cfdState", "userInfo"]),
+    
   }
 };
 </script>

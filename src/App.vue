@@ -26,7 +26,7 @@
         </ul>
         <span
           ><clickable-address style="margin-top:20px" :eth-address="account" />
-          <p style="padding-right:10px  padding-top:5px; margin-top:4px">
+          <p style="padding-top:5px; margin-top:4px; text-align: right">
             {{ currentNetwork }}
           </p></span
         >
