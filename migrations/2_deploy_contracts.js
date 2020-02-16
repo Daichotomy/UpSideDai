@@ -33,14 +33,14 @@ module.exports = async (deployer, network, accounts) => {
     const oneMonthInSeconds = 60 * 60 * 24 * 30;
     const now = new Date().getTime() / 1000;
 
-    if (network == "development") {
+    if (network == "development" || network == "coverage") {
         // Deploy mock token / DAI
         await deployer.deploy(c_ERC20Mock, "Templator", "TMPLT", 1000000, { from: acc_default });
         const d_ERC20Mock = await c_ERC20Mock.deployed();
         d_ERC20Mock.mint(acc_default, 500, { from: acc_default});
 
         // Medianizer mocks
-        const ethPrice = (266 * 10**18).toString();
+        // const ethPrice = (266 * 10**18).toString();
         await deployer.deploy(c_MakerMedianizerMock, { from: acc_default });
         const d_MakerMedianizerMock = await c_MakerMedianizerMock.deployed();
 
