@@ -17,13 +17,12 @@
   - [Calculating The Settlement Price Of The CDF](#calculating-the-settlement-price-of-the-cdf)
   - [Incentives For Market Makers](#incentives-for-market-makers)
   - [Transaction Flow](#transaction-flow)
+- [Local Development Setup](#local-development-setup)
+  - [Testing](#testing)
+  - [Code Linting](#code-linting)
+- [Networks](#networks)
+  - [Mainnet](#mainnet)
 - [Technical Description](#technical-description)
-  - [Local Development Setup](#local-development-setup)
-    - [Testing](#testing)
-    - [Code Linting](#code-linting)
-  - [Networks](#networks)
-    - [Mainnet](#mainnet)
-  - [Smart Contracts](#smart-contracts)
 
 ---
 
@@ -83,11 +82,7 @@ These three sources of revenue makes being a liquidity provider for UpsideDai mo
 
 - At the time of providing liquidity into the protocol as a market maker, the deposited asset (DAI) 
 
-## Technical Description
-
-You can find more in our [smart contracts documentation](docs/CFD.md)
-
-### Local Development Setup
+## Local Development Setup
 
 For local development it is recommended to use [ganache](http://truffleframework.com/ganache/) to run a local development chain. Using the ganache simulator no full Ethereum node is required.
 
@@ -118,13 +113,13 @@ Switch back to your other terminal and deploy the contracts:
 
 Make sure to setup the deployments parameters in `./migrations/deployment-config.json` file
 
-#### Testing
+### Testing
 
 Run tests with:
 
     $ npm run test
 
-#### Code Linting
+### Code Linting
 
 Linting is setup for `JavaScript` with [ESLint](https://eslint.org) & Solidity with [Solhint](https://protofire.github.io/solhint/) 
 
@@ -136,9 +131,9 @@ Linting is setup for `JavaScript` with [ESLint](https://eslint.org) & Solidity w
 
 Code style is enforced through the CI test process, builds will fail if there're any linting errors.
 
-### Networks
+## Networks
 
-#### Mainnet
+### Mainnet
 
 The contract addresses deployed on `Mainnet` Mainnet:
 
@@ -153,6 +148,8 @@ The contract addresses deployed on `Mainnet` Mainnet:
 | Uniswap Factory           | [0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95](https://etherscan.io/address/0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95) |
 | MakerDAO Medianizer       | [0xE3774Af455602C5a0EACC1b0f93e3cE0f65236ce](https://etherscan.io/address/0xE3774Af455602C5a0EACC1b0f93e3cE0f65236ce) |
 
-### Smart Contracts
+## Technical Description
 
 ![](Diagrams/UpSideDai.png)
+
+You can find more in our [smart contracts documentation](docs/CFD.md)
