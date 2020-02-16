@@ -1,17 +1,17 @@
-const DaiHard = artifacts.require("DaiHard.sol");
+const UpSideDai = artifacts.require("UpSideDai.sol");
 
 const config = require("./config.json");
 
 module.exports = async function(callback) {
     try {
-        if(config.daiHard == '') {
-        console.log("Specify a DaiHard contract address in the config file");
+        if(config.upSideDai == '') {
+        console.log("Specify a UpSideDai contract address in the config file");
         return;
         }
-        const daiHard = await DaiHard.at(config.daiHard);
+        const upSideDai = await UpSideDai.at(config.upSideDai);
 
-        console.log("DaiHard: ", daiHard.address);
-        const tx = await daiHard.deployedCFD(1);
+        console.log("UpSideDai: ", upSideDai.address);
+        const tx = await upSideDai.deployedCFD(1);
 
         console.log("CFD address:");
         callback(tx);

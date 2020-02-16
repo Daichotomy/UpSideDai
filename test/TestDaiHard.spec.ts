@@ -1,32 +1,32 @@
 /// <reference path="../types/interfaces.d.ts" />
 /// <reference path="../types/chai.d.ts" />
 
-import { DaiHardContract } from "./../types/generated/index.d";
+import { UpSideDaiContract } from "./../types/generated/index.d";
 import { assert } from "chai";
 
 import { ether, BN } from "openzeppelin-test-helpers";
 
-const DaiHard: DaiHardContract = artifacts.require("DaiHard");
+const UpSideDai: UpSideDaiContract = artifacts.require("UpSideDai");
 
 // require("chai")
 //   .use(require("chai-as-promised"))
 //   .use(require("chai-bignumber")(BN))
 //   .should();
 
-contract("DAI Hard", ([daiHardTeam, random]) => {
-  let daiHard;
+contract("DAI Hard", ([upSideDaiTeam, random]) => {
+    let upSideDai;
 
-  before(async () => {
-    daiHard = await DaiHard.new({ from: daiHardTeam });
-  });
-
-  describe("DaiHard deployment", async () => {
-    it("check deployment", async () => {
-      assert.equal(
-        await daiHard.owner.call(),
-        daiHardTeam,
-        "Wrong DaiHard contract owner"
-      );
+    before(async () => {
+        upSideDai = await UpSideDai.new({ from: upSideDaiTeam });
     });
-  });
+
+    describe("DaiHard deployment", async () => {
+        it("check deployment", async () => {
+            assert.equal(
+                await upSideDai.owner.call(),
+                upSideDaiTeam,
+                "Wrong UpSideDai contract owner"
+            );
+        });
+    });
 });

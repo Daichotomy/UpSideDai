@@ -21,10 +21,6 @@ export interface ContextContract extends Truffle.Contract<ContextInstance> {
   "new"(meta?: Truffle.TransactionDetails): Promise<ContextInstance>;
 }
 
-export interface DaiHardContract extends Truffle.Contract<DaiHardInstance> {
-  "new"(meta?: Truffle.TransactionDetails): Promise<DaiHardInstance>;
-}
-
 export interface DAITokenMockContract
   extends Truffle.Contract<DAITokenMockInstance> {
   "new"(
@@ -113,7 +109,15 @@ export interface UpDaiContract extends Truffle.Contract<UpDaiInstance> {
   ): Promise<UpDaiInstance>;
 }
 
+export interface UpSideDaiContract extends Truffle.Contract<UpSideDaiInstance> {
+  "new"(meta?: Truffle.TransactionDetails): Promise<UpSideDaiInstance>;
+}
+
 export interface CFDInstance extends Truffle.ContractInstance {
+  DPLP(arg0: string | BN, txDetails?: Truffle.TransactionDetails): Promise<BN>;
+
+  UPLP(arg0: string | BN, txDetails?: Truffle.TransactionDetails): Promise<BN>;
+
   daiPriceAtSettlement(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
   daiToken(txDetails?: Truffle.TransactionDetails): Promise<string>;
@@ -130,12 +134,9 @@ export interface CFDInstance extends Truffle.ContractInstance {
 
   makerMedianizer(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
-  providerLP(
-    arg0: string | BN,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<BN>;
-
   settlementDate(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+
+  totalLP(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
   uniswapDownDaiExchange(
     txDetails?: Truffle.TransactionDetails
@@ -232,87 +233,6 @@ export interface CFDInstance extends Truffle.ContractInstance {
 }
 
 export interface ContextInstance extends Truffle.ContractInstance {}
-
-export interface DaiHardInstance extends Truffle.ContractInstance {
-  deployedCFD(
-    arg0: number | BN | string,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<string>;
-
-  isOwner(txDetails?: Truffle.TransactionDetails): Promise<boolean>;
-
-  owner(txDetails?: Truffle.TransactionDetails): Promise<string>;
-
-  renounceOwnership: {
-    (txDetails?: Truffle.TransactionDetails): Promise<
-      Truffle.TransactionResponse
-    >;
-    call(txDetails?: Truffle.TransactionDetails): Promise<void>;
-    sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
-    estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
-  };
-
-  transferOwnership: {
-    (newOwner: string | BN, txDetails?: Truffle.TransactionDetails): Promise<
-      Truffle.TransactionResponse
-    >;
-    call(
-      newOwner: string | BN,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      newOwner: string | BN,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      newOwner: string | BN,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
-  };
-
-  newCFD: {
-    (
-      _makerMedianizer: string | BN,
-      _uniswapFactory: string | BN,
-      _daiToken: string | BN,
-      _leverage: number | BN | string,
-      _fee: number | BN | string,
-      _settlementLength: number | BN | string,
-      _version: number | BN | string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse>;
-    call(
-      _makerMedianizer: string | BN,
-      _uniswapFactory: string | BN,
-      _daiToken: string | BN,
-      _leverage: number | BN | string,
-      _fee: number | BN | string,
-      _settlementLength: number | BN | string,
-      _version: number | BN | string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      _makerMedianizer: string | BN,
-      _uniswapFactory: string | BN,
-      _daiToken: string | BN,
-      _leverage: number | BN | string,
-      _fee: number | BN | string,
-      _settlementLength: number | BN | string,
-      _version: number | BN | string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      _makerMedianizer: string | BN,
-      _uniswapFactory: string | BN,
-      _daiToken: string | BN,
-      _leverage: number | BN | string,
-      _fee: number | BN | string,
-      _settlementLength: number | BN | string,
-      _version: number | BN | string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
-  };
-}
 
 export interface DAITokenMockInstance extends Truffle.ContractInstance {
   addMinter: {
@@ -2548,4 +2468,85 @@ export interface UpDaiInstance extends Truffle.ContractInstance {
   };
 
   version(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+}
+
+export interface UpSideDaiInstance extends Truffle.ContractInstance {
+  deployedCFD(
+    arg0: number | BN | string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<string>;
+
+  isOwner(txDetails?: Truffle.TransactionDetails): Promise<boolean>;
+
+  owner(txDetails?: Truffle.TransactionDetails): Promise<string>;
+
+  renounceOwnership: {
+    (txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse
+    >;
+    call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+    sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+    estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
+  };
+
+  transferOwnership: {
+    (newOwner: string | BN, txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse
+    >;
+    call(
+      newOwner: string | BN,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      newOwner: string | BN,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      newOwner: string | BN,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  newCFD: {
+    (
+      _makerMedianizer: string | BN,
+      _uniswapFactory: string | BN,
+      _daiToken: string | BN,
+      _leverage: number | BN | string,
+      _fee: number | BN | string,
+      _settlementLength: number | BN | string,
+      _version: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      _makerMedianizer: string | BN,
+      _uniswapFactory: string | BN,
+      _daiToken: string | BN,
+      _leverage: number | BN | string,
+      _fee: number | BN | string,
+      _settlementLength: number | BN | string,
+      _version: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      _makerMedianizer: string | BN,
+      _uniswapFactory: string | BN,
+      _daiToken: string | BN,
+      _leverage: number | BN | string,
+      _fee: number | BN | string,
+      _settlementLength: number | BN | string,
+      _version: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      _makerMedianizer: string | BN,
+      _uniswapFactory: string | BN,
+      _daiToken: string | BN,
+      _leverage: number | BN | string,
+      _fee: number | BN | string,
+      _settlementLength: number | BN | string,
+      _version: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
 }
