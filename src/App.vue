@@ -10,9 +10,7 @@
           <li class="nav-item">
             <router-link
               class="nav-link"
-              :style="
-                $route.name == 'market' ? 'text-decoration:underline' : ''
-              "
+              :class="$route.name == 'market' ? 'selected' : 'notSelected'"
               to="market"
               >Market</router-link
             >
@@ -20,9 +18,7 @@
           <li class="nav-item">
             <router-link
               class="nav-link"
-              :style="
-                $route.name == 'myAccount' ? 'text-decoration:underline' : ''
-              "
+              :class="$route.name == 'myAccount' ? 'selected' : 'notSelected'"
               to="/myAccount"
               >My account
             </router-link>
@@ -229,5 +225,20 @@ nav li.router-link-exact-active {
   position: absolute;
   right: 36%;
   top: 30%;
+}
+.selected {
+  text-decoration: underline !important;
+  font-weight: bold;
+}
+.notSelected {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  align-items: center;
+  text-align: center;
+
+  color: #4d4d4d;
 }
 </style>
