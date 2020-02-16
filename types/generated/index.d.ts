@@ -88,7 +88,6 @@ export interface IUniswapFactoryContract
 export interface MakerMedianizerMockContract
   extends Truffle.Contract<MakerMedianizerMockInstance> {
   "new"(
-    _etherPrice: number | BN | string,
     meta?: Truffle.TransactionDetails
   ): Promise<MakerMedianizerMockInstance>;
 }
@@ -120,6 +119,8 @@ export interface CFDInstance extends Truffle.ContractInstance {
   downDai(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
   fee(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+
+  inSettlementPeriod(txDetails?: Truffle.TransactionDetails): Promise<boolean>;
 
   leverage(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
@@ -163,6 +164,15 @@ export interface CFDInstance extends Truffle.ContractInstance {
       _ethAmount: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
+  };
+
+  claimRewards: {
+    (txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse
+    >;
+    call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+    sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+    estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
   };
 
   redeem: {

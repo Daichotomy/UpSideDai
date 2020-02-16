@@ -88,8 +88,8 @@ module.exports = async (deployer, network, accounts) => {
             d_MakerMedianizerMock.address,
             d_UniswapFactory.address,
             d_ERC20Mock.address,
-            (50).toString(),
-            (3 * 10**16).toString(),
+            (20 * 10**18).toString(),
+            (3 * 10**15).toString(),
             oneMonthInSeconds,
             1
         );
@@ -119,8 +119,8 @@ module.exports = async (deployer, network, accounts) => {
             deploymentConfig.KOVAN.MAKER_MEDIANIZER,
             deploymentConfig.KOVAN.UNISWAP_FACTORY,
             deploymentConfig.KOVAN.DAI_TOKEN,
-            (50).toString(),
-            (3 * 10**16).toString(),
+            (20 * 10**18).toString(),
+            (3 * 10**15).toString(),
             oneMonthInSeconds,
             1
         );
@@ -151,7 +151,7 @@ module.exports = async (deployer, network, accounts) => {
             deploymentConfig.MAINNET.UNISWAP_FACTORY,
             deploymentConfig.MAINNET.DAI_TOKEN,
             (20 * 10**18).toString(),
-            (3 * 10**16).toString(),
+            (3 * 10**15).toString(),
             oneMonthInSeconds,
             1
         );

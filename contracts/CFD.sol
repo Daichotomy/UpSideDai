@@ -1,13 +1,11 @@
 pragma solidity ^0.5.16;
 
-// import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-//import "openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IUniswapFactory.sol";
 import "./interfaces/IUniswapExchange.sol";
 import "./interfaces/IMakerMedianizer.sol";
-import "./UpDai.sol";
-import "./DownDai.sol";
+import "./tokens/UpDai.sol";
+import "./tokens/DownDai.sol";
 import "./StableMath.sol";
 
 contract CFD {
@@ -28,6 +26,8 @@ contract CFD {
     uint256 public fee; // 100% fee == 1e18, 0.3% fee == 3e15
     uint256 public settlementDate; // In seconds
 
+    bool public inSettlementPeriod = false;
+
     mapping(address => uint256) public providerLP; // Total LP for a given staker
     uint256 totalLP;
 
@@ -36,8 +36,8 @@ contract CFD {
      * @param _makerMedianizer maker medianizer address
      * @param _uniswapFactory uniswap factory address
      * @param _daiToken maker medianizer address
-     * @param _leverage leverage (1000000000000000x)
-     * @param _fee payout fee
+     * @param _leverage leverage (1000000000000000x) (1x == 1e18)
+     * @param _fee payout fee (1% == 1e16)
      * @param _settlementDate maker medianizer address
      * @param _version maker medianizer address
      */
@@ -69,14 +69,36 @@ contract CFD {
         );
     }
 
+    /***************************************
+                    MODIFIERS
+    ****************************************/
+
+    modifier notInSettlementPeriod() {
+        require(!inSettlementPeriod, "Must not be in settlement period");
+        if (settlementDate > now) {
+            // settle
+        }
+        _;
+    }
+
+    modifier onlyInSettlementPeriod() {
+        require(inSettlementPeriod, "Must be in settlement period");
+        _;
+    }
+
+    /***************************************
+              LIQUIDITY PROVIDERS
+    ****************************************/
+
     /**
      * @notice mint UP and DOWN DAI tokens
      * @param _underlyingAmount amount of DAI to deposit
      * @param _ethAmount amount of ETH as collateral for UP&DOWN DAI Uniswap pools
      */
     function mint(uint256 _underlyingAmount, uint256 _ethAmount)
-        public
+        external
         payable
+        notInSettlementPeriod
     {
         (uint256 upDaiCollateral, uint256 downDaiCollateral) = getETHCollateralRequirements(
             _underlyingAmount
@@ -121,10 +143,57 @@ contract CFD {
     }
 
     /**
+     * @notice get the amount of ETH required to create a uniswap exchange
+     * @param _underlyingAmount the total amount of underlying to deposit (UP/DOWN DAI = _underlyingAmount/2)
+     * @return the amount of ETH needed for UPDAI pool and DOWNDAI pool
+     */
+    function getETHCollateralRequirements(uint256 _underlyingAmount)
+        public
+        view
+        returns (uint256, uint256)
+    {
+        // TODO - validate that everything is denominated in the right decimal amounts
+        // by running through an actual example with numbers on each step
+
+        // get ETH price, where $200 == 200e18
+        uint256 ethUsdPrice = GetETHUSDPriceFromMedianizer();
+        // get DAI price, where $1 == 1e18
+        uint256 daiUsdPrice = GetDaiPriceUSD();
+
+        // // get the price of 1 UPDAI in DAI, where 1:1 == 1e18
+        // uint256 upDaiDaiPrice = uint256(1e18).add(daiUsdPrice.sub(1)).mul(
+        //     leverage
+        // );
+        // // get the price of 1 DOWNDAI in DAI
+        // uint256 downDaiDaiPrice = uint256(1).sub(daiUsdPrice.sub(1)).mul(
+        //     leverage
+        // );
+        // // ETH amount needed for the UPDAI pool
+        // uint256 upDaiPoolEth = ((_underlyingAmount.div(2)).mul(upDaiDaiPrice))
+        //     .div(ethUsdPrice);
+        // // ETH amount needed for the DOWNDAI pool
+        // uint256 downDaiPoolEth = (
+        //     (_underlyingAmount.div(2)).mul(downDaiDaiPrice)
+        // )
+        //     .div(ethUsdPrice);
+        return (1, 1);
+    }
+
+    function claimRewards() external onlyInSettlementPeriod {
+        // 1. Claim Redemption Fees (proportionate to LP)
+        // 2. Redeem or withdraw LP
+        // 3. Claim rDAI interest?
+    }
+
+    /***************************************
+                PUBLIC REDEPTION
+    ****************************************/
+
+    /**
      * @notice redeem a pair of UPDAI and DOWNDAI
      * @dev this function can be called before the settlement date, an equal amount of UPDAI and DOWNDAI should be deposited
      */
-    function redeem(uint256 _redeemAmount) public {
+    function redeem(uint256 _redeemAmount) public notInSettlementPeriod {
         // get DAI price
         uint256 daiUsdPrice = GetDaiPriceUSD();
 
@@ -147,7 +216,7 @@ contract CFD {
      * @notice redeem UPDAI or DOWNDAI token
      * @dev this function can only be called after contract settlement
      */
-    function redeemFinal() public {
+    function redeemFinal() public onlyInSettlementPeriod {
         require(now >= settlementDate, "CFD::contract did not settle yet");
 
         // get DAI price
@@ -173,6 +242,10 @@ contract CFD {
         // burn downDai
         downDai.burnFrom(msg.sender, downDaiRedeemAmount);
     }
+
+    /***************************************
+              INTERNAL - PAYOUT
+    ****************************************/
 
     /**
      * @notice $ payout function $
@@ -206,39 +279,39 @@ contract CFD {
         IERC20(daiToken).transfer(redeemer, cash);
     }
 
+    /***************************************
+                  PRICE HELPERS
+    ****************************************/
+
     /**
-     * @notice get the amount of ETH required to create a uniswap exchange
-     * @param _underlyingAmount the total amount of underlying to deposit (UP/DOWN DAI = _underlyingAmount/2)
-     * @return the amount of ETH needed for UPDAI pool and DOWNDAI pool
+     * @notice Based on the price of DAI, what are the current exchange rates for upDai and downDai?
      */
-    function getETHCollateralRequirements(uint256 _underlyingAmount)
-        public
+    function _getCurrentDaiRates(uint256 daiUsdPrice)
+        private
         view
-        returns (uint256, uint256)
+        returns (uint256 upDaiRate, uint256 downDaiRate)
     {
-        // TODO - validate that everything is denominated in the right decimal amounts
-        // by running through an actual example with numbers on each step
-        // get ETH price
-        // uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
-        // // get DAI price
-        // uint256 daiUsdPrice = GetDaiPriceUSD();
-        // // get the price of 1 UPDAI in DAI
-        // uint256 upDaiDaiPrice = uint256(1).add(daiUsdPrice.sub(1)).mul(
-        //     leverage
-        // );
-        // // get the price of 1 DOWNDAI in DAI
-        // uint256 downDaiDaiPrice = uint256(1).sub(daiUsdPrice.sub(1)).mul(
-        //     leverage
-        // );
-        // // ETH amount needed for the UPDAI pool
-        // uint256 upDaiPoolEth = ((_underlyingAmount.div(2)).mul(upDaiDaiPrice))
-        //     .div(ethUsdPrice);
-        // // ETH amount needed for the DOWNDAI pool
-        // uint256 downDaiPoolEth = (
-        //     (_underlyingAmount.div(2)).mul(downDaiDaiPrice)
-        // )
-        //     .div(ethUsdPrice);
-        // return (upDaiPoolEth, downDaiPoolEth);
+        // (1 + ((DaiPriceFeed-1) *  Leverage))
+        // Given that price is reflected absolutely on both sides.. then
+        // (1 + (delta * leverage)), to find the up multiplier
+        uint256 one = 1e18;
+        bool priceIsPositive = daiUsdPrice > one;
+        // Get price delta, e.g. if daiUsdPrice == 99e16, delta == 1e16
+        uint256 delta = priceIsPositive
+            ? daiUsdPrice.sub(one)
+            : one.sub(daiUsdPrice);
+        // Consider 20x leverage == 20e18 == 2e19, then
+        // e.g. 1e16 * 2e19 == 2e35, then truncate to 2e17
+        uint256 deltaWithLeverage = delta.mulTruncate(leverage);
+        // e.g. 1e18 + 2e17 = 12e17
+        uint256 winRate = one.add(deltaWithLeverage);
+        if (winRate >= 2) {
+            // TODO - the contract is now over.. this should be settlement time
+        }
+        // e.g. 1e18 - 2e17 = 8e17
+        uint256 loseRate = one.sub(deltaWithLeverage);
+        // If price is positive, upDaiRate should be better :)
+        return priceIsPositive ? (winRate, loseRate) : (loseRate, winRate);
     }
 
     /**
@@ -251,7 +324,7 @@ contract CFD {
             .getExchange(daiToken);
 
         // ethUsdPrice, where $1 == 1e18
-        uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
+        uint256 ethUsdPrice = GetETHUSDPriceFromMedianizer();
         // ethDaiPrice, where 1:1 == 1e8. Using a single wei here means 0 slippage and allows pricing from low liq pool
         // extrapolate to base 1e18 in order to do calcs
         uint256 ethDaiPriceSimple = IUniswapExchange(uniswapExchangeAddress)
