@@ -151,31 +151,41 @@ export interface CFDInstance extends Truffle.ContractInstance {
 
   mint: {
     (
-      _underlyingAmount: number | BN | string,
-      _ethAmount: number | BN | string,
+      _daiDeposit: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse>;
     call(
-      _underlyingAmount: number | BN | string,
-      _ethAmount: number | BN | string,
+      _daiDeposit: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<void>;
     sendTransaction(
-      _underlyingAmount: number | BN | string,
-      _ethAmount: number | BN | string,
+      _daiDeposit: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
     estimateGas(
-      _underlyingAmount: number | BN | string,
-      _ethAmount: number | BN | string,
+      _daiDeposit: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
 
-  getETHCollateralRequirements(
-    _underlyingAmount: number | BN | string,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<[BN, BN]>;
+  getETHCollateralRequirements: {
+    (
+      _daiDeposit: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      _daiDeposit: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<[BN, BN]>;
+    sendTransaction(
+      _daiDeposit: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      _daiDeposit: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
 
   claimRewards: {
     (txDetails?: Truffle.TransactionDetails): Promise<

@@ -84,7 +84,7 @@ contract("CFD", ([daiHardTeam, random]) => {
       let upDaiCollateral = await cfd.getETHCollateralRequirements(
         daiAmountDeposit
       );
-      console.log(upDaiCollateral);
+      // console.log(upDaiCollateral);
     });
   });
 

@@ -9,7 +9,7 @@ import "./tokens/DownDai.sol";
 import "./StableMath.sol";
 
 /**
-  * @title x
+  * @title CFD
   * @author Daichotomy
   */
 contract CFD {
@@ -105,13 +105,8 @@ contract CFD {
     /**
      * @notice mint UP and DOWN DAI tokens
      * @param _daiDeposit amount of DAI to deposit
-     * @param _ethAmount amount of ETH as collateral for UP&DOWN DAI Uniswap pools
      */
-    function mint(uint256 _daiDeposit, uint256 _ethAmount)
-        external
-        payable
-        notInSettlementPeriod
-    {
+    function mint(uint256 _daiDeposit) external payable notInSettlementPeriod {
         // Step 1. Take the DAI
         require(
             IERC20(daiToken).transferFrom(
@@ -128,8 +123,8 @@ contract CFD {
         );
         uint256 totalETHCollateral = upDaiEthUnits.add(downDaiEthUnits);
         require(msg.value >= totalETHCollateral, "CFD::error transfering ETH");
-        if(msg.value > totalETHCollateral) {
-            msg.sender.transfer(msg.value-totalETHCollateral)
+        if (msg.value > totalETHCollateral) {
+            msg.sender.transfer(msg.value.sub(totalETHCollateral));
         }
 
         // Step 3. Mint the up/down DAI tokens
@@ -161,7 +156,6 @@ contract CFD {
      */
     function getETHCollateralRequirements(uint256 _daiDeposit)
         public
-        view
         returns (uint256, uint256)
     {
         uint256 individualDeposits = _daiDeposit.div(2);
@@ -188,6 +182,8 @@ contract CFD {
     function claimRewards() external onlyInSettlementPeriod {
         // 1. Claim Redemption Fees (proportionate to LP)
         // 2. Redeem or withdraw LP
+        //    - Get the LP, convert to L/S DAi
+        //    - Send back to user
         // 3. Claim rDAI interest?
     }
 
@@ -304,13 +300,12 @@ contract CFD {
             inSettlementPeriod = true;
             daiPriceAtSettlement = daiUsdPrice;
             // If Price is positive, Long wins and is worth 2:1, where Short is worth 0:1
-            (upDaiRateAtSettlement, downDaiRateAtSettlement) = priceIsPositive
+            (uint256 finalUpDaiRate, uint256 finalDownDaiRate) = priceIsPositive
                 ? (uint256(2e18), uint256(0))
                 : (uint256(0), uint256(2e18));
-            return
-                priceIsPositive
-                    ? (uint256(2e18), uint256(0))
-                    : (uint256(0), uint256(2e18));
+            upDaiRateAtSettlement = finalUpDaiRate;
+            downDaiRateAtSettlement = finalDownDaiRate;
+            return (finalUpDaiRate, finalDownDaiRate);
         }
         // e.g. 1e18 - 2e17 = 8e17
         uint256 loseRate = one.sub(deltaWithLeverage);
