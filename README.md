@@ -81,11 +81,11 @@ These three sources of revenue makes being a liquidity provider for UpsideDai mo
 
 ### Transaction Flow
 
-xxx
+
 
 ## Technical Description
 
-xxx
+You can find more in our [smart contracts documentation](docs/CFD.md)
 
 ### Local Development Setup
 
