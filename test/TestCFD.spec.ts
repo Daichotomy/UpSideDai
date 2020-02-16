@@ -71,7 +71,7 @@ contract("CFD", ([upSideDaiTeam, random]) => {
     it("check deployment params", async () => {
       expect(await upDai.totalSupply()).bignumber.eq(
         new BN((50 * 10 ** 18).toString()),
-        "upDai total supply mismatch"
+        "upDai total supply mismatcsh"
       );
       expect(await downDai.totalSupply()).bignumber.eq(
         new BN((50 * 10 ** 18).toString()),
