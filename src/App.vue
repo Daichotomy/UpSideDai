@@ -90,7 +90,7 @@ export default {
     };
 
     this.web3Connect = new Web3Connect.Core({
-      network: "kovan", // optional
+      network: "mainnet", // optional
       cacheProvider: true, // optional
       providerOptions // required
     });
