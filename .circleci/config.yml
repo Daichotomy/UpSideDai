@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  coveralls: coveralls/coveralls@1.0.4
 jobs:
   build:
     # working_directory: ~/daihard
@@ -29,6 +31,7 @@ jobs:
       - run:
           name: Produce Coverage Report
           command: yarn coverage
+      - coveralls/upload
       - store_artifacts:
           path: /coverage
       - store_artifacts:
