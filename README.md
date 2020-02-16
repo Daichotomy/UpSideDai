@@ -1,5 +1,7 @@
 # UpsideDai [![CircleCI](https://circleci.com/gh/Daichotomy/UpSideDai/tree/master.svg?style=svg)](https://circleci.com/gh/Daichotomy/UpSideDai/tree/master) [![Coverage Status](https://coveralls.io/repos/github/Daichotomy/UpSideDai/badge.svg?branch=master)](https://coveralls.io/github/Daichotomy/UpSideDai?branch=master)
 
+![](src/assets/Logo.png)
+
 ## Resources
 
 [Live Application](https://upsidedai.com)  
@@ -82,6 +84,14 @@ xxx
 xxx
 
 ### Local Development Setup
+
+For local development it is recommended to use [ganache](http://truffleframework.com/ganache/) to run a local development chain. Using the ganache simulator no full Ethereum node is required.
+
+As a pre-requisite, you need:
+
+- Node.js
+- npm
+
 
 ### Smart Contracts
 
