@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="rowObject" :class="historyItem.disabled ? 'disabled' : ''">
+    <div class="rowObject" :class="historyItem.sellingPrice ? 'past' : ''">
       <div
         class="md-layout sections"
         style="padding-left:10px;padding-right:10px;padding-top:20px"
@@ -26,7 +26,14 @@
             {{ historyItem.amount }}</span
           >
         </div>
-        <div class="md-layout-item">
+        <div class="md-layout-item" v-if="historyItem.sellingPrice">
+          <span class="rowDetails rowDetailsItem">Selling price</span>
+          <div style="margin-top:10px" />
+          <span class="detailedItem" style="margin-top:15px">
+            {{ historyItem.sellingPrice }}</span
+          >
+        </div>
+        <div class="md-layout-item" v-if="!historyItem.sellingPrice">
           <md-button
             class="withdrawalButton"
             :disabled="historyItem.disabled"
@@ -132,7 +139,7 @@ export default {
   height: 50px;
   font-weight: 500;
 }
-.disabled {
+.past {
   background-color: #f4f3f3;
 }
 </style>

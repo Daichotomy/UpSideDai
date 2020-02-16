@@ -4,7 +4,7 @@
       <div class="md-layout-item"></div>
       <div class="md-layout-item">
         <div style="padding-top:75px" />
-        <span class="SectionHeading">My Active pools</span>
+        <span class="SectionHeading">My active pools</span>
         <div style="padding-top:10px" />
         <span class="SectionDetails">
           As a liquidity provider you need to wait until contract maturity
@@ -74,14 +74,14 @@ export default {
           amount: 2507,
           buyPrice: 0.97,
           RedemptionDate: "15.01.2019",
-          past: true
+          sellingPrice: 1.01
         },
         {
           direction: "down",
           amount: 3507,
           buyPrice: 1.01,
           RedemptionDate: "15.01.2019",
-          past: true
+          sellingPrice: 0.99
         }
       ]
     };

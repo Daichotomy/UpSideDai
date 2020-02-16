@@ -4,7 +4,7 @@
       <div class="md-layout-item"></div>
       <div class="md-layout-item">
         <div style="padding-top:75px" />
-        <span class="SectionHeading">My Active trades</span>
+        <span class="SectionHeading">My active trades</span>
         <div style="padding-top:10px" />
         <span class="SectionDetails">
           Remember when selling your Up/Down DAI before the withdrawal date, the
