@@ -8,7 +8,24 @@
       <div class="md-layout-item text-center" style="padding-top:100px">
         <span class="landingText"
           >Do you have lows and highs daily?<br />
-          Everyone does. Even DAI.</span
+          Everyone does.
+          <span style="font-weight: bold;">Even </span>
+          <span style="font-weight: bold; color:#FFC221">DAI.</span></span
+        >
+        <div style="padding-top:20px" />
+        <span class="landingSecondary">
+          We help you to profit your lows as much as your highs.<br />
+          <span style="font-weight: bold;">UpsideDAI</span> helps you to trade
+          on DAI volatility<br />
+          to <span style="font-weight: bold;">leverage a 20x</span> price
+          exposure.
+        </span>
+        <div />
+        <md-button
+          class="softCallToAction"
+          style="margin-top:20px"
+          @click="goToCreate"
+          >Start your journey</md-button
         >
       </div>
       <div class="md-layout-item md-size-10" />
@@ -77,5 +94,27 @@ export default {
   align-items: center;
   text-align: center;
   color: #000000;
+}
+.landingSecondary {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  align-items: center;
+  text-align: center;
+}
+.softCallToAction {
+  background: #ffba00;
+  border-radius: 15px;
+  border: none;
+  color: #473144;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  height: 60px;
+  font-weight: 500;
 }
 </style>
