@@ -12,16 +12,14 @@
               class="nav-link"
               :class="$route.name == 'market' ? 'selected' : 'notSelected'"
               to="market"
-              >Market</router-link
-            >
+            >Market</router-link>
           </li>
           <li class="nav-item">
             <router-link
               class="nav-link"
               :class="$route.name == 'myAccount' ? 'selected' : 'notSelected'"
               to="/myAccount"
-              >My account
-            </router-link>
+            >My account</router-link>
           </li>
         </ul>
         <span
@@ -52,6 +50,8 @@
 import MiningTransaction from "@/components/widgets/MiningTransaction";
 
 import Web3 from "web3";
+import Web3Connect from "web3connect";
+import Fortmatic from "fortmatic";
 import * as actions from "@/store/actions";
 import * as mutations from "@/store/mutation-types";
 import ClickableAddress from "@/components/widgets/ClickableAddress";
@@ -71,48 +71,32 @@ export default {
     ...mapActions(["INIT_APP"]),
     redirect(_path) {
       router.push({ name: _path });
+    },
+    async connectWallet() {
+      const provider = await this.web3Connect.connect();
+
+      this.web3 = new Web3(provider);
+
+      await this.INIT_APP(this.web3);
     }
   },
   async mounted() {
-    if (window.ethereum) {
-      window.web3 = new Web3(ethereum);
-      console.log("web3 provider detected!");
-      console.log(window.web3);
+    const providerOptions = {
+      fortmatic: {
+        package: Fortmatic, // required
+        options: {
+          key: process.env.VUE_APP_FORTMATIC_KEY // required
+        }
+      }
+    };
 
-      // Request account access if needed
-      ethereum
-        .enable()
-        .then(value => {
-          console.log("Bootstrapping web app - provider acknowedgled", value);
-          this.INIT_APP(window.web3);
-        })
-        .catch(error => {
-          console.log(
-            "User denied access, boostrapping application using infura",
-            error
-          );
-          window.web3 = new Web3(
-            new Web3.providers.HttpProvider(
-              "https://mainnet.infura.io/v3/fb32a606c5c646c7932e43cfaf6c39df"
-            )
-          );
-          this.INIT_APP(window.web3);
-        });
-    } else if (window.web3) {
-      console.log("Running legacy web3 provider");
-      window.web3 = new Web3(web3.currentProvider);
-      this.INIT_APP(window.web3);
-    } else {
-      window.web3 = new Web3(
-        new Web3.providers.HttpProvider(
-          "https://mainnet.infura.io/v3/fb32a606c5c646c7932e43cfaf6c39df"
-        )
-      );
-      console.log(
-        "Non-Ethereum browser detected. You should consider trying MetaMask!"
-      );
-      this.INIT_APP(window.web3);
-    }
+    this.web3Connect = new Web3Connect.Core({
+      network: "kovan", // optional
+      cacheProvider: true, // optional
+      providerOptions // required
+    });
+
+    this.connectWallet();
   },
   computed: {
     ...mapState(["currentNetwork", "account"])
