@@ -186,13 +186,38 @@ export default new Vuex.Store({
       commit(mutations.SET_UNISWAPFACTORY, uniSwapFactory);
       console.log("HERE");
       console.log("daiAddress", daiAddress);
+
       let uniSwapDaiAddress = await uniSwapFactory.getExchange(daiAddress);
-      console.log("val2");
+      console.log("uniSwapDaiAddress");
       console.log(uniSwapDaiAddress);
       let uniSwapDai = await UniSwap.at(uniSwapDaiAddress);
-      console.log("contract DaiUniswap");
+      console.log("contract uniSwapDai");
       console.log(uniSwapDai);
       commit(mutations.SET_UNISWAPDAI, uniSwapDai);
+
+      console.log("END CONTRACT CONNECT");
+
+      let value = await uniSwapDai.factoryAddress();
+      console.log("factory", value);
+
+      //   const oneMonthInSeconds = 60 * 60 * 24 * 30;
+      //   const now = new Date().getTime() / 1000;
+
+      //   await state.dai.approve(
+      //     state.uniswapDai.address,
+      //     (100 * 10 ** 18).toString(),
+      //     {
+      //       from: state.account
+      //     }
+      //   );
+      //     await uniSwapDai.tokenToTokenSwapInput(
+      //       (1 * 10 ** 18).toString(),
+      //       (1 * 10 ** 18).toString(),
+      //       (1 * 10 ** 14).toString(),
+      //       parseInt(now + oneMonthInSeconds),
+      //       upDai.address,
+      //       { from: state.account }
+      //     );
 
       let daiPrice = await cfd.GetDaiPriceUSD();
       console.log("daiPrice", web3.utils.fromWei(daiPrice).toString());
@@ -272,37 +297,43 @@ export default new Vuex.Store({
         txHash: ""
       });
 
-      let uniswapExchange =
-        params.direction == "up" ? state.uniswapUpDai : state.uniswapDownDai;
-
       let upOrDownDai = params.direction == "up" ? state.upDai : state.downDai;
 
       let walletApproval = await state.dai.allowance(
         state.account,
-        uniswapExchange.address
+        state.uniswapDai.address
       );
 
-      console.log(uniswapExchange.address);
       console.log("walletApproval", walletApproval.toString());
-      let timestamp = Math.floor(Date.now() / 1000) + 1000;
+      const oneMonthInSeconds = 60 * 60 * 24 * 30;
+      const now = new Date().getTime() / 1000;
 
       console.log("upOrDownDai", upOrDownDai);
-      await upOrDownDai.approve(
-        uniswapExchange.address,
-        state.web3.web3.utils.toWei("100000"),
-        { from: state.account }
-      );
+      //   await upOrDownDai.approve(
+      //     uniswapExchange.address,
+      //     (100 * 10 ** 18).toString(),
+      //     {
+      //       from: state.account
+      //     }
+      //   );
       await state.dai.approve(
-        uniswapExchange.address,
-        state.web3.web3.utils.toWei("100000"),
-        { from: state.account }
+        state.uniswapDai.address,
+        (100 * 10 ** 18).toString(),
+        {
+          from: state.account
+        }
       );
 
       console.log("passedApprove");
-      let txHash = await state.cfd.mint(state.web3.web3.utils.toWei("11"), {
-        from: state.account,
-        value: state.web3.web3.utils.toWei("1")
-      });
+      console.log("up/down address", upOrDownDai.address);
+      let txHash = await state.uniswapDai.tokenToTokenSwapInput(
+        (100 * 10 ** 18).toString(),
+        (1 * 10 ** 18).toString(),
+        (1 * 10 ** 14).toString(),
+        parseInt(now + oneMonthInSeconds),
+        upOrDownDai.address,
+        { from: state.account }
+      );
 
       if (txHash) {
         commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
