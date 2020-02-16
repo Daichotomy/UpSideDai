@@ -34,13 +34,13 @@ The price that Dai can fluctuate around the peg is bounded by the leverage used 
 
 A contract for difference is a contract between two parties stipulating that the buyer will pay to the seller the difference between the current value of an asset and its value at contract time. UpsideDai's implementation pays out the difference between the price of Dai and 1 USD with **20x leverage**. A CFD is a synthetic contract, representing synthetic price exposure to an underlying fictitious asset. As such it requires a maturity at which tokens can be redeemed for underlying. This ensures that the price of the token in the secondary market has a low tracking error to the underlying price feed.
 
-### On-chain price of Dai in USD
+### On-chain Price of Dai in USD
 
 At settlement the price of Dai in Usd is needed to define how much each upDai and downDai tokens are redeemable for. This _could_ be build using an oracle but we chose to rather find a trustless on-chain representation of the price of Dai. This is found by getting the Eth/Usd price from the Maker Medianzer and the Eth/Dai price from Uniswap. The uniswap price divided by the Maker medianizer price yields the current on chain price of Dai without needing an oracle or external price feed. Numerically this can be defined as follows:
 
 ![](./Diagrams/PriceOfDai.gif)
 
-### Calculating the settlement price of the CDF
+### Calculating The Settlement Price Of The CDF
 
 Contracts in UpsideDai run for a one month maturity. At settlement token holders can redeem their upDai and downDai for a representative amount of underlying Dai. The amount of Dai that they can redeem(`payout`) is a function of how many `upDai` or `downDai` they hold, the settlement price of Dai in Usd(`p`), leverage(`L`) and market fees(`f`). This is expressed as follows:
 
@@ -48,7 +48,7 @@ Contracts in UpsideDai run for a one month maturity. At settlement token holders
 
 If a token holder only has upDai or downDai then they yield the commensurate amount from that position. If a market maker holds equal amounts of both tokens they yield their full underlying + fees and interest (more on this in the next section).
 
-### Incentives for market makers
+### Incentives For Market Makers
 
 A key element of UpsideDai is an incentive mechanism to encourage liquidity provision from market makers. This is done in a number of ways:
 
@@ -58,16 +58,16 @@ A key element of UpsideDai is an incentive mechanism to encourage liquidity prov
 
 These three sources of revenue makes being a liquidity provider for UpsideDai more profitable than investing in the money market or DSR while having minimum risk.
 
-### Transaction flow
+### Transaction Flow
 
 xxx
 
-## Technical description
+## Technical Description
 
 xxx
 
-### Smart contracts
+### Local Development Setup
+
+### Smart Contracts
 
 ![](Diagrams/UpSideDai.png)
-
-### running code locally
