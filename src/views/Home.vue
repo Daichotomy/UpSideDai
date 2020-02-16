@@ -135,8 +135,8 @@ export default {
   font-family: Roboto;
   font-style: normal;
   font-weight: 300;
-  font-size: 20px;
-  line-height: 23px;
+  font-size: 40px;
+  line-height: 50px;
   align-items: center;
   text-align: center;
   color: #000000;
@@ -145,8 +145,8 @@ export default {
   font-family: Roboto;
   font-style: normal;
   font-weight: 300;
-  font-size: 16px;
-  line-height: 19px;
+  font-size: 20px;
+  line-height: 25px;
   align-items: center;
   text-align: center;
 }
