@@ -354,7 +354,7 @@ contract CFD {
      * @return downDaiRate where 1:1 == 1e18
      */
     function _getCurrentDaiRates(uint256 daiUsdPrice)
-        private
+        public
         returns (uint256 upDaiRate, uint256 downDaiRate)
     {
         // (1 + ((DaiPriceFeed-1) *  Leverage))

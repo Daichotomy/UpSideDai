@@ -80,18 +80,6 @@ contract("CFD", ([upSideDaiTeam, random]) => {
         });
     });
 
-    describe("Liquidity provider", async () => {
-        it("get required ETH for up&down pool", async () => {
-            let tx = await cfd.getETHCollateralRequirements(daiAmountDeposit);
-            truffleAssert.eventEmitted(tx, 'NeededEthCollateral', (ev) => {
-                console.log("eeeeeeevvvv");
-                console.log(ev);
-                console.log(ev.upDaiPoolEth.toString());
-                return ev;
-            });
-        });
-    });
-
     describe("GetDaiPriceUSD", async () => {
         it("should return relative price", async () => {
             let ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
@@ -111,6 +99,17 @@ contract("CFD", ([upSideDaiTeam, random]) => {
                 expectedPrice,
                 "expected price mismatch"
             );
+        });
+    });
+
+    describe("Liquidity provider", async () => {
+        it("get required ETH for up&down pool", async () => {
+            let tx = await cfd.getETHCollateralRequirements(daiAmountDeposit);
+            truffleAssert.eventEmitted(tx, 'NeededEthCollateral', (ev) => {
+                console.log(ev.downDaiPoolEth.toString());
+                console.log(ev.upDaiPoolEth.toString());
+                return ev;
+            });
         });
     });
 });
