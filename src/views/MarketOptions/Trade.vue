@@ -216,7 +216,7 @@ export default {
   width: 85px;
   height: 85px;
   background: #ffffff;
-  border: 2px solid #fece4d;
+  border: 2px solid #ffba00;
   box-sizing: border-box;
   border-radius: 10px;
   cursor: pointer;
@@ -226,7 +226,7 @@ export default {
   width: 85px;
   height: 85px;
   background: #ffffff;
-  // border: 2px solid #fece4d;
+  // border: 2px solid #FFBA00;
   box-sizing: border-box;
   border-radius: 10px;
   cursor: pointer;
@@ -246,7 +246,7 @@ export default {
   transform: rotate(180deg);
 }
 .Deposit {
-  background: #fece4d;
+  background: #ffba00;
   margin-top: 85px;
   border-radius: 15px;
   border: none;

@@ -47,41 +47,36 @@ export default {
     return {
       tableData: [
         {
-          direction: "up",
           amount: 2507,
-          buyPrice: 0.97,
-          RedemptionDate: "15.02.2019",
-          disabled: false
+          redemptionDate: "15.02.2019",
+          disabled: false,
+          profit: 5
         },
         {
-          direction: "down",
           amount: 3507,
-          buyPrice: 1.01,
-          RedemptionDate: "15.03.2019",
-          disabled: true
+          redemptionDate: "15.03.2019",
+          disabled: true,
+          profit: 8
         },
         {
-          direction: "up",
           amount: 420.69,
-          buyPrice: 0.98,
-          RedemptionDate: "15.03.2019",
-          disabled: true
+          redemptionDate: "15.03.2019",
+          disabled: true,
+          profit: 3
         }
       ],
       tableDataHistory: [
         {
-          direction: "up",
           amount: 2507,
-          buyPrice: 0.97,
-          RedemptionDate: "15.01.2019",
-          sellingPrice: 1.01
+          redemptionDate: "15.01.2019",
+          profit: 3,
+          past: true
         },
         {
-          direction: "down",
           amount: 3507,
-          buyPrice: 1.01,
-          RedemptionDate: "15.01.2019",
-          sellingPrice: 0.99
+          redemptionDate: "15.01.2019",
+          profit: 3,
+          past: true
         }
       ]
     };

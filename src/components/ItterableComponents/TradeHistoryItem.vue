@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="rowObject" :class="historyItem.disabled ? 'disabled' : ''">
+    <div class="rowObject" :class="historyItem.past ? 'past' : ''">
       <div
         class="md-layout sections"
         style="padding-left:10px;padding-right:10px;padding-top:20px"
@@ -29,14 +29,14 @@
           <span class="rowDetails rowDetailsItem">Buy price</span>
           <div style="margin-top:10px" />
           <span class="detailedItem" style="margin-top:15px">
-            {{ historyItem.amount }}</span
+            {{ historyItem.buyPrice }}</span
           >
         </div>
         <div class="md-layout-item">
           <span class="rowDetails rowDetailsItem">Withdrawal date</span>
           <div style="margin-top:10px" />
           <span class="detailedItem" style="margin-top:15px">
-            {{ historyItem.amount }}</span
+            {{ historyItem.RedemptionDate }}</span
           >
         </div>
         <div class="md-layout-item" v-if="historyItem.profit">
@@ -50,8 +50,11 @@
             {{ historyItem.profit }}%</span
           >
         </div>
-        <div class="md-layout-item" v-if="!historyItem.disabled">
-          <md-button class="withdrawalButton" @click="deposit()"
+        <div class="md-layout-item" v-if="!historyItem.past">
+          <md-button
+            class="withdrawalButton"
+            :disabled="historyItem.disabled"
+            @click="withdraw()"
             >withdraw</md-button
           >
         </div>
@@ -141,7 +144,7 @@ export default {
   margin-bottom: 10px;
 }
 .withdrawalButton {
-  background: #fece4d;
+  background: #ffba00;
   border-radius: 15px;
   border: none;
   color: #473144;
@@ -153,7 +156,13 @@ export default {
   height: 50px;
   font-weight: 500;
 }
-.disabled {
+
+.withdrawalButton:disabled,
+withdrawalButton[disabled] {
+  background-color: #cccccc;
+  color: #666666;
+}
+.past {
   background-color: #f4f3f3;
 }
 .profit {
