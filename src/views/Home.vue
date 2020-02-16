@@ -33,7 +33,14 @@
     <div class="md-layout sections secondarySection">
       <div class="md-layout-item">
         <img class="memeImage" src="../assets/meme1.png" />
+        <br />
         <span class="memeTextMain">Up & Down DAI</span>
+        <br />
+        <br />
+        <span class="memeTextSecondary">
+          We help you to trade on DAI’s price <br />
+          variability leveraging 20x price exposure.</span
+        >
       </div>
       <div class="md-layout-item">
         <img class="memeImage" src="../assets/meme1.png" />
@@ -134,5 +141,25 @@ export default {
   -webkit-box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
   box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
+}
+.memeTextMain {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 25px;
+  line-height: 29px;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+}
+.memeTextSecondary {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 20px;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
 }
 </style>
