@@ -44,7 +44,8 @@ export default new Vuex.Store({
       daiPrice: null
     },
     userInfo: {
-      daiBallance: null
+      daiBallance: null,
+      ethBallance: null
     }
   },
   mutations: {
@@ -171,6 +172,12 @@ export default new Vuex.Store({
       console.log("userdaiBallance", userDaiBallance);
       state.userInfo.daiBallance = web3.utils
         .fromWei(userDaiBallance)
+        .toString();
+
+      let userEthBallance = await web3.eth.getBalance(account);
+      console.log("userEthBallance", userEthBallance);
+      state.userInfo.ethBallance = web3.utils
+        .fromWei(userEthBallance)
         .toString();
     },
     // [actions.COMMIT]: async function ({
