@@ -1,10 +1,10 @@
 /**
  * remove comments for public chain migration
  */
-//const HDWalletProvider = require('truffle-hdwallet-provider')
-//const fs = require('fs');
-//const mnemonic = fs.readFileSync(".mnemonic").toString().trim();
-//const infuraKey = "816cc7a6308448dbbaf46ac5488507cf";
+// const HDWalletProvider = require('truffle-hdwallet-provider')
+// const fs = require('fs');
+// const mnemonic = fs.readFileSync(".mnemonic").toString().trim();
+// const infuraKey = "816cc7a6308448dbbaf46ac5488507cf";
 
 require('ts-node/register')
 // OPTIONAL: Allows the use of tsconfig path mappings with ts-node
@@ -34,6 +34,8 @@ module.exports = {
     mainnet: {
       provider: () => new HDWalletProvider(mnemonic, `https://mainnet.infura.io/v3/${infuraKey}`),
       network_id: 1,
+      gasPrice: 2000000000, // 2 GWei,
+      gasLimit: 8000000,
       skipDryRun: false // Skip dry run before migrations? (default: false for public nets )
     }
   },
