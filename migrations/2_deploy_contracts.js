@@ -60,11 +60,15 @@ module.exports = async (deployer, network, accounts) => {
         let d_UniswapFactory = await factory.new({ from : acc_default})
         await d_UniswapFactory.initializeFactory.sendTransaction(d_UniswapExchange.address, {from: acc_default});
 
-        let daiExchange = await exchange.new( { from : acc_default})
-        await daiExchange.setup.sendTransaction(d_ERC20Mock.address, {from: acc_default});
-        d_ERC20Mock.approve(daiExchange.address, 280, {from: acc_default});
-        // error down here --------------
-        //daiExchange.addLiquidity(280, 1, parseInt(now+oneMonthInSeconds), {from: acc_default, value: 1 * 10**18});
+        // Create DAI Exchange on Uniswap
+        await d_UniswapFactory.createExchange(d_ERC20Mock.address, { from : acc_default})
+        let exchangeAddr = await d_UniswapFactory.getExchange(d_ERC20Mock.address);
+        let daiExchange = await exchange.at(exchangeAddr)
+        
+        // Fund DAI Exchange with initial liquidity
+        const liquidityAmt = (280 * (10**18)).toString();
+        await d_ERC20Mock.approve(daiExchange.address, liquidityAmt, {from: acc_default});
+        await daiExchange.addLiquidity(0, liquidityAmt, parseInt(now + oneMonthInSeconds), {from: acc_default, value: 1 * (10**18)});
 
         // DaiHard contracts
         await deployer.deploy(c_DaiHard, { from: acc_default });

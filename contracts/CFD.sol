@@ -24,11 +24,12 @@ contract CFD {
     address public uniswapUpDaiExchange;
     address public uniswapDownDaiExchange;
 
-    uint256 public leverage; // 1x leverage == 1
-    uint256 public fee; // 1% fee == ?
+    uint256 public leverage; // 1x leverage == 1e18
+    uint256 public fee; // 100% fee == 1e18, 0.3% fee == 3e15
     uint256 public settlementDate; // In seconds
 
     mapping(address => uint256) public providerLP; // Total LP for a given staker
+    uint256 totalLP;
 
     /**
      * @notice constructor
@@ -114,8 +115,9 @@ contract CFD {
             _underlyingAmount.div(2),
             now + 3600
         );
-        providerLP[msg.sender] = providerLP[msg.sender].add(upLP.add(downLP));
-
+        uint256 newLP = upLP.add(downLP);
+        providerLP[msg.sender] = providerLP[msg.sender].add(newLP);
+        totalLP = totalLP.add(newLP);
     }
 
     /**
