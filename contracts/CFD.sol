@@ -84,7 +84,10 @@ contract CFD {
         if (now > settlementDate) {
             inSettlementPeriod = true;
             daiPriceAtSettlement = GetDaiPriceUSD();
-
+            (
+                upDaiRateAtSettlement,
+                downDaiRateAtSettlement
+            ) = _getCurrentDaiRates(daiPriceAtSettlement);
         }
         require(!inSettlementPeriod, "Must not be in settlement period");
         _;
@@ -211,8 +214,20 @@ contract CFD {
         upDai.burnFrom(msg.sender, _redeemAmount);
         downDai.burnFrom(msg.sender, _redeemAmount);
 
+        uint256 daiPriceUsd = GetDaiPriceUSD();
+        // Rate 1:1 == 1e18, 1.2:1 == 12e17
+        (uint256 upDaiRate, uint256 downDaiRate) = _getCurrentDaiRates(
+            daiPriceUsd
+        );
+
         // spread MONEY bitches
-        _payout(msg.sender, _redeemAmount, _redeemAmount);
+        _payout(
+            msg.sender,
+            _redeemAmount,
+            _redeemAmount,
+            upDaiRate,
+            downDaiRate
+        );
     }
 
     /**
@@ -231,7 +246,13 @@ contract CFD {
         downDai.burnFrom(msg.sender, downDaiRedeemAmount);
 
         // spread MONEY bitches
-        _payout(msg.sender, upDaiRedeemAmount, downDaiRedeemAmount);
+        _payout(
+            msg.sender,
+            upDaiRedeemAmount,
+            downDaiRedeemAmount,
+            upDaiRateAtSettlement,
+            downDaiRateAtSettlement
+        );
     }
 
     /***************************************
@@ -242,28 +263,25 @@ contract CFD {
      * @notice $ payout function $
      * @dev can only be called internally
      * @param redeemer redeemer address
-     * @param upDai units of UpDai
-     * @param downDai units of DownDai
+     * @param upDaiUnits units of UpDai
+     * @param downDaiUnits units of DownDai
      */
-    function _payout(address redeemer, uint256 upDaiUnits, uint256 downDaiUnits)
-        internal
-    {
-        uint256 daiPriceUsd = GetDaiPriceUSD();
-        // Rate 1:1 == 1e18, 1.2:1 == 12e17
-        (bool success, uint256 upDaiRate, uint256 downDaiRate) = _getCurrentDaiRates(
-            daiPriceUsd
-        );
-        if (success) {
-            // e.g. (12e17 * 100e18) / 1e18 = 12e37 / 1e18 = 120e18
-            uint256 convertedUpDai = upDaiRate.mulTruncate(upDaiUnits);
-            // e.g. (8e17 * 100e18) / 1e18 = 8e37 / 1e18 = 80e18
-            uint256 convertedDownDai = downDaiRate.mulTruncate(downDaiUnits);
-            // if feeRate = 3e15, (2e20*3e15)/1e18 = 6e17
-            uint256 totalDaiPayout = (convertedUpDai.add(convertedDownDai))
-                .mulTruncate(feeRate);
-            // Pay the moola
-            IERC20(daiToken).transfer(redeemer, totalDaiPayout);
-        }
+    function _payout(
+        address redeemer,
+        uint256 upDaiUnits,
+        uint256 downDaiUnits,
+        uint256 upDaiRate,
+        uint256 downDaiRate
+    ) internal {
+        // e.g. (12e17 * 100e18) / 1e18 = 12e37 / 1e18 = 120e18
+        uint256 convertedUpDai = upDaiRate.mulTruncate(upDaiUnits);
+        // e.g. (8e17 * 100e18) / 1e18 = 8e37 / 1e18 = 80e18
+        uint256 convertedDownDai = downDaiRate.mulTruncate(downDaiUnits);
+        // if feeRate = 3e15, (2e20*3e15)/1e18 = 6e17
+        uint256 totalDaiPayout = (convertedUpDai.add(convertedDownDai))
+            .mulTruncate(feeRate);
+        // Pay the moola
+        IERC20(daiToken).transfer(redeemer, totalDaiPayout);
     }
 
     /***************************************
@@ -275,8 +293,7 @@ contract CFD {
      */
     function _getCurrentDaiRates(uint256 daiUsdPrice)
         private
-        view
-        returns (bool success, uint256 upDaiRate, uint256 downDaiRate)
+        returns (uint256 upDaiRate, uint256 downDaiRate)
     {
         // (1 + ((DaiPriceFeed-1) *  Leverage))
         // Given that price is reflected absolutely on both sides.. then
@@ -292,18 +309,23 @@ contract CFD {
         uint256 deltaWithLeverage = delta.mulTruncate(leverage);
         // e.g. 1e18 + 2e17 = 12e17
         uint256 winRate = one.add(deltaWithLeverage);
+        // If the price has hit the roof, settle the contract
         if (winRate >= 2) {
-            daiPriceAtSettlement = daiUsdPrice;
             inSettlementPeriod = true;
-            return (false, 0, 0);
+            daiPriceAtSettlement = daiUsdPrice;
+            // If Price is positive, Long wins and is worth 2:1, where Short is worth 0:1
+            (upDaiRateAtSettlement, downDaiRateAtSettlement) = priceIsPositive
+                ? (uint256(2e18), uint256(0))
+                : (uint256(0), uint256(2e18));
+            return
+                priceIsPositive
+                    ? (uint256(2e18), uint256(0))
+                    : (uint256(0), uint256(2e18));
         }
         // e.g. 1e18 - 2e17 = 8e17
         uint256 loseRate = one.sub(deltaWithLeverage);
         // If price is positive, upDaiRate should be better :)
-        return
-            priceIsPositive
-                ? (true, winRate, loseRate)
-                : (true, loseRate, winRate);
+        return priceIsPositive ? (winRate, loseRate) : (loseRate, winRate);
     }
 
     /**

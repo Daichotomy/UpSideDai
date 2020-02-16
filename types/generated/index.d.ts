@@ -114,11 +114,15 @@ export interface UpDaiContract extends Truffle.Contract<UpDaiInstance> {
 }
 
 export interface CFDInstance extends Truffle.ContractInstance {
+  daiPriceAtSettlement(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+
   daiToken(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
   downDai(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
-  fee(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+  downDaiRateAtSettlement(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+
+  feeRate(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
   inSettlementPeriod(txDetails?: Truffle.TransactionDetails): Promise<boolean>;
 
@@ -143,6 +147,8 @@ export interface CFDInstance extends Truffle.ContractInstance {
 
   upDai(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
+  upDaiRateAtSettlement(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+
   mint: {
     (
       _underlyingAmount: number | BN | string,
@@ -165,6 +171,11 @@ export interface CFDInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
+
+  getETHCollateralRequirements(
+    _underlyingAmount: number | BN | string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<[BN, BN]>;
 
   claimRewards: {
     (txDetails?: Truffle.TransactionDetails): Promise<
@@ -202,11 +213,6 @@ export interface CFDInstance extends Truffle.ContractInstance {
     sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
     estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
   };
-
-  getETHCollateralRequirements(
-    _underlyingAmount: number | BN | string,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<[BN, BN]>;
 
   GetDaiPriceUSD(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
