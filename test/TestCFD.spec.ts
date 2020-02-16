@@ -80,12 +80,10 @@ contract("CFD", ([upSideDaiTeam, random]) => {
     });
 
     describe("Liquidity provider", async () => {
-        // context("");
         it("get required ETH for up&down pool", async () => {
             let upDaiCollateral = await cfd.getETHCollateralRequirements(
                 daiAmountDeposit
             );
-            // console.log(upDaiCollateral);
         });
     });
 
@@ -103,7 +101,6 @@ contract("CFD", ([upSideDaiTeam, random]) => {
                 .mul(new BN(10).pow(new BN(18)))
                 .div(ethDAPriceExact);
             const onChainPrice = await cfd.GetDaiPriceUSD();
-            console.log(onChainPrice.toString());
 
             expect(onChainPrice).bignumber.eq(
                 expectedPrice,

@@ -39,6 +39,14 @@ contract CFD {
     mapping(address => uint256) public UPLP; // Total LP for the UPDAI pool
     mapping(address => uint256) public DPLP; // Total LP for the DOWNDAI pool
 
+    event NeededEthCollateral(
+        address indexed depositor,
+        address indexed cfd,
+        uint256 indexed amount,
+        uint256 upDaiPoolEth,
+        uint256 downDaiPoolEth
+    );
+
     /**
      * @notice constructor
      * @param _makerMedianizer maker medianizer address
@@ -178,6 +186,15 @@ contract CFD {
         // e.g. (11e17 * 1e18) / 287e18 = 11e35 / 287e18 = 3e15 ETH
         uint256 upDaiPoolEth = totalUpDaiValue.divPrecisely(ethUsdPrice);
         uint256 downDaiPoolEth = totalDownDaiValue.divPrecisely(ethUsdPrice);
+
+        emit NeededEthCollateral(
+            msg.sender,
+            address(this),
+            _daiDeposit,
+            upDaiPoolEth,
+            downDaiPoolEth
+        );
+
         return (upDaiPoolEth, downDaiPoolEth);
     }
 
