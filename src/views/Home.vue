@@ -74,9 +74,17 @@
         >
       </div>
     </div>
-    <md-button class="call-Button" style="margin-top:50px" @click="goToCreate"
-      >Leverage Dai</md-button
-    >
+    <div class="md-layout sectionSecond" style="padding-top:0px">
+      <div class="md-layout-item">
+        <md-button
+          class="callButton"
+          style="margin-top:50px"
+          @click="goToCreate"
+          >Start your journey</md-button
+        >
+        <div class="md-layout-item"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -122,9 +130,6 @@ export default {
 .sectionSecond {
   text-align: center;
   vertical-align: middle;
-}
-.meme {
-  //   width: 600px;
 }
 .landingText {
   font-family: Roboto;
@@ -193,6 +198,21 @@ export default {
   line-height: 35px;
   //   align-items: center;
   //   text-align: center;
+  color: #ffffff;
+}
+.callButton {
+  width: 310px;
+  height: 67px;
+  background: #4d4d4d;
+  border-radius: 20px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 25px;
+  align-items: center;
+  text-align: center;
+
   color: #ffffff;
 }
 </style>
