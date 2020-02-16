@@ -46,7 +46,7 @@ contract CFD {
      * @param _leverage leverage (1000000000000000x) (1x == 1e18)
      * @param _fee payout fee (1% == 1e16)
      * @param _settlementDate maker medianizer address
-     * @param _version maker medianizer address
+     * @param _version which tranche are we on?
      */
     constructor(
         address _makerMedianizer,
@@ -194,6 +194,7 @@ contract CFD {
     /**
      * @notice redeem a pair of UPDAI and DOWNDAI
      * @dev this function can be called before the settlement date, an equal amount of UPDAI and DOWNDAI should be deposited
+     * @param _redeemAmount Pair count where 1 real token == 1e18 base units
      */
     function redeem(uint256 _redeemAmount) public notInSettlementPeriod {
         // burn UPDAI & DOWNDAI from redeemer
@@ -251,6 +252,8 @@ contract CFD {
      * @param redeemer redeemer address
      * @param upDaiUnits units of UpDai
      * @param downDaiUnits units of DownDai
+     * @param upDaiRate Rate of uDAI<>DAI
+     * @param downDaiRate units of downDAI<>DAI
      */
     function _payout(
         address redeemer,
@@ -264,10 +267,10 @@ contract CFD {
         // e.g. (8e17 * 100e18) / 1e18 = 8e37 / 1e18 = 80e18
         uint256 convertedDownDai = downDaiRate.mulTruncate(downDaiUnits);
         // if feeRate = 3e15, (2e20*3e15)/1e18 = 6e17
-        uint256 totalDaiPayout = (convertedUpDai.add(convertedDownDai))
-            .mulTruncate(feeRate);
+        uint256 totalDaiPayout = convertedUpDai.add(convertedDownDai);
+        uint256 fee = totalDaiPayout.mulTruncate(feeRate);
         // Pay the moola
-        IERC20(daiToken).transfer(redeemer, totalDaiPayout);
+        IERC20(daiToken).transfer(redeemer, totalDaiPayout.sub(fee));
     }
 
     /***************************************
@@ -276,6 +279,9 @@ contract CFD {
 
     /**
      * @notice Based on the price of DAI, what are the current exchange rates for upDai and downDai?
+     * @param daiUsdPrice Dai price in USD where $1 == 1e18
+     * @return upDaiRate where 1:1 == 1e18
+     * @return downDaiRate where 1:1 == 1e18
      */
     function _getCurrentDaiRates(uint256 daiUsdPrice)
         private
@@ -299,7 +305,7 @@ contract CFD {
         if (winRate >= 2) {
             inSettlementPeriod = true;
             daiPriceAtSettlement = daiUsdPrice;
-            // If Price is positive, Long wins and is worth 2:1, where Short is worth 0:1
+            // If Price is positive, Up wins and is worth 2:1, where Down is worth 0:1
             (uint256 finalUpDaiRate, uint256 finalDownDaiRate) = priceIsPositive
                 ? (uint256(2e18), uint256(0))
                 : (uint256(0), uint256(2e18));
@@ -335,6 +341,7 @@ contract CFD {
 
     /**
      * @notice Parses the bytes32 price from Makers Medianizer into uint
+     * @return uint256 Medianised price where $1 == 1e18
      */
     function GetETHUSDPriceFromMedianizer() public view returns (uint256) {
         return uint256(IMakerMedianizer(makerMedianizer).read());

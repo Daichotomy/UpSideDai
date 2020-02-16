@@ -80,6 +80,7 @@ contract("CFD", ([daiHardTeam, random]) => {
   });
 
   describe("Liquidity provider", async () => {
+    // context("");
     it("get required ETH for up&down pool", async () => {
       let upDaiCollateral = await cfd.getETHCollateralRequirements(
         daiAmountDeposit
@@ -103,6 +104,7 @@ contract("CFD", ([daiHardTeam, random]) => {
         .div(ethDAPriceExact);
       const onChainPrice = await cfd.GetDaiPriceUSD();
       console.log(onChainPrice.toString());
+
       expect(onChainPrice).bignumber.eq(
         expectedPrice,
         "expected price mismatch"
