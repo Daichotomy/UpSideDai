@@ -38,6 +38,9 @@ export default new Vuex.Store({
     miningTransactionObject: {
       status: null,
       txHash: ""
+    },
+    cfdState: {
+      daiPrice: null
     }
   },
   mutations: {
@@ -146,6 +149,10 @@ export default new Vuex.Store({
       console.log("contract DownDaiUniswap");
       console.log(uniSwapDownDai);
       commit(mutations.SET_UNISWAPDOWNDAI, uniSwapDownDai);
+
+      let daiPrice = await cfd.GetDaiPriceUSD();
+      console.log("daiPrice", web3.utils.fromWei(daiPrice).toString());
+      state.cfdState.daiPrice = web3.utils.fromWei(daiPrice).toString();
     },
     // [actions.COMMIT]: async function ({
     //   commit,
