@@ -6,6 +6,7 @@ var contract = require("@truffle/contract");
 
 
 var c_ERC20Mock = artifacts.require("DAITokenMock");
+var c_UpDai = artifacts.require("UpDai");
 var c_MakerMedianizerMock = artifacts.require("MakerMedianizerMock");
 var uniswap_exchange_abi = require("./uniswap/abi/uniswap_exchange.json");
 var uniswap_factory_abi = require("./uniswap/abi/uniswap_factory.json");
@@ -117,9 +118,12 @@ module.exports = async (deployer, network, accounts) => {
         let upDaiExchange = await exchange.at(cfdDeets.uniswapUpDaiExchange);
         await upDaiExchange.ethToTokenSwapInput((1 * 10**18).toString(), parseInt(now + oneMonthInSeconds), { from: acc_default, value:  1 * (10**18)} )
 
+        const upDai = await c_UpDai.at(cfdDeets.upDai);
+        console.log('upDaiBal', (await upDai.balanceOf(acc_default)).toString())
         await d_ERC20Mock.approve(daiExchange.address, (100 * 10**18).toString(), { from: acc_default} )
         await daiExchange.tokenToTokenSwapInput((100 * 10**18).toString(), (1 * 10**18).toString(), (1 * 10**14).toString(), parseInt(now + oneMonthInSeconds), cfdDeets.upDai, { from: acc_default})
-            
+
+        console.log('upDaiBal', (await upDai.balanceOf(acc_default)).toString())
     }
     else if (network == "kovan") {
         // DaiHard contracts
