@@ -15,29 +15,48 @@ import "./StableMath.sol";
 contract CFD {
     using StableMath for uint256;
 
-    /**************** PROTOCOL CONFIGURATION ****************/
+    /***************************************
+                  CONNECTIONS
+    ****************************************/
+
     address public makerMedianizer;
     address public uniswapFactory;
     address public daiToken;
-    /********************************************************/
+
+
+    /***************************************
+                    CONFIG
+    ****************************************/
 
     UpDai public upDai;
     DownDai public downDai;
-    address public uniswapUpDaiExchange;
-    address public uniswapDownDaiExchange;
+    IUniswapExchange public uniswapUpDaiExchange;
+    IUniswapExchange public uniswapDownDaiExchange;
 
     uint256 public leverage; // 1x leverage == 1e18
     uint256 public feeRate; // 100% fee == 1e18, 0.3% fee == 3e15
     uint256 public settlementDate; // In seconds
 
+
+    /***************************************
+              STAKING & SETTLEMENT
+    ****************************************/
+
     bool public inSettlementPeriod = false;
     uint256 public daiPriceAtSettlement; // $1 == 1e18
     uint256 public upDaiRateAtSettlement; // 1:1 == 1e18
     uint256 public downDaiRateAtSettlement; // 1:1 == 1e18
-    uint256 public totalLP;
 
-    mapping(address => uint256) public UPLP; // Total LP for the UPDAI pool
-    mapping(address => uint256) public DPLP; // Total LP for the DOWNDAI pool
+    uint256 public totalMintVolumeInDai;
+
+    struct Stake {
+        uint256 upLP; // Total LP for the UPDAI pool
+        uint256 downLP; // Total LP for the UPDAI pool
+        uint256 mintVolume; // Total mint volume in DA units
+        bool liquidated; // Has this staker withdrawn his funds?
+    }
+
+    mapping(address => Stake) public stakes;
 
     /**
      * @notice constructor
@@ -69,12 +88,12 @@ contract CFD {
         upDai = new UpDai(_version);
         downDai = new DownDai(_version);
 
-        uniswapUpDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
+        uniswapUpDaiExchange = IUniswapExchange(IUniswapFactory(uniswapFactory).createExchange(
             address(upDai)
-        );
-        uniswapDownDaiExchange = IUniswapFactory(uniswapFactory).createExchange(
+        ));
+        uniswapDownDaiExchange = IUniswapExchange(IUniswapFactory(uniswapFactory).createExchange(
             address(downDai)
-        );
+        ));
     }
 
     /***************************************
@@ -133,22 +152,22 @@ contract CFD {
         downDai.mint(address(this), _daiDeposit.div(2));
 
         // Step 4. Contribute to Uniswap
-        uint256 upLP = IUniswapExchange(uniswapUpDaiExchange)
-            .addLiquidity
+        uint256 upLP = uniswapUpDaiExchange.addLiquidity
             .value(upDaiEthUnits)(1, _daiDeposit.div(2), now + 3600);
-        uint256 downLP = IUniswapExchange(uniswapDownDaiExchange)
-            .addLiquidity
+        uint256 downLP = uniswapDownDaiExchange.addLiquidity
             .value(downDaiEthUnits)(1, _daiDeposit.div(2), now + 3600);
 
         // Step 5. Store the LP and log the mint volume
-        uint256 newLP = upLP.add(downLP);
-        UPLP[msg.sender] = UPLP[msg.sender].add(upLP);
-        DPLP[msg.sender] = DPLP[msg.sender].add(downLP);
-        totalLP = totalLP.add(newLP);
+        totalMintVolumeInDai = totalMintVolumeInDai.add(_daiDeposit);
+        stakes[msg.sender] = Stake({
+            upLP: stakes[msg.sender].upLP.add(upLP),
+            downLP: stakes[msg.sender].downLP.add(downLP),
+            mintVolume: stakes[msg.sender].mintVolume.add(_daiDeposit),
+            liquidated: false
+        })
 
         // TODO - add a time element here to incentivise early stakers to provide liquidity
         // This will affect the proportionate amount of rewards they receive at the end
-
     }
 
     /**
@@ -181,12 +200,33 @@ contract CFD {
         return (upDaiPoolEth, downDaiPoolEth);
     }
 
+    /**
+     * @notice Claims all rewards that a staker is eligable for
+     */
     function claimRewards() external onlyInSettlementPeriod {
+        Stake memory stake = stakes[msg.sender];
+        require(stake.mintVolume > 0 && !stake.liquidated, "Must be a valid staker");
+        stakes[msg.sender].liquidated = true;
+
         // 1. Claim Redemption Fees (proportionate to LP)
+        // e.g. (1e27 * 3e15)/1e18 = 3e42/1e18 = 3e24
+        uint256 totalRedemptionFees = totalMintVolumeInDai.mulTruncate(feeRate);
+        require(IERC20(daiToken).transfer(msg.sender, totalRedemptionFees), "Must receive the fees");
+
         // 2. Redeem or withdraw LP
-        //    - Get the LP, convert to L/S DAi
-        //    - Send back to user
-        // 3. Claim rDAI interest?
+        // 2.1. Get everything from Uniswap
+        (uint256 ethRedeemedUp, uint256 upDaiRedeemed)  = uniswapUpDaiExchange.removeLiquidity(stake.upLP, 1, 1, now + 3600);
+        (uint256 ethRedeemedDown, uint256 downDaiRedeemed) = uniswapDownDaiExchange.removeLiquidity(stake.downLP, 1, 1, now + 3600);
+        // 2.2. Redeem all the tokens
+        _payout(
+            msg.sender,
+            _redeemAmount,
+            _redeemAmount,
+            upDaiRateAtSettlement,
+            downDaiRateAtSettlement
+        );
+        // 2.3. Transfer the eth to the user
+        msg.sender.transfer(ethRedeemedUp.add(ethRedeemedDown));
     }
 
     /***************************************
