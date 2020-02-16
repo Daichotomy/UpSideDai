@@ -1,17 +1,18 @@
 pragma solidity ^0.5.16;
 
 contract MakerMedianizerMock {
-    uint256 val; // $1 == 1e8
+    // Current price from Medianizer
+    bytes32 val = 0x00000000000000000000000000000000000000000000000e60e0033988bb8000; // $1 == 1e8
 
-    constructor(uint256 _etherPrice) public {
-        val = _etherPrice;
+    constructor() public {
+        // val = _etherPrice;
     }
 
     function read() external view returns (bytes32) {
-        return bytes32(val);
+        return val;
     }
 
     function poke(uint256 _etherPrice) public {
-        val = _etherPrice;
+        val = bytes32(_etherPrice);
     }
 }

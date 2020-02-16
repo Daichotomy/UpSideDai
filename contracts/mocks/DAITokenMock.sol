@@ -10,7 +10,7 @@ import {
 /**
  * @notice ERC20 token mock
  */
-contract TokenMock is ERC20Detailed, ERC20Mintable {
+contract DAITokenMock is ERC20Detailed, ERC20Mintable {
     constructor(
         string memory _name,
         string memory _symbol,

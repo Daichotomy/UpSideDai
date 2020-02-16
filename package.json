@@ -11,14 +11,13 @@
     "compile": "truffle compile --all",
     "deploy": "truffle deploy",
     "migrate:development": "truffle migrate --network development --reset",
-    "migrate:rinkeby": "truffle migrate --network rinkeby --reset",
     "migrate:kovan": "truffle migrate --network kovan --reset",
     "migrate:mainnet": "truffle migrate --network mainnet --reset",
     "test": "yarn run test-prep; truffle test;",
     "test-prep": "rimraf ./build; yarn run compile; yarn run generate-typings;",
     "lint:tests": "eslint ./test --fix",
-    "lint:contracts": "prettier --write contracts/**/*.sol",
-    "coverage": "npx solidity-coverage",
+    "lint:contracts": "solium -d contracts/ --fix ",
+    "coverage": "node_modules/truffle/build/cli.bundled.js run coverage --network coverage --solcoverjs './.solcover.js'",
     "generate-typings": "rimraf ./types/generated && typechain --target 'truffle-v5' --outDir types/generated './build/*.json'",
     "generate:doc": "truffle compile && solidoc ./ ./docs true"
   },
@@ -26,6 +25,7 @@
     "@statnett/vue-plotly": "^0.3.2",
     "apexcharts": "^3.6.7",
     "axios": "^0.18.0",
+    "bn.js": "^5.1.1",
     "core-js": "^2.6.5",
     "cross-env": "^5.2.0",
     "cryptocompare": "^1.0.0",
@@ -57,17 +57,22 @@
     "babel-eslint": "^10.0.1",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "chai-bignumber": "^3.0.0",
-    "chai-bn": "0.1.0-beta.0",
+    "chai-bn": "^0.2.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
+    "ethlint": "^1.2.5",
     "node-sass": "^4.11.0",
     "openzeppelin-solidity": "^2.5.0",
     "openzeppelin-test-helpers": "^0.4.2",
     "sass-loader": "^7.1.0",
-    "truffle-typings": "^1.0.8",
+    "solidity-coverage": "^0.7.1",
+    "truffle": "^5.1.13",
     "truffle-hdwallet-provider": "^1.0.6",
+    "truffle-typings": "^1.0.8",
+    "ts-node": "^8.6.2",
+    "tsconfig-paths": "^3.9.0",
     "typechain": "1.0.4",
+    "typescript": "^3.7.5",
     "vue-svg-loader": "^0.12.0",
     "vue-template-compiler": "^2.5.21",
     "webpack": "^4.29.6"
@@ -81,7 +86,14 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "max-len": [
+        "error",
+        {
+          "code": 120
+        }
+      ]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }

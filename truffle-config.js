@@ -6,8 +6,13 @@
 //const mnemonic = fs.readFileSync(".mnemonic").toString().trim();
 //const infuraKey = "816cc7a6308448dbbaf46ac5488507cf";
 
+require('ts-node/register')
+// OPTIONAL: Allows the use of tsconfig path mappings with ts-node
+// require('tsconfig-paths/register')
+
+
 module.exports = {
- 
+  contracts_build_directory: './build',
   networks: {
     development: {
       host: "127.0.0.1", // Localhost (default: none)
@@ -15,16 +20,11 @@ module.exports = {
       network_id: "*", // Any network (default: none)
     },
     coverage: {
-      host: "localhost",
+      host: "127.0.0.1",
+      port: 7546,
       network_id: "*",
-      port: 8555, // <-- If you change this, also set the port option in .solcover.js.
       gas: 0xfffffffffff, // <-- Use this high gas value
-      gasPrice: 0x01 // <-- Use this low gas price
-    },
-    rinkeby: {
-      provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infuraKey}`),
-      network_id: 4,
-      skipDryRun: true // Skip dry run before migrations? (default: false for public nets )
+      gasPrice: 0x01      // <-- Use this low gas price
     },
     kovan: {
       provider: () => new HDWalletProvider(mnemonic, `https://kovan.infura.io/v3/${infuraKey}`),
@@ -42,6 +42,7 @@ module.exports = {
   mocha: {
     // timeout: 100000
   },
+  plugins: ["solidity-coverage"],
 
   compilers: {
     solc: {

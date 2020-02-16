@@ -2,3 +2,24 @@
 /build
 /client/dist
 /solidity/build
+
+
+# TSC
+/artifacts/json
+/artifacts/ts
+/dist
+/transpiled
+/types/generated/*
+
+package-lock.json
+
+# .vscode
+
+# solcover
+.coverage_artifacts/
+.coverage_contracts/
+/coverage/*
+coverage/*
+*coverage*
+
+.mnemonic

@@ -1,6 +1,6 @@
 var contract = require("@truffle/contract");
 
-var c_ERC20Mock = artifacts.require("TokenMock");
+var c_ERC20Mock = artifacts.require("DAITokenMock");
 var c_MakerMedianizerMock = artifacts.require("MakerMedianizerMock");
 var uniswap_exchange_abi = require("./uniswap/abi/uniswap_exchange.json");
 var uniswap_factory_abi = require("./uniswap/abi/uniswap_factory.json");
@@ -12,8 +12,11 @@ const exchangeABI = '0x61309c56600035601c527401000000000000000000000000000000000
       '018051610240526101a051610260523361028052336102a0526101c0516102c0526102c0516102a051610280516102605161024051610220516102005160065801611ec9565b610320526101c0526101a0526101805261016052610140526103205160005260206000f3005b63981a1327600051141561281c5760c0600461014037341561274357600080fd5b608435602051811061275457600080fd5b5060a435602051811061276657600080fd5b50306101c051141561277757600080fd5b6101405161016051610180516101a0516101c0516101e051631a7b28f2610200526101405161022052610160516102405261018051610260526101a05161028052336102a0526101c0516102c0526101e0516102e0526102e0516102c0516102a0516102805161026051610240516102205160065801611ec9565b610340526101e0526101c0526101a0526101805261016052610140526103405160005260206000f3005b63cd7724c36000511415612918576020600461014037341561283d57600080fd5b6000610140511161284d57600080fd5b6006543b61285a57600080fd5b60065430141561286957600080fd5b602061020060246370a0823161018052306101a05261019c6006545afa61288f57600080fd5b60005061020051610160526101405161016051610180516101a0516101c0516101e051610200516389f2a871610220526101405161024052303161026052610160516102805261028051610260516102405160065801610852565b6102e052610200526101e0526101c0526101a0526101805261016052610140526102e05160005260206000f3005b6359e948626000511415612a27576020600461014037341561293957600080fd5b6000610140511161294957600080fd5b6006543b61295657600080fd5b60065430141561296557600080fd5b602061020060246370a0823161018052306101a05261019c6006545afa61298b57600080fd5b60005061020051610160526101405161016051610180516101a0516101c0516101e051610200516102205163fd11c223610240526101405161026052303161028052610160516102a0526102a0516102805161026051600658016109ce565b6103005261022052610200526101e0526101c0526101a05261018052610160526101405261030051610220526001610220510260005260206000f3005b6395b68fe76000511415612b365760206004610140373415612a4857600080fd5b60006101405111612a5857600080fd5b6006543b612a6557600080fd5b600654301415612a7457600080fd5b602061020060246370a0823161018052306101a05261019c6006545afa612a9a57600080fd5b60005061020051610160526101405161016051610180516101a0516101c0516101e05161020051610220516389f2a871610240526101405161026052610160516102805230316102a0526102a051610280516102605160065801610852565b6103005261022052610200526101e0526101c0526101a05261018052610160526101405261030051610220526001610220510260005260206000f3005b632640f62c6000511415612c325760206004610140373415612b5757600080fd5b60006101405111612b6757600080fd5b6006543b612b7457600080fd5b600654301415612b8357600080fd5b602061020060246370a0823161018052306101a05261019c6006545afa612ba957600080fd5b60005061020051610160526101405161016051610180516101a0516101c0516101e0516102005163fd11c2236102205261014051610240526101605161026052303161028052610280516102605161024051600658016109ce565b6102e052610200526101e0526101c0526101a0526101805261016052610140526102e05160005260206000f3005b639d76ea586000511415612c58573415612c4b57600080fd5b60065460005260206000f3005b63966dae0e6000511415612c7e573415612c7157600080fd5b60075460005260206000f3005b6370a082316000511415612ccd5760206004610140373415612c9f57600080fd5b6004356020518110612cb057600080fd5b5060046101405160e05260c052604060c0205460005260206000f3005b63a9059cbb6000511415612d985760406004610140373415612cee57600080fd5b6004356020518110612cff57600080fd5b5060043360e05260c052604060c0206101605181541015612d1f57600080fd5b6101605181540381555060046101405160e05260c052604060c0208054610160518254011015612d4e57600080fd5b61016051815401815550610160516101805261014051337fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef6020610180a3600160005260206000f3005b6323b872dd6000511415612eb35760606004610140373415612db957600080fd5b6004356020518110612dca57600080fd5b506024356020518110612ddc57600080fd5b5060046101405160e05260c052604060c0206101805181541015612dff57600080fd5b6101805181540381555060046101605160e05260c052604060c0208054610180518254011015612e2e57600080fd5b6101805181540181555060056101405160e05260c052604060c0203360e05260c052604060c0206101805181541015612e6657600080fd5b61018051815403815550610180516101a05261016051610140517fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60206101a0a3600160005260206000f3005b63095ea7b36000511415612f485760406004610140373415612ed457600080fd5b6004356020518110612ee557600080fd5b506101605160053360e05260c052604060c0206101405160e05260c052604060c02055610160516101805261014051337f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b9256020610180a3600160005260206000f3005b63dd62ed3e6000511415612fb85760406004610140373415612f6957600080fd5b6004356020518110612f7a57600080fd5b506024356020518110612f8c57600080fd5b5060056101405160e05260c052604060c0206101605160e05260c052604060c0205460005260206000f3005b6306fdde036000511415612fde573415612fd157600080fd5b60005460005260206000f3005b6395d89b416000511415613004573415612ff757600080fd5b60015460005260206000f3005b63313ce567600051141561302a57341561301d57600080fd5b60025460005260206000f3005b6318160ddd600051141561305057341561304357600080fd5b60035460005260206000f3005b638c717a33610140523461016052600161018052426101a052336101c052336101e0526101e0516101c0516101a051610180516101605160065801610bfb565b610240526102405b61000461309c0361000460003961000461309c036000f3'
 const factoryABI = '0x6103f056600035601c52740100000000000000000000000000000000000000006020526f7fffffffffffffffffffffffffffffff6040527fffffffffffffffffffffffffffffffff8000000000000000000000000000000060605274012a05f1fffffffffffffffffffffffffdabf41c006080527ffffffffffffffffffffffffed5fa0e000000000000000000000000000000000060a05263538a3f0e60005114156100ed57602060046101403734156100b457600080fd5b60043560205181106100c557600080fd5b50600054156100d357600080fd5b60006101405114156100e457600080fd5b61014051600055005b631648f38e60005114156102bf576020600461014037341561010e57600080fd5b600435602051811061011f57600080fd5b50600061014051141561013157600080fd5b6000600054141561014157600080fd5b60026101405160e05260c052604060c020541561015d57600080fd5b7f602e600c600039602e6000f33660006000376110006000366000730000000000610180526c010000000000000000000000006000540261019b527f5af41558576110006000f30000000000000000000000000000000000000000006101af5260406101806000f0806101cf57600080fd5b61016052610160513b6101e157600080fd5b610160513014156101f157600080fd5b6000600060246366d3820361022052610140516102405261023c6000610160515af161021c57600080fd5b6101605160026101405160e05260c052604060c020556101405160036101605160e05260c052604060c02055600154600160015401101561025c57600080fd5b6001600154016102a0526102a0516001556101405160046102a05160e05260c052604060c0205561016051610140517f9d42cb017eb05bd8944ab536a8b35bc68085931dd5f4356489801453923953f960006000a36101605160005260206000f3005b6306f2bf62600051141561030e57602060046101403734156102e057600080fd5b60043560205181106102f157600080fd5b5060026101405160e05260c052604060c0205460005260206000f3005b6359770438600051141561035d576020600461014037341561032f57600080fd5b600435602051811061034057600080fd5b5060036101405160e05260c052604060c0205460005260206000f3005b63aa65a6c0600051141561039a576020600461014037341561037e57600080fd5b60046101405160e05260c052604060c0205460005260206000f3005b631c2bbd1860005114156103c05734156103b357600080fd5b60005460005260206000f3005b639f181b5e60005114156103e65734156103d957600080fd5b60015460005260206000f3005b60006000fd5b6100046103f0036100046000396100046103f0036000f3'
 
+const oneMonthInSeconds = 60 * 60 * 24 * 30;
+
 const cfdDetails = async (d_CFD) => {
   return {
+    address: d_CFD.address,
     upDai: await d_CFD.upDai(),
     downDai: await d_CFD.downDai(),
     uniswapUpDaiExchange: await d_CFD.uniswapUpDaiExchange(),
@@ -22,48 +25,142 @@ const cfdDetails = async (d_CFD) => {
   }
 }
 
+const deploymentConfig = require("./deployment-config.json");
+
 module.exports = async (deployer, network, accounts) => {
 
     const [acc_default] = accounts;
-
-    // Deploy mock token / DAI
-    await deployer.deploy(c_ERC20Mock, "Templator", "TMPLT", 1000000, { from: acc_default });
-    const d_ERC20Mock = await c_ERC20Mock.deployed();
-
-    // Medianizer mocks
-    const ethPrice = 287 * 10**8;
-    await deployer.deploy(c_MakerMedianizerMock, ethPrice, { from: acc_default });
-    const d_MakerMedianizerMock = await c_MakerMedianizerMock.deployed();
-
-    // Uniswap testnet deployment
-    var exchange = contract({
-      abi: uniswap_exchange_abi,
-      unlinked_binary: exchangeABI
-    });
-    exchange.setProvider(deployer.provider);
-    let d_UniswapExchange = await exchange.new( { from : acc_default})
-    await d_UniswapExchange.setup.sendTransaction(d_ERC20Mock.address, {from: acc_default});
-
-    var factory = contract({
-      abi: uniswap_factory_abi,
-      unlinked_binary: factoryABI
-    });
-    factory.setProvider(deployer.provider);
-    let d_UniswapFactory = await factory.new({ from : acc_default})
-    await d_UniswapFactory.initializeFactory.sendTransaction(d_UniswapExchange.address, {from: acc_default});
-
-    // DaiHard contracts
-    await deployer.deploy(c_DaiHard, { from: acc_default });
-    const d_DaiHard = await c_DaiHard.deployed();
-
-    // Create the first CFD
     const oneMonthInSeconds = 60 * 60 * 24 * 30;
-    await d_DaiHard.newCFD(d_MakerMedianizerMock.address, d_UniswapFactory.address, d_ERC20Mock.address, oneMonthInSeconds, 1);
+    const now = new Date().getTime() / 1000;
 
-    // Grab CFD deets
-    const newCFD_address = await d_DaiHard.deployedCFD(1);
-    const d_CFD = await c_CFD.at(newCFD_address);
+    if (network == "development" || network == "coverage") {
+        // Deploy mock token / DAI
+        await deployer.deploy(c_ERC20Mock, "Templator", "TMPLT", 1000000, { from: acc_default });
+        const d_ERC20Mock = await c_ERC20Mock.deployed();
+        d_ERC20Mock.mint(acc_default, 500, { from: acc_default});
 
-    const cfdDeets = await cfdDetails(d_CFD);
-    console.log(cfdDeets);
+        // Medianizer mocks
+        // const ethPrice = (266 * 10**18).toString();
+        await deployer.deploy(c_MakerMedianizerMock, { from: acc_default });
+        const d_MakerMedianizerMock = await c_MakerMedianizerMock.deployed();
+
+        // Uniswap testnet deployment
+        var exchange = contract({
+        abi: uniswap_exchange_abi,
+        unlinked_binary: exchangeABI
+        });
+        exchange.setProvider(deployer.provider);
+        let d_UniswapExchange = await exchange.new( { from : acc_default})
+        await d_UniswapExchange.setup.sendTransaction(d_ERC20Mock.address, {from: acc_default});
+
+        var factory = contract({
+        abi: uniswap_factory_abi,
+        unlinked_binary: factoryABI
+        });
+        factory.setProvider(deployer.provider);
+        let d_UniswapFactory = await factory.new({ from : acc_default})
+        await d_UniswapFactory.initializeFactory.sendTransaction(d_UniswapExchange.address, {from: acc_default});
+
+        // Create DAI Exchange on Uniswap
+        await d_UniswapFactory.createExchange(d_ERC20Mock.address, { from : acc_default})
+        let exchangeAddr = await d_UniswapFactory.getExchange(d_ERC20Mock.address);
+        let daiExchange = await exchange.at(exchangeAddr)
+        
+        // Fund DAI Exchange with initial liquidity
+        const liquidityAmt = (264 * (10**18)).toString();
+        await d_ERC20Mock.approve(daiExchange.address, liquidityAmt, {from: acc_default});
+        await daiExchange.addLiquidity(0, liquidityAmt, parseInt(now + oneMonthInSeconds), {from: acc_default, value: 1 * (10**18)});
+
+        // DaiHard contracts
+        await deployer.deploy(c_DaiHard, { from: acc_default });
+        
+        const d_DaiHard = await c_DaiHard.deployed();
+
+        // Create the first CFD
+        // * @param _makerMedianizer maker medianizer address
+        // * @param _uniswapFactory uniswap factory address
+        // * @param _daiToken maker medianizer address
+        // * @param _leverage leverage (1000000000000000x)
+        // * @param _fee payout fee
+        // * @param _settlementLength maker medianizer address
+        // * @param _version maker medianizer address
+        await d_DaiHard.newCFD(
+            d_MakerMedianizerMock.address,
+            d_UniswapFactory.address,
+            d_ERC20Mock.address,
+            (20 * 10**18).toString(),
+            (3 * 10**15).toString(),
+            oneMonthInSeconds,
+            1
+        );
+
+        // Grab CFD deets
+        //const newCFD_address = await d_DaiHard.deployedCFD(1);
+        //const d_CFD = await c_CFD.at(newCFD_address);
+
+        //const cfdDeets = await cfdDetails(d_CFD);
+        //console.log(cfdDeets);
+    }
+    else if (network == "kovan") {
+        // DaiHard contracts
+        await deployer.deploy(c_DaiHard, { from: acc_default });
+
+        const d_DaiHard = await c_DaiHard.deployed();
+
+        // Create the first CFD
+        // * @param _makerMedianizer maker medianizer address
+        // * @param _uniswapFactory uniswap factory address
+        // * @param _daiToken maker medianizer address
+        // * @param _leverage leverage (1000000000000000x)
+        // * @param _fee payout fee
+        // * @param _settlementLength maker medianizer address
+        // * @param _version maker medianizer address
+        await d_DaiHard.newCFD(
+            deploymentConfig.KOVAN.MAKER_MEDIANIZER,
+            deploymentConfig.KOVAN.UNISWAP_FACTORY,
+            deploymentConfig.KOVAN.DAI_TOKEN,
+            (20 * 10**18).toString(),
+            (3 * 10**15).toString(),
+            oneMonthInSeconds,
+            1
+        );
+
+        // Grab CFD deets
+        //const newCFD_address = await d_DaiHard.deployedCFD(1);
+        //const d_CFD = await c_CFD.at(newCFD_address);
+
+        //const cfdDeets = await cfdDetails(d_CFD);
+        //console.log(cfdDeets);
+    }
+    else if (network == "mainnet") {
+        // DaiHard contracts
+        await deployer.deploy(c_DaiHard, { from: acc_default });
+
+        const d_DaiHard = await c_DaiHard.deployed();
+
+        // Create the first CFD
+        // * @param _makerMedianizer maker medianizer address
+        // * @param _uniswapFactory uniswap factory address
+        // * @param _daiToken maker medianizer address
+        // * @param _leverage leverage (1000000000000000x)
+        // * @param _fee payout fee
+        // * @param _settlementLength maker medianizer address
+        // * @param _version maker medianizer address
+        await d_DaiHard.newCFD(
+            deploymentConfig.MAINNET.MAKER_MEDIANIZER,
+            deploymentConfig.MAINNET.UNISWAP_FACTORY,
+            deploymentConfig.MAINNET.DAI_TOKEN,
+            (20 * 10**18).toString(),
+            (3 * 10**15).toString(),
+            oneMonthInSeconds,
+            1
+        );
+
+        // Grab CFD deets
+        //const newCFD_address = await d_DaiHard.deployedCFD(1);
+        //const d_CFD = await c_CFD.at(newCFD_address);
+
+        //const cfdDeets = await cfdDetails(d_CFD);
+        //console.log(cfdDeets);
+    }
 }
