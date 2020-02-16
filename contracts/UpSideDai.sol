@@ -58,8 +58,8 @@ contract UpSideDai is Ownable {
                 _daiToken,
                 _leverage,
                 _fee,
-                _version,
-                settlementDate
+                settlementDate,
+                _version
             )
         );
 
