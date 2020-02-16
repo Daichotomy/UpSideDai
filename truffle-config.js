@@ -1,10 +1,10 @@
 /**
  * remove comments for public chain migration
  */
-const HDWalletProvider = require('truffle-hdwallet-provider')
-const fs = require('fs');
-const mnemonic = fs.readFileSync(".mnemonic").toString().trim();
-const infuraKey = "816cc7a6308448dbbaf46ac5488507cf";
+//const HDWalletProvider = require('truffle-hdwallet-provider')
+//const fs = require('fs');
+//const mnemonic = fs.readFileSync(".mnemonic").toString().trim();
+//const infuraKey = "816cc7a6308448dbbaf46ac5488507cf";
 
 require('ts-node/register')
 // OPTIONAL: Allows the use of tsconfig path mappings with ts-node
