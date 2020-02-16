@@ -60,4 +60,6 @@ xxx
 
 ### Smart contracts
 
+![](Diagrams/UpSideDai.png)
+
 ### running code locally
