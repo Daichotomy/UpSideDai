@@ -41,7 +41,7 @@
                 </md-field>
               </span>
               <span class="SoftFont">
-                Ballance:
+                Balance:
                 <img class="text-center clock" src="../../assets/dai.png" />
                 {{
                   userInfo.daiBallance
@@ -113,7 +113,7 @@
         </div>
       </div>
       <div class="md-layout-item">
-        <md-button class="Deposit" @click="deposit()">Buy</md-button>
+        <md-button class="Deposit" @click="trade()">Buy</md-button>
       </div>
       <div class="md-layout-item"></div>
     </div>
@@ -139,6 +139,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["TRADE"]),
     changeDirection() {
       if (this.direction == null) {
         this.direction = "down";
@@ -153,8 +154,12 @@ export default {
         return;
       }
     },
-    deposit() {
-      console.log("deposit");
+    trade() {
+      console.log("TRADING");
+      this.TRADE({
+        direction: this.direction ? this.direction : "up",
+        inputDaiAmount: this.inputDaiAmount
+      });
     }
   },
   mounted() {},

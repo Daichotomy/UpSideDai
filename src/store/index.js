@@ -13,7 +13,7 @@ import * as mutations from "./mutation-types";
 import truffleContract from "truffle-contract";
 
 import CFDABI from "../../build/CFD.json";
-import UniSwapABI from "../../build/IUniswapFactory.json";
+import UniSwapABI from "../../build/IUniswapExchange.json";
 import UpSideDaiABI from "../../build/UpSideDai.json";
 import Erc20TokenABI from "../../build/ERC20.json";
 
@@ -31,7 +31,8 @@ export default new Vuex.Store({
     currentNetwork: null,
     etherscanBase: null,
     cfd: null,
-    uniswap: null,
+    uniswapUpDai: null,
+    uniswapDownDai: null,
     upSideDai: null,
     dai: null,
     upDai: null,
@@ -153,13 +154,13 @@ export default new Vuex.Store({
       commit(mutations.SET_DOWNDAI, downDai);
 
       let uniSwapUpDaiAddress = await cfd.uniswapUpDaiExchange();
-      let uniSwapUpDai = await Erc20Token.at(uniSwapUpDaiAddress);
+      let uniSwapUpDai = await UniSwap.at(uniSwapUpDaiAddress);
       console.log("contract upDaiUniswap");
       console.log(uniSwapUpDai);
       commit(mutations.SET_UNISWAPUPDAI, uniSwapUpDai);
 
       let uniSwapDownDaiAddress = await cfd.uniswapDownDaiExchange();
-      let uniSwapDownDai = await Erc20Token.at(uniSwapDownDaiAddress);
+      let uniSwapDownDai = await UniSwap.at(uniSwapDownDaiAddress);
       console.log("contract DownDaiUniswap");
       console.log(uniSwapDownDai);
       commit(mutations.SET_UNISWAPDOWNDAI, uniSwapDownDai);
@@ -194,7 +195,7 @@ export default new Vuex.Store({
         state.cfd.address
       );
 
-      console.log(state.cfd.address)
+      console.log(state.cfd.address);
       console.log("walletApproval", walletApproval.toString());
       if (walletApproval.toString() == "0") {
         await state.dai.approve(
@@ -205,6 +206,97 @@ export default new Vuex.Store({
 
         let txHash = await state.cfd.mint(
           state.web3.web3.utils.toWei(params.daiDeposit),
+          {
+            from: state.account,
+            value: state.web3.web3.utils.toWei("1")
+          }
+        );
+
+        if (txHash) {
+          commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+            status: "done",
+            txHash: txHash.tx
+          });
+        }
+      } else {
+        let txHash = await state.cfd.mint(
+          state.web3.web3.utils.toWei(params.daiDeposit),
+          {
+            from: state.account,
+            value: state.web3.web3.utils.toWei("1")
+          }
+        );
+
+        if (txHash) {
+          commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+            status: "done",
+            txHash: txHash.tx
+          });
+        }
+      }
+    },
+    [actions.TRADE]: async function({ commit, dispatch, state }, params) {
+      console.log("TRADE");
+      console.log(params);
+      commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+        status: "pending",
+        txHash: ""
+      });
+
+      let uniswapExchange =
+        params.direction == "up" ? state.uniswapUpDai : state.uniswapDownDai;
+      console.log(uniswapExchange);
+
+      let upOrDownDai = params.direction == "up" ? state.upDai : state.downDai;
+
+      let walletApproval = await state.dai.allowance(
+        state.account,
+        uniswapExchange.address
+      );
+
+      console.log(uniswapExchange.address);
+      console.log("walletApproval", walletApproval.toString());
+      let timestamp = Math.floor(Date.now() / 1000) + 1000;
+
+      await state.dai.approve(
+        uniswapExchange.address,
+        state.web3.web3.utils.toWei("100000"),
+        { from: state.account }
+      );
+
+      if (walletApproval.toString() == "0") {
+        await state.dai.approve(
+          uniswapExchange.address,
+          state.web3.web3.utils.toWei("100000"),
+          { from: state.account }
+        );
+        console.log("passedApprove");
+        let txHash = await uniswapExchange.tokenToTokenSwapInput(
+          state.web3.web3.utils.toWei("100000000"),
+          1,
+          1,
+          timestamp,
+          state.dai.address,
+          {
+            from: state.account,
+            value: state.web3.web3.utils.toWei("1")
+          }
+        );
+
+        if (txHash) {
+          commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+            status: "done",
+            txHash: txHash.tx
+          });
+        }
+      } else {
+        console.log("passedApprove");
+        let txHash = await uniswapExchange.tokenToTokenSwapInput(
+          state.web3.web3.utils.toWei("100000000"),
+          1,
+          1,
+          timestamp,
+          state.dai.address,
           {
             from: state.account,
             value: state.web3.web3.utils.toWei("1")

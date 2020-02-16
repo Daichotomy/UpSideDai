@@ -53,7 +53,7 @@
                   style="text-align: left; padding-left:30px"
                 >
                   <span class="SoftFont">
-                    Ballance:
+                    Balance:
                     <img class="clock" src="../../assets/dai.png" />
                     {{
                       userInfo.daiBallance
