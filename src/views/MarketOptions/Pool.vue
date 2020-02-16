@@ -96,7 +96,7 @@
 <script>
 import router from "@/router";
 import Lottie from "vue-lottie";
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 
 export default {
   name: "pool",
@@ -111,11 +111,13 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["POOL"]),
     changeDirection(direction) {
       this.directionLong = direction;
     },
     deposit() {
       console.log("deposit");
+      this.POOL({ daiDeposit: this.inputDaiAmount });
     }
   },
   mounted() {},

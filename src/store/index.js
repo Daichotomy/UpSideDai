@@ -180,32 +180,45 @@ export default new Vuex.Store({
         .fromWei(userEthBallance)
         .toString();
     },
-    // [actions.COMMIT]: async function ({
-    //   commit,
-    //   dispatch,
-    //   state
-    // }, params) {
+    [actions.POOL]: async function({ commit, dispatch, state }, params) {
+      console.log("POOL");
+      console.log(params);
 
-    //   console.log("commited")
-    //   console.log(params)
+      commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+        status: "pending",
+        txHash: ""
+      });
 
-    //   commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
-    //     status: 'pending',
-    //     txHash: ""
-    //   })
+      let walletApproval = await state.dai.allowance(
+        state.account,
+        state.cfd.address
+      );
 
-    //   let txHash = await state.cherryswap.deposit(state.account, web3.utils.toWei(params.value + "", 'ether'), params.position, {
-    //     from: state.account
-    //   })
+      console.log(state.cfd.address)
+      console.log("walletApproval", walletApproval.toString());
+      if (walletApproval.toString() == "0") {
+        await state.dai.approve(
+          state.cfd.address,
+          state.web3.web3.utils.toWei("100000"),
+          { from: state.account }
+        );
 
-    //   if (txHash) {
-    //     commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
-    //       status: 'done',
-    //       txHash: txHash.tx
-    //     })
-    //   }
+        let txHash = await state.cfd.mint(
+          state.web3.web3.utils.toWei(params.daiDeposit),
+          {
+            from: state.account,
+            value: state.web3.web3.utils.toWei("1")
+          }
+        );
 
-    // },
+        if (txHash) {
+          commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+            status: "done",
+            txHash: txHash.tx
+          });
+        }
+      }
+    },
     [actions.CLOSE_MINING_DIALOG]: async function({ commit, dispatch, state }) {
       commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
         status: null,
