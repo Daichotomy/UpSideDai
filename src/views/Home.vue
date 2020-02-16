@@ -30,16 +30,21 @@
       </div>
       <div class="md-layout-item md-size-10" />
     </div>
-    <div class="md-layout sections">
+    <div class="md-layout sections secondarySection">
       <div class="md-layout-item">
-        <md-button
-          class="call-Button"
-          style="margin-top:50px"
-          @click="goToCreate"
-          >Leverage Dai</md-button
-        >
+        <img class="memeImage" src="../assets/meme1.png" />
+        <span class="memeTextMain">Up & Down DAI</span>
+      </div>
+      <div class="md-layout-item">
+        <img class="memeImage" src="../assets/meme1.png" />
+      </div>
+      <div class="md-layout-item">
+        <img class="memeImage" src="../assets/meme1.png" />
       </div>
     </div>
+    <md-button class="call-Button" style="margin-top:50px" @click="goToCreate"
+      >Leverage Dai</md-button
+    >
   </div>
 </template>
 
@@ -116,5 +121,18 @@ export default {
   font-size: 16px;
   height: 60px;
   font-weight: 500;
+}
+.secondarySection {
+  background: #ffba01;
+}
+.memeImage {
+  background: white;
+  height: 200px;
+  width: 200px;
+  border-radius: 100px;
+  margin: 20px;
+  -webkit-box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
 }
 </style>
