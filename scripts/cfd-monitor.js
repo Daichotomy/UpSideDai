@@ -24,14 +24,18 @@ module.exports = async function(callback) {
         let medianizerAdd = await cfd.makerMedianizer();
         console.log("Medianizer: ", medianizerAdd);
 
-        let ethUsdPrice = await cfd.GetETHUSDPriceFromMedianizer();
+        /*let ethUsdPrice = await cfd.GetETHUSDPriceFromMedianizer();
         console.log("ETH/USD price from Maker:");
-        console.log(tx);
+        console.log(tx);*/
 
-        let daiAdd = await cfd.daiToken();
+        let daiUsdPrice = await cfd.GetDaiPriceUSD();
+        console.log("DAI/USD price:");
+        console.log(daiUsdPrice.toString());
+
+        /*let daiAdd = await cfd.daiToken();
         let uniFactAdd = await cfd.uniswapFactory();
         const uniswapFactory = await IUniswapFactory(uniFactAdd).getExchange(daiAdd);
-        console.log(uniswapFactory);
+        console.log(uniswapFactory);*/
 
         /*console.log("DAI token");
         console.log(tx);
