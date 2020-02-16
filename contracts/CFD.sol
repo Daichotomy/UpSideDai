@@ -244,19 +244,27 @@ contract CFD {
     /**
      * @notice get DAI price in USD
      * @dev this function get the DAI/USD price by getting the price of ETH/USD from Maker medianizer and dividing it by the price of ETH/DAI from Uniswap.
+     * @return relativePrice of DAI with regards to USD peg, where 1:1 == 1e18
      */
-    function GetDaiPriceUSD() public view returns (uint256) {
+    function GetDaiPriceUSD() public view returns (uint256 relativePrice) {
         address uniswapExchangeAddress = IUniswapFactory(uniswapFactory)
             .getExchange(daiToken);
 
-        // TODO - Check that these values both return the same decimal amount..
-        // i.e. $1 == 1e8 in both cases. else math will fail
-
+        // ethUsdPrice, where $1 == 1e18
         uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
-        uint256 ethDaiPrice = IUniswapExchange(uniswapExchangeAddress)
-            .getEthToTokenInputPrice(1 ether);
+        // ethDaiPrice, where 1:1 == 1e8. Using a single wei here means 0 slippage and allows pricing from low liq pool
+        // extrapolate to base 1e18 in order to do calcs
+        uint256 ethDaiPriceSimple = IUniswapExchange(uniswapExchangeAddress)
+            .getEthToTokenInputPrice(1 * 10**6);
+        uint256 ethDaiPriceExact = ethDaiPriceSimple.mul(10**12);
 
-        return ethUsdPrice.div(ethDaiPrice);
+        return ethUsdPrice.divPrecisely(ethDaiPriceExact);
     }
 
+    /**
+     * @notice Parses the bytes32 price from Makers Medianizer into uint
+     */
+    function GetETHUSDPriceFromMedianizer() public view returns (uint256) {
+        return uint256(IMakerMedianizer(makerMedianizer).read());
+    }
 }

@@ -1,6 +1,6 @@
 var contract = require("@truffle/contract");
 
-var c_ERC20Mock = artifacts.require("TokenMock");
+var c_ERC20Mock = artifacts.require("DAITokenMock");
 var c_MakerMedianizerMock = artifacts.require("MakerMedianizerMock");
 var uniswap_exchange_abi = require("./uniswap/abi/uniswap_exchange.json");
 var uniswap_factory_abi = require("./uniswap/abi/uniswap_factory.json");
@@ -39,8 +39,8 @@ module.exports = async (deployer, network, accounts) => {
         d_ERC20Mock.mint(acc_default, 500, { from: acc_default});
 
         // Medianizer mocks
-        const ethPrice = 287 * 10**8;
-        await deployer.deploy(c_MakerMedianizerMock, ethPrice, { from: acc_default });
+        const ethPrice = (266 * 10**18).toString();
+        await deployer.deploy(c_MakerMedianizerMock, { from: acc_default });
         const d_MakerMedianizerMock = await c_MakerMedianizerMock.deployed();
 
         // Uniswap testnet deployment
@@ -66,7 +66,7 @@ module.exports = async (deployer, network, accounts) => {
         let daiExchange = await exchange.at(exchangeAddr)
         
         // Fund DAI Exchange with initial liquidity
-        const liquidityAmt = (280 * (10**18)).toString();
+        const liquidityAmt = (264 * (10**18)).toString();
         await d_ERC20Mock.approve(daiExchange.address, liquidityAmt, {from: acc_default});
         await daiExchange.addLiquidity(0, liquidityAmt, parseInt(now + oneMonthInSeconds), {from: acc_default, value: 1 * (10**18)});
 

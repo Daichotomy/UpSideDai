@@ -5,11 +5,13 @@ import {
   CFDInstance,
   DaiHardContract,
   MakerMedianizerMockContract,
-  TokenMockContract,
-  TokenMockInstance,
+  DAITokenMockContract,
+  DAITokenMockInstance,
   IUniswapExchangeContract,
   MakerMedianizerMockInstance,
   IUniswapFactoryInstance,
+  IUniswapFactoryContract,
+  IUniswapExchangeInstance,
   DaiHardInstance,
   UpDaiInstance,
   UpDaiContract,
@@ -29,12 +31,15 @@ const { assert, expect } = chai;
 
 const ZERO_ADDR = "0x0000000000000000000000000000000000000000";
 
-const TokenMock: TokenMockContract = artifacts.require("TokenMock");
+const DAITokenMock: DAITokenMockContract = artifacts.require("DAITokenMock");
 const MakerMedianizerMock: MakerMedianizerMockContract = artifacts.require(
   "MakerMedianizerMock"
 );
 const IUniswapExchange: IUniswapExchangeContract = artifacts.require(
   "IUniswapExchange"
+);
+const IUniswapFactory: IUniswapFactoryContract = artifacts.require(
+  "IUniswapFactory"
 );
 const DaiHard: DaiHardContract = artifacts.require("DaiHard");
 const CFD: CFDContract = artifacts.require("CFD");
@@ -43,17 +48,19 @@ const DownDaiContract: DownDaiContract = artifacts.require("DownDai");
 
 contract("CFD", ([daiHardTeam, random]) => {
   const daiAmountDeposit = ether("50");
-  let dai: TokenMockInstance;
-  let makerMedianizer: MakerMedianizerMockInstance;
-  let uniswapFactory: IUniswapFactoryInstance;
+  let dai: DAITokenMockInstance;
   let daiHard: DaiHardInstance;
   let cfd: CFDInstance;
+  let makerMedianizer: MakerMedianizerMockInstance;
+  let uniswapFactory: IUniswapFactoryInstance;
   let upDai: UpDaiInstance;
   let downDai: DownDaiInstance;
 
   before(async () => {
+    dai = await DAITokenMock.deployed();
     daiHard = await DaiHard.deployed();
     cfd = await CFD.at(await daiHard.deployedCFD(1));
+    uniswapFactory = await IUniswapFactory.at(await cfd.uniswapFactory());
     makerMedianizer = await MakerMedianizerMock.at(await cfd.makerMedianizer());
     upDai = await UpDaiContract.at(await cfd.upDai());
     downDai = await DownDaiContract.at(await cfd.downDai());
@@ -78,6 +85,28 @@ contract("CFD", ([daiHardTeam, random]) => {
         daiAmountDeposit
       );
       console.log(upDaiCollateral);
+    });
+  });
+
+  describe("GetDaiPriceUSD", async () => {
+    it("should return relative price", async () => {
+      let ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
+      let daiExchange: IUniswapExchangeInstance = await IUniswapExchange.at(
+        await uniswapFactory.getExchange(dai.address)
+      );
+      let ethDAIPriceSimple = await daiExchange.getEthToTokenInputPrice(
+        (1000000).toString()
+      );
+      let ethDAPriceExact = ethDAIPriceSimple.mul(new BN(10 ** 12));
+      let expectedPrice = ethUSDPrice
+        .mul(new BN(10).pow(new BN(18)))
+        .div(ethDAPriceExact);
+      const onChainPrice = await cfd.GetDaiPriceUSD();
+      console.log(onChainPrice.toString());
+      expect(onChainPrice).bignumber.eq(
+        expectedPrice,
+        "expected price mismatch"
+      );
     });
   });
 });

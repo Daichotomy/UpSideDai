@@ -11,6 +11,7 @@ declare global {
       require(name: "CFD"): TruffleContracts.CFDContract;
       require(name: "Context"): TruffleContracts.ContextContract;
       require(name: "DaiHard"): TruffleContracts.DaiHardContract;
+      require(name: "DAITokenMock"): TruffleContracts.DAITokenMockContract;
       require(name: "DownDai"): TruffleContracts.DownDaiContract;
       require(name: "ERC20"): TruffleContracts.ERC20Contract;
       require(name: "ERC20Burnable"): TruffleContracts.ERC20BurnableContract;
@@ -32,7 +33,6 @@ declare global {
       require(name: "Migrations"): TruffleContracts.MigrationsContract;
       require(name: "MinterRole"): TruffleContracts.MinterRoleContract;
       require(name: "Ownable"): TruffleContracts.OwnableContract;
-      require(name: "TokenMock"): TruffleContracts.TokenMockContract;
       require(name: "UpDai"): TruffleContracts.UpDaiContract;
     }
   }
