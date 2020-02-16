@@ -4,7 +4,7 @@
 
 ## Resources
 
-[Live Application](https://upsidedai.com)  
+[Live Platform](https://upsidedai.com)  
 [Pitch deck](https://docs.google.com/presentation/d/1qZtUZ2vuH_k8AtWUEa444_UhoD8DlzgenaHmmxuohMU)  
 [Figma mockups](https://www.figma.com/file/561C0EC33s556EpVKYBzG2/Eth-Denver?node-id=8%3A0)  
 
@@ -81,7 +81,7 @@ These three sources of revenue makes being a liquidity provider for UpsideDai mo
 
 ### Transaction Flow
 
-
+- At the time of depositing 
 
 ## Technical Description
 
