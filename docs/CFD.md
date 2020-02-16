@@ -1,7 +1,7 @@
 # CFD - take a 20x leveraged position on the future price of DAI.. or provide
 liquidity to the market and earn staking rewards. Liquidation prices at 20x are 0.95<>1.05 (CFD.sol)
 
-View Source: [home/alex/projects/ethdenver/DaiHard/contracts/CFD.sol](../home/alex/projects/ethdenver/DaiHard/contracts/CFD.sol)
+View Source: [contracts/CFD.sol](../contracts/CFD.sol)
 
 **CFD**
 

@@ -1,6 +1,6 @@
 # DownDai.sol
 
-View Source: [home/alex/projects/ethdenver/DaiHard/contracts/tokens/DownDai.sol](../home/alex/projects/ethdenver/DaiHard/contracts/tokens/DownDai.sol)
+View Source: [contracts/tokens/DownDai.sol](../contracts/tokens/DownDai.sol)
 
 **↗ Extends: [ERC20Detailed](ERC20Detailed.md), [ERC20Mintable](ERC20Mintable.md), [ERC20Burnable](ERC20Burnable.md)**
 

@@ -1,6 +1,6 @@
 # Migrations.sol
 
-View Source: [home/alex/projects/ethdenver/DaiHard/contracts/z_Migrations.sol](../home/alex/projects/ethdenver/DaiHard/contracts/z_Migrations.sol)
+View Source: [contracts/z_Migrations.sol](../contracts/z_Migrations.sol)
 
 **Migrations**
 

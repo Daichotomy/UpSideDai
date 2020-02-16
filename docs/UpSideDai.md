@@ -1,6 +1,6 @@
 # UpSideDai.sol
 
-View Source: [home/alex/projects/ethdenver/DaiHard/contracts/UpSideDai.sol](../home/alex/projects/ethdenver/DaiHard/contracts/UpSideDai.sol)
+View Source: [contracts/UpSideDai.sol](../contracts/UpSideDai.sol)
 
 **↗ Extends: [Ownable](Ownable.md)**
 

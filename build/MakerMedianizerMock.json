@@ -38,15 +38,15 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_etherPrice\",\"type\":\"uint256\"}],\"name\":\"poke\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"read\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/alex/projects/ethdenver/DaiHard/contracts/mocks/MakerMedianizerMock.sol\":\"MakerMedianizerMock\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/alex/projects/ethdenver/DaiHard/contracts/mocks/MakerMedianizerMock.sol\":{\"keccak256\":\"0x413445e8c3af5fd7924178852533370c3c093e918219d1924a4eb82d14a9d6b4\",\"urls\":[\"bzz-raw://4afd4477b94c95449c645a6a7aad899324ce4aed4f608af4597f775e35b46290\",\"dweb:/ipfs/QmSyZhR6LdTLecfYhSt8WZfdKXzjbTYvanvPMzsti5CYkk\"]}},\"version\":1}",
-  "bytecode": "0x6080604052680e60e0033988bb800060005534801561001d57600080fd5b5060ab8061002c6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806332145f9014603757806357de26a4146053575b600080fd5b605160048036036020811015604b57600080fd5b5035606b565b005b60596070565b60408051918252519081900360200190f35b600055565b6000549056fea265627a7a72315820e3a0971ee3817f2bcbc3d07d5d92aa5bd6f1e95bd7a88be89ef783fffa5fc9a064736f6c63430005100032",
-  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c806332145f9014603757806357de26a4146053575b600080fd5b605160048036036020811015604b57600080fd5b5035606b565b005b60596070565b60408051918252519081900360200190f35b600055565b6000549056fea265627a7a72315820e3a0971ee3817f2bcbc3d07d5d92aa5bd6f1e95bd7a88be89ef783fffa5fc9a064736f6c63430005100032",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_etherPrice\",\"type\":\"uint256\"}],\"name\":\"poke\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"read\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol\":\"MakerMedianizerMock\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol\":{\"keccak256\":\"0x413445e8c3af5fd7924178852533370c3c093e918219d1924a4eb82d14a9d6b4\",\"urls\":[\"bzz-raw://4afd4477b94c95449c645a6a7aad899324ce4aed4f608af4597f775e35b46290\",\"dweb:/ipfs/QmSyZhR6LdTLecfYhSt8WZfdKXzjbTYvanvPMzsti5CYkk\"]}},\"version\":1}",
+  "bytecode": "0x6080604052680e60e0033988bb800060005534801561001d57600080fd5b5060ab8061002c6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806332145f9014603757806357de26a4146053575b600080fd5b605160048036036020811015604b57600080fd5b5035606b565b005b60596070565b60408051918252519081900360200190f35b600055565b6000549056fea265627a7a72315820170ee6582fa2ed15ff776b9ef85fd9f71ea0eb190b847d08c314c467f07e5e5e64736f6c63430005100032",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c806332145f9014603757806357de26a4146053575b600080fd5b605160048036036020811015604b57600080fd5b5035606b565b005b60596070565b60408051918252519081900360200190f35b600055565b6000549056fea265627a7a72315820170ee6582fa2ed15ff776b9ef85fd9f71ea0eb190b847d08c314c467f07e5e5e64736f6c63430005100032",
   "sourceMap": "26:404:7:-;;;112:66;98:80;;198:58;5:2:-1;;;;30:1;27;20:12;5:2;198:58:7;26:404;;;;;;",
   "deployedSourceMap": "26:404:7:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;26:404:7;;;;;;;;;;;;;;;;;;;;;;;;343:85;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;343:85:7;;:::i;:::-;;262:75;;;:::i;:::-;;;;;;;;;;;;;;;;343:85;401:20;395:26;343:85::o;262:75::-;301:7;327:3;262:75;:::o",
   "source": "pragma solidity ^0.5.16;\n\ncontract MakerMedianizerMock {\n    // Current price from Medianizer\n    bytes32 val = 0x00000000000000000000000000000000000000000000000e60e0033988bb8000; // $1 == 1e8\n\n    constructor() public {\n        // val = _etherPrice;\n    }\n\n    function read() external view returns (bytes32) {\n        return val;\n    }\n\n    function poke(uint256 _etherPrice) public {\n        val = bytes32(_etherPrice);\n    }\n}\n",
-  "sourcePath": "/home/alex/projects/ethdenver/DaiHard/contracts/mocks/MakerMedianizerMock.sol",
+  "sourcePath": "/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol",
   "ast": {
-    "absolutePath": "/home/alex/projects/ethdenver/DaiHard/contracts/mocks/MakerMedianizerMock.sol",
+    "absolutePath": "/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol",
     "exportedSymbols": {
       "MakerMedianizerMock": [
         1654
@@ -385,7 +385,7 @@
     "src": "0:431:7"
   },
   "legacyAST": {
-    "absolutePath": "/home/alex/projects/ethdenver/DaiHard/contracts/mocks/MakerMedianizerMock.sol",
+    "absolutePath": "/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol",
     "exportedSymbols": {
       "MakerMedianizerMock": [
         1654
@@ -742,8 +742,7 @@
     }
   },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-02-16T12:50:32.223Z",
-  "networkType": "ethereum",
+  "updatedAt": "2020-02-16T14:12:16.121Z",
   "devdoc": {
     "methods": {}
   },

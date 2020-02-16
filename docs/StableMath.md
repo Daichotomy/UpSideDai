@@ -1,6 +1,6 @@
 # StableMath (StableMath.sol)
 
-View Source: [home/alex/projects/ethdenver/DaiHard/contracts/StableMath.sol](../home/alex/projects/ethdenver/DaiHard/contracts/StableMath.sol)
+View Source: [contracts/StableMath.sol](../contracts/StableMath.sol)
 
 **StableMath**
 

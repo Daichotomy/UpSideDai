@@ -1,6 +1,6 @@
 # MakerMedianizerMock.sol
 
-View Source: [home/alex/projects/ethdenver/DaiHard/contracts/mocks/MakerMedianizerMock.sol](../home/alex/projects/ethdenver/DaiHard/contracts/mocks/MakerMedianizerMock.sol)
+View Source: [contracts/mocks/MakerMedianizerMock.sol](../contracts/mocks/MakerMedianizerMock.sol)
 
 **MakerMedianizerMock**
 

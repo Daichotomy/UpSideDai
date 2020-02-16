@@ -1,6 +1,6 @@
 # IUniswapExchange.sol
 
-View Source: [home/alex/projects/ethdenver/DaiHard/contracts/interfaces/IUniswapExchange.sol](../home/alex/projects/ethdenver/DaiHard/contracts/interfaces/IUniswapExchange.sol)
+View Source: [contracts/interfaces/IUniswapExchange.sol](../contracts/interfaces/IUniswapExchange.sol)
 
 **IUniswapExchange**
 

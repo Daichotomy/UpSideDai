@@ -1,6 +1,6 @@
 # IMakerMedianizer.sol
 
-View Source: [home/alex/projects/ethdenver/DaiHard/contracts/interfaces/IMakerMedianizer.sol](../home/alex/projects/ethdenver/DaiHard/contracts/interfaces/IMakerMedianizer.sol)
+View Source: [contracts/interfaces/IMakerMedianizer.sol](../contracts/interfaces/IMakerMedianizer.sol)
 
 **IMakerMedianizer**
 

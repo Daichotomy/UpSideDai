@@ -1,6 +1,6 @@
 # UpDai.sol
 
-View Source: [home/alex/projects/ethdenver/DaiHard/contracts/tokens/UpDai.sol](../home/alex/projects/ethdenver/DaiHard/contracts/tokens/UpDai.sol)
+View Source: [contracts/tokens/UpDai.sol](../contracts/tokens/UpDai.sol)
 
 **↗ Extends: [ERC20Detailed](ERC20Detailed.md), [ERC20Mintable](ERC20Mintable.md), [ERC20Burnable](ERC20Burnable.md)**
 

@@ -17,15 +17,15 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"read\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/alex/projects/ethdenver/DaiHard/contracts/interfaces/IMakerMedianizer.sol\":\"IMakerMedianizer\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/alex/projects/ethdenver/DaiHard/contracts/interfaces/IMakerMedianizer.sol\":{\"keccak256\":\"0xa1baa0c95f0f8ba7cbd3ce471bcf8fe21912f93a97388f434d5cf953938f6a27\",\"urls\":[\"bzz-raw://77bce04f4c24395de57f976cb78b911556e4b8c592e892fa379416964096c555\",\"dweb:/ipfs/QmUTJnf82YDus2XSFXEi5JprvpVpnD6XwG6Lec4G8417JR\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"read\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/haythem96/Projects/DaiHard/contracts/interfaces/IMakerMedianizer.sol\":\"IMakerMedianizer\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/haythem96/Projects/DaiHard/contracts/interfaces/IMakerMedianizer.sol\":{\"keccak256\":\"0xa1baa0c95f0f8ba7cbd3ce471bcf8fe21912f93a97388f434d5cf953938f6a27\",\"urls\":[\"bzz-raw://77bce04f4c24395de57f976cb78b911556e4b8c592e892fa379416964096c555\",\"dweb:/ipfs/QmUTJnf82YDus2XSFXEi5JprvpVpnD6XwG6Lec4G8417JR\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.16;\n\ninterface IMakerMedianizer {\n    function read() external view returns (bytes32);\n}\n",
-  "sourcePath": "/home/alex/projects/ethdenver/DaiHard/contracts/interfaces/IMakerMedianizer.sol",
+  "sourcePath": "/Users/haythem96/Projects/DaiHard/contracts/interfaces/IMakerMedianizer.sol",
   "ast": {
-    "absolutePath": "/home/alex/projects/ethdenver/DaiHard/contracts/interfaces/IMakerMedianizer.sol",
+    "absolutePath": "/Users/haythem96/Projects/DaiHard/contracts/interfaces/IMakerMedianizer.sol",
     "exportedSymbols": {
       "IMakerMedianizer": [
         1203
@@ -120,7 +120,7 @@
     "src": "0:110:3"
   },
   "legacyAST": {
-    "absolutePath": "/home/alex/projects/ethdenver/DaiHard/contracts/interfaces/IMakerMedianizer.sol",
+    "absolutePath": "/Users/haythem96/Projects/DaiHard/contracts/interfaces/IMakerMedianizer.sol",
     "exportedSymbols": {
       "IMakerMedianizer": [
         1203
@@ -220,7 +220,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-02-16T08:03:19.773Z",
+  "updatedAt": "2020-02-16T14:12:16.112Z",
   "devdoc": {
     "methods": {}
   },
