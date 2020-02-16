@@ -10,7 +10,6 @@ declare global {
     interface Artifacts {
       require(name: "CFD"): TruffleContracts.CFDContract;
       require(name: "Context"): TruffleContracts.ContextContract;
-      require(name: "DaiHard"): TruffleContracts.DaiHardContract;
       require(name: "DAITokenMock"): TruffleContracts.DAITokenMockContract;
       require(name: "DownDai"): TruffleContracts.DownDaiContract;
       require(name: "ERC20"): TruffleContracts.ERC20Contract;
@@ -34,6 +33,7 @@ declare global {
       require(name: "MinterRole"): TruffleContracts.MinterRoleContract;
       require(name: "Ownable"): TruffleContracts.OwnableContract;
       require(name: "UpDai"): TruffleContracts.UpDaiContract;
+      require(name: "UpSideDai"): TruffleContracts.UpSideDaiContract;
     }
   }
 }

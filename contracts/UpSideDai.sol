@@ -4,10 +4,10 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./CFD.sol";
 
 /**
- * @notice DaiHard contract
+ * @notice UpSideDai contract
  * @dev Just a CFD factory
  */
-contract DaiHard is Ownable {
+contract UpSideDai is Ownable {
     mapping(uint256 => address) public deployedCFD;
 
     event CFDeployed(

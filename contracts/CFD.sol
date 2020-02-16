@@ -58,6 +58,14 @@ contract CFD {
 
     mapping(address => Stake) public stakes;
 
+    event NeededEthCollateral(
+        address indexed depositor,
+        address indexed cfd,
+        uint256 indexed amount,
+        uint256 upDaiPoolEth,
+        uint256 downDaiPoolEth
+    );
+
     /**
      * @notice constructor
      * @param _makerMedianizer maker medianizer address
@@ -197,6 +205,15 @@ contract CFD {
         // e.g. (11e17 * 1e18) / 287e18 = 11e35 / 287e18 = 3e15 ETH
         uint256 upDaiPoolEth = totalUpDaiValue.divPrecisely(ethUsdPrice);
         uint256 downDaiPoolEth = totalDownDaiValue.divPrecisely(ethUsdPrice);
+
+        emit NeededEthCollateral(
+            msg.sender,
+            address(this),
+            _daiDeposit,
+            upDaiPoolEth,
+            downDaiPoolEth
+        );
+
         return (upDaiPoolEth, downDaiPoolEth);
     }
 
@@ -356,7 +373,7 @@ contract CFD {
             return (finalUpDaiRate, finalDownDaiRate);
         }
         // e.g. 1e18 - 2e17 = 8e17
-        uint256 loseRate = one.sub(deltaWithLeverage);
+        uint256 loseRate = (uint256(2e18)).sub(deltaWithLeverage);
         // If price is positive, upDaiRate should be better :)
         return priceIsPositive ? (winRate, loseRate) : (loseRate, winRate);
     }

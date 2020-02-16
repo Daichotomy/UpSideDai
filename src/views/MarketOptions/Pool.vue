@@ -2,8 +2,8 @@
   <div class="page-container">
     <div class="md-layout sections">
       <div class="md-layout-item"></div>
-      <div class="md-layout-item md-size-15" style="padding-top:75px">
-        <span class="infoText">Current Dai Price</span>
+      <div class="md-layout-item" style="padding-top:60px">
+        <span class="infoText">Current Dai price</span>
         <br />
         <br />
         <div class="priceBlob">
@@ -15,12 +15,26 @@
       <div class="md-layout-item">
         <div class="tradeBox">
           <div class="md-layout">
-            <div class="md-layout-item" style="padding-top:70px">
-              <span class="infoText">Dai</span>
-              <br />
-              <span class="inputDai">
-                <md-field md-inline>
-                  <label>To Deposit...</label>
+            <div class="md-layout-item" style="padding-top:30px">
+              <span class="infoText"
+                >Input Dai<br />
+                to pool
+                <span class="Question"
+                  >?
+                  <md-tooltip md-direction="top" class="toolTip"
+                    >Add dai to the UpsideDai liquidity pool.</md-tooltip
+                  >
+                </span></span
+              >
+
+              <span>
+                <md-field
+                  md-inline
+                  style="
+    padding-top: 5px;
+    margin-bottom: 5px;"
+                >
+                  <label style="margin-left:80px">To Deposit...</label>
                   <md-input
                     v-model="inputDaiAmount"
                     class="inputDai"
@@ -28,60 +42,41 @@
                   ></md-input>
                 </md-field>
               </span>
-            </div>
-
-            <div>
+              <div style="padding-top:0px" />
               <div class="md-layout">
-                <div class="md-layout-item" @click="changeDirection(true)">
-                  <div class="md-layout-item" style="padding-top:70px">
-                    <div
-                      :class="
-                        directionLong
-                          ? 'directionSelected'
-                          : 'directionNotSelected'
-                      "
-                    >
-                      <img
-                        class="text-center finger"
-                        src="../assets/point.png"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="md-layout-item" @click="changeDirection(false)">
-                  <div class="md-layout-item" style="padding-top:70px">
-                    <div
-                      :class="
-                        !directionLong
-                          ? 'directionSelected'
-                          : 'directionNotSelected'
-                      "
-                    >
-                      <img
-                        class="text-center fingerFlip"
-                        src="../assets/point.png"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <br />
-
-                <span class="Question"
-                  >?
-                  <md-tooltip md-direction="bottom" class="toolTip"
-                    >Bet on a direction that you think Dai will move.</md-tooltip
+                <div
+                  class="md-layout-item"
+                  style="text-align: left; padding-left:30px"
+                >
+                  <span class="SoftFont">
+                    Ballance:
+                    <img class="clock" src="../../assets/dai.png" /> {{
+                      daiBallance
+                    }}</span
                   >
-                </span>
-                <!-- <md-tooltip md-direction="bottom">Bottom</md-tooltip> -->
+                  <div style="padding-top:5px" />
+                  <span class="SoftFont">
+                    Required:
+                    <img class="ethLogo" src="../../assets/eth.png" /> {{
+                      ethBallance
+                    }}</span
+                  >
+                </div>
+                <div class="md-layout-item" style="text-align: center;">
+                  <span class="SoftFont">
+                    <img class="clock" src="../../assets/clock.png" />
+                    Withdrawal Date:
+                    <div style="padding-top:5px" />
+                    <span class="yellowText">{{ maturity }}</span>
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="md-layout-item">
-              <md-button class="Deposit" @click="deposit()">Buy</md-button>
             </div>
           </div>
         </div>
+      </div>
+      <div class="md-layout-item">
+        <md-button class="Deposit" @click="deposit()">Pool</md-button>
       </div>
       <div class="md-layout-item"></div>
     </div>
@@ -93,13 +88,15 @@ import router from "@/router";
 import Lottie from "vue-lottie";
 
 export default {
-  name: "trade",
+  name: "pool",
   components: {},
   data() {
     return {
-      daiPrice: 420.69,
+      daiPrice: 1.069,
       inputDaiAmount: 420.69,
-      directionLong: true
+      daiBallance: 101.69,
+      ethBallance: 12.42,
+      maturity: "16th March"
     };
   },
   methods: {
@@ -115,7 +112,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables.scss";
+@import "../../styles/variables.scss";
 
 .sections {
   text-align: center;
@@ -141,21 +138,22 @@ export default {
   display: flex;
   align-items: center;
   text-align: center;
-  width: 250px;
+  width: 230px;
+  padding-top: 0px !important;
+  margin-top: 0px !important;
+  padding-left: 20 !important;
 }
-
 .priceBlobText {
   font-family: Roboto;
   font-style: normal;
-  font-weight: 300;
-  font-size: 45px;
-  line-height: 53px;
-  // display: flex;
+  font-weight: 200 !important;
+  font-size: 35px;
+  line-height: 60px;
+ 
   align-items: center;
   text-align: center;
-  padding: 10px;
-
-  color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  color: #ffba01;
   width: 216px;
   height: 80px;
   left: 238px;
@@ -165,7 +163,7 @@ export default {
 }
 .tradeBox {
   margin: 15px;
-  width: 694px;
+  width: 450px;
   height: 208px;
   left: 508px;
   top: 240px;
@@ -179,19 +177,21 @@ export default {
   width: 85px;
   height: 85px;
   background: #ffffff;
-  border: 2px solid #fece4d;
+  border: 2px solid #FFBA00;
   box-sizing: border-box;
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s;
 }
 .directionNotSelected {
   width: 85px;
   height: 85px;
   background: #ffffff;
-  // border: 2px solid #fece4d;
+  // border: 2px solid #FFBA00;
   box-sizing: border-box;
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s;
 }
 .finger {
   padding-top: 5px;
@@ -207,8 +207,8 @@ export default {
   transform: rotate(180deg);
 }
 .Deposit {
-  background: #fece4d;
-  margin-top: 75px;
+  background: #FFBA00;
+  margin-top: 85px;
   border-radius: 15px;
   border: none;
   color: #473144;
@@ -221,7 +221,7 @@ export default {
   font-weight: 500;
 }
 .Question {
-  font-size: 20px;
+  font-size: 12px;
   // line-height: 18px;
   align-items: center;
   text-align: center;
@@ -231,11 +231,41 @@ export default {
   width: 64px;
   padding-top: 4px;
   padding-bottom: 4px;
-  padding-left: 11px;
-  padding-right: 11px;
+  padding-left: 7px;
+  padding-right: 7px;
 }
 .toolTip {
   background-color: #c4c4c4;
   // padding-
+}
+.buyPrice {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 47px;
+  // display: flex;
+  align-items: center;
+  text-align: center;
+  color: #ffba01;
+}
+.SoftFont {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  color: rgba(12, 1, 1, 0.5);
+}
+.clock {
+  width: 16px;
+}
+.ethLogo {
+  width: 12px;
+}
+.yellowText {
+  font-size: 14px;
+  line-height: 16px;
+  color: #ffba01;
 }
 </style>

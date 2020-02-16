@@ -67,6 +67,7 @@
     "sass-loader": "^7.1.0",
     "solidity-coverage": "^0.7.1",
     "truffle": "^5.1.13",
+    "truffle-assertions": "^0.9.2",
     "truffle-hdwallet-provider": "^1.0.6",
     "truffle-typings": "^1.0.8",
     "ts-node": "^8.6.2",
