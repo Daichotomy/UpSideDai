@@ -18,10 +18,10 @@
         />
 
         <div style="padding-top:50px" />
-        <span class="SectionHeading">My Historical trades</span>
+        <span class="SectionHeading">My Historical pool positions</span>
         <div style="padding-top:10px" />
         <span class="SectionDetails">
-          Trades you've had in the past and closed off and redeemed.</span
+          Pool liquidity provision you've made in the past and closed off.</span
         >
         <div style="padding-top:10px" />
         <PoolHistoryItem

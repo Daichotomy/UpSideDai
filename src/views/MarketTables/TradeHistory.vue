@@ -71,14 +71,16 @@ export default {
           amount: 2507,
           buyPrice: 0.97,
           RedemptionDate: "15.02.2019",
-          disabled: true
+          disabled: true,
+          profit: 3
         },
         {
           direction: "down",
           amount: 3507,
           buyPrice: 1.01,
           RedemptionDate: "15.02.2019",
-          disabled: true
+          disabled: true,
+          profit: -1
         }
       ]
     };

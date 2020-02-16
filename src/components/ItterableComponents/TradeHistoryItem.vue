@@ -39,6 +39,17 @@
             {{ historyItem.amount }}</span
           >
         </div>
+        <div class="md-layout-item" v-if="historyItem.profit">
+          <span class="rowDetails rowDetailsItem">Profit/loss</span>
+          <div style="margin-top:10px" />
+          <span
+            class="detailedItem"
+            style="margin-top:15px"
+            :class="historyItem.profit > 0 ? 'profit' : 'loss'"
+          >
+            {{ historyItem.profit }}%</span
+          >
+        </div>
         <div class="md-layout-item" v-if="!historyItem.disabled">
           <md-button class="withdrawalButton" @click="deposit()"
             >withdraw</md-button
@@ -144,5 +155,11 @@ export default {
 }
 .disabled {
   background-color: #f4f3f3;
+}
+.profit {
+  color: #5bbe06;
+}
+.loss {
+  color: #e54711;
 }
 </style>
