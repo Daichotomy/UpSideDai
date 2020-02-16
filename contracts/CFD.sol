@@ -362,17 +362,17 @@ contract CFD {
         // (1 + (delta * leverage)), to find the up multiplier
         uint256 one = 1e18;
         bool priceIsPositive = daiUsdPrice > one;
-        // Get price delta, e.g. if daiUsdPrice == 99e16, delta == 1e16
+        // Get price delta, e.g. if daiUsdPrice == 1007e15, delta == 7e15
         uint256 delta = priceIsPositive
             ? daiUsdPrice.sub(one)
             : one.sub(daiUsdPrice);
         // Consider 20x leverage == 20e18 == 2e19, then
-        // e.g. 1e16 * 2e19 == 2e35, then truncate to 2e17
+        // e.g. 7e15 * 2e19 == 14e34, then truncate to 4e16
         uint256 deltaWithLeverage = delta.mulTruncate(leverage);
-        // e.g. 1e18 + 2e17 = 12e17
+        // e.g. 1e18 + 4e16 = 104e16
         uint256 winRate = one.add(deltaWithLeverage);
         // If the price has hit the roof, settle the contract
-        if (winRate >= 2) {
+        if (winRate >= uint256(2e18)) {
             inSettlementPeriod = true;
             daiPriceAtSettlement = daiUsdPrice;
             // If Price is positive, Up wins and is worth 2:1, where Down is worth 0:1
