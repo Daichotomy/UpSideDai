@@ -172,7 +172,6 @@ export default {
       let value = this.cfdState.daiPrice
         ? 1 + alpha * (parseFloat(this.cfdState.daiPrice).toFixed(6) - 1) * 20
         : "Loading...";
-      console.log("value", value);
       return value.toFixed(4);
     }
   }
