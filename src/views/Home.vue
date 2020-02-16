@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="md-layout sections md-gutter">
+    <div class="md-layout sections md-gutter" style="padding-top:100px">
       <div class="md-layout-item md-size-10" />
       <div class="md-layout-item">
         <img class="meme" src="../assets/landingMeme.png" />
@@ -29,6 +29,15 @@
         >
       </div>
       <div class="md-layout-item md-size-10" />
+    </div>
+    <div
+      class="md-layout sectionSecond secondarySection"
+      style="padding-top:50px"
+    >
+      <div class="md-layout-item">
+        <span class="topMemeText">Killer components</span>
+        <div class="md-layout-item"></div>
+      </div>
     </div>
     <div class="md-layout sections secondarySection">
       <div class="md-layout-item">
@@ -106,8 +115,12 @@ export default {
 @import "../styles/variables.scss";
 .sections {
   text-align: center;
-  padding-top: 100px;
+  padding-top: 25px;
   padding-bottom: 100px;
+  vertical-align: middle;
+}
+.sectionSecond {
+  text-align: center;
   vertical-align: middle;
 }
 .meme {
@@ -170,6 +183,16 @@ export default {
   line-height: 20px;
   align-items: center;
   text-align: center;
+  color: #ffffff;
+}
+.topMemeText {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 35px;
+  //   align-items: center;
+  //   text-align: center;
   color: #ffffff;
 }
 </style>
