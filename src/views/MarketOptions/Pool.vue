@@ -53,7 +53,7 @@
                   style="text-align: left; padding-left:30px"
                 >
                   <span class="SoftFont">
-                    Balance:
+                    Ballance:
                     <img class="clock" src="../../assets/dai.png" />
                     {{
                       userInfo.daiBallance
@@ -65,12 +65,8 @@
                   <span class="SoftFont">
                     Required:
                     <img class="ethLogo" src="../../assets/eth.png" />
-                    {{
-                      userInfo.ethBallance
-                        ? parseFloat(userInfo.ethBallance).toFixed(2)
-                        : "Loading..."
-                    }}</span
-                  >
+                    {{ requiredEth }}
+                  </span>
                 </div>
                 <div class="md-layout-item" style="text-align: center;">
                   <span class="SoftFont">
@@ -104,7 +100,7 @@ export default {
   data() {
     return {
       daiPrice: 1.069,
-      inputDaiAmount: 420.69,
+      inputDaiAmount: null,
       daiBallance: 101.69,
       ethBallance: 12.42,
       maturity: "16th March"
@@ -122,7 +118,10 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapState(["cfdState", "userInfo"])
+    ...mapState(["cfdState", "userInfo"]),
+    requiredEth() {
+      return ((this.inputDaiAmount / 271.23)).toFixed(6);
+    }
   }
 };
 </script>
