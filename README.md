@@ -9,7 +9,6 @@
 ## Table of Contents
 
 - [What is UpSideDai](#what-is-upsidedai)
-  - [Local development](#local-development)
 - [Team](#team)
 - [Financial engineering](#financial-engineering)
   - [On-chain Price of Dai in USD](#on-chain-price-of-dai-in-usd)
