@@ -122,16 +122,19 @@ contract CFD {
             "CFD::error transfering underlying asset"
         );
 
-        // Step 2. Mint the up/down DAI tokens
-        upDai.mint(address(this), _daiDeposit.div(2));
-        downDai.mint(address(this), _daiDeposit.div(2));
-
-        // Step 3. Calculate the value of these tokens, and how much ETH that is
+        // Step 2. Calculate the value of these tokens, and how much ETH that is
         (uint256 upDaiEthUnits, uint256 downDaiEthUnits) = getETHCollateralRequirements(
             _daiDeposit
         );
         uint256 totalETHCollateral = upDaiEthUnits.add(downDaiEthUnits);
         require(msg.value >= totalETHCollateral, "CFD::error transfering ETH");
+        if(msg.value > totalETHCollateral) {
+            msg.sender.transfer(msg.value-totalETHCollateral)
+        }
+
+        // Step 3. Mint the up/down DAI tokens
+        upDai.mint(address(this), _daiDeposit.div(2));
+        downDai.mint(address(this), _daiDeposit.div(2));
 
         // Step 4. Contribute to Uniswap
         uint256 upLP = IUniswapExchange(uniswapUpDaiExchange)
