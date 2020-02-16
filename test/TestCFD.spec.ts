@@ -82,6 +82,9 @@ contract("CFD", ([upSideDaiTeam, random]) => {
 
     describe("Liquidity provider", async () => {
         it("get required ETH for up&down pool", async () => {
+            let ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
+            let daiPrice = await cfd.GetDaiPriceUSD();
+
             let tx = await cfd.getETHCollateralRequirements(daiAmountDeposit);
             truffleAssert.eventEmitted(tx, "NeededEthCollateral", ev => {
                 console.log(ev.downDaiPoolEth.toString());
