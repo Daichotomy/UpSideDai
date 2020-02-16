@@ -14,11 +14,13 @@ import truffleContract from "truffle-contract";
 
 import CFDABI from "../../build/CFD.json";
 import UniSwapABI from "../../build/IUniswapExchange.json";
+import UniSwapFactoryABI from "../../build/IUniswapFactory.json";
 import UpSideDaiABI from "../../build/UpSideDai.json";
 import Erc20TokenABI from "../../build/ERC20.json";
 
 const Cfd = truffleContract(CFDABI);
 const UniSwap = truffleContract(UniSwapABI);
+const UniSwapFactory = truffleContract(UniSwapFactoryABI);
 const UpSideDai = truffleContract(UpSideDaiABI);
 const Erc20Token = truffleContract(Erc20TokenABI);
 
@@ -33,6 +35,8 @@ export default new Vuex.Store({
     cfd: null,
     uniswapUpDai: null,
     uniswapDownDai: null,
+    uniswapDai: null,
+    uniswapFactory: null,
     upSideDai: null,
     dai: null,
     upDai: null,
@@ -77,6 +81,12 @@ export default new Vuex.Store({
     [mutations.SET_UNISWAPDOWNDAI]: async function(state, uniswapDownDai) {
       state.uniswapDownDai = uniswapDownDai;
     },
+    [mutations.SET_UNISWAPFACTORY]: async function(state, uniswapFactory) {
+      state.uniswapFactory = uniswapFactory;
+    },
+    [mutations.SET_UNISWAPDAI]: async function(state, uniswapDai) {
+      state.uniswapDai = uniswapDai;
+    },
     [mutations.SET_DAI]: async function(state, dai) {
       state.dai = dai;
     },
@@ -104,6 +114,7 @@ export default new Vuex.Store({
       // Set the web3 instance
       Cfd.setProvider(web3.currentProvider);
       UniSwap.setProvider(web3.currentProvider);
+      UniSwapFactory.setProvider(web3.currentProvider);
       UpSideDai.setProvider(web3.currentProvider);
       Erc20Token.setProvider(web3.currentProvider);
       console.log("IN STORE");
@@ -164,6 +175,24 @@ export default new Vuex.Store({
       console.log("contract DownDaiUniswap");
       console.log(uniSwapDownDai);
       commit(mutations.SET_UNISWAPDOWNDAI, uniSwapDownDai);
+
+      let uniSwapFactoryAddress = await cfd.uniswapFactory();
+      console.log("VAL");
+      console.log(uniSwapFactoryAddress);
+      let uniSwapFactory = await UniSwapFactory.at(uniSwapFactoryAddress);
+      console.log("contract uniSwapFactory");
+      console.log(uniSwapFactory);
+      console.log("HERE1");
+      commit(mutations.SET_UNISWAPFACTORY, uniSwapFactory);
+      console.log("HERE");
+      console.log("daiAddress", daiAddress);
+      let uniSwapDaiAddress = await uniSwapFactory.getExchange(daiAddress);
+      console.log("val2");
+      console.log(uniSwapDaiAddress);
+      let uniSwapDai = await UniSwap.at(uniSwapDaiAddress);
+      console.log("contract DaiUniswap");
+      console.log(uniSwapDai);
+      commit(mutations.SET_UNISWAPDAI, uniSwapDai);
 
       let daiPrice = await cfd.GetDaiPriceUSD();
       console.log("daiPrice", web3.utils.fromWei(daiPrice).toString());
@@ -257,50 +286,29 @@ export default new Vuex.Store({
       console.log("walletApproval", walletApproval.toString());
       let timestamp = Math.floor(Date.now() / 1000) + 1000;
 
-      if (walletApproval.toString() == "0") {
-        console.log("upOrDownDai", upOrDownDai);
-        await upOrDownDai.approve(
-          uniswapExchange.address,
-          state.web3.web3.utils.toWei("100000"),
-          { from: state.account }
-        );
-        await state.dai.approve(
-          uniswapExchange.address,
-          state.web3.web3.utils.toWei("100000"),
-          { from: state.account }
-        );
+      console.log("upOrDownDai", upOrDownDai);
+      await upOrDownDai.approve(
+        uniswapExchange.address,
+        state.web3.web3.utils.toWei("100000"),
+        { from: state.account }
+      );
+      await state.dai.approve(
+        uniswapExchange.address,
+        state.web3.web3.utils.toWei("100000"),
+        { from: state.account }
+      );
 
-        console.log("passedApprove");
-        let txHash = await state.cfd.mint(
-          state.web3.web3.utils.toWei("11"),
-          {
-            from: state.account,
-            value: state.web3.web3.utils.toWei("1")
-          }
-        );
+      console.log("passedApprove");
+      let txHash = await state.cfd.mint(state.web3.web3.utils.toWei("11"), {
+        from: state.account,
+        value: state.web3.web3.utils.toWei("1")
+      });
 
-        if (txHash) {
-          commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
-            status: "done",
-            txHash: txHash.tx
-          });
-        }
-      } else {
-        console.log("passedApprove");
-        let txHash = await state.cfd.mint(
-          state.web3.web3.utils.toWei("11"),
-          {
-            from: state.account,
-            value: state.web3.web3.utils.toWei("1")
-          }
-        );
-
-        if (txHash) {
-          commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
-            status: "done",
-            txHash: txHash.tx
-          });
-        }
+      if (txHash) {
+        commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+          status: "done",
+          txHash: txHash.tx
+        });
       }
     },
     [actions.CLOSE_MINING_DIALOG]: async function({ commit, dispatch, state }) {
