@@ -43,10 +43,26 @@
         >
       </div>
       <div class="md-layout-item">
-        <img class="memeImage" src="../assets/meme1.png" />
+        <img class="memeImage" src="../assets/meme2.png" />
+        <br />
+        <span class="memeTextMain">For traders & market makers</span>
+        <br />
+        <br />
+        <span class="memeTextSecondary">
+          Either you want to trade or add liquidity,<br />
+          we help you to get profit on your bets.</span
+        >
       </div>
       <div class="md-layout-item">
-        <img class="memeImage" src="../assets/meme1.png" />
+        <img class="memeImage" src="../assets/meme3.png" />
+        <br />
+        <span class="memeTextMain">30 day period withdraw</span>
+        <br />
+        <br />
+        <span class="memeTextSecondary">
+          After 30 days you will be able to sell your<br />
+          trades and to withdraw your assets.</span
+        >
       </div>
     </div>
     <md-button class="call-Button" style="margin-top:50px" @click="goToCreate"
@@ -133,14 +149,8 @@ export default {
   background: #ffba01;
 }
 .memeImage {
-  background: white;
-  height: 200px;
-  width: 200px;
-  border-radius: 100px;
-  margin: 20px;
-  -webkit-box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
+  height: 250px;
+  width: 250px;
 }
 .memeTextMain {
   font-family: Roboto;
