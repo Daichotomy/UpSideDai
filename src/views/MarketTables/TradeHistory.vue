@@ -16,7 +16,21 @@
           :historyItem="item"
           class="rowItem"
         />
+
+        <div style="padding-top:75px" />
+        <span class="SectionHeading">My Historical trades</span>
+        <div style="padding-top:10px" />
+        <span class="SectionDetails">
+          Trades you've had in the past and closed off and redeemed.</span
+        >
+        <div style="padding-top:10px" />
+        <TradeHistoryItem
+          v-for="item in tableData"
+          :historyItem="item"
+          class="rowItem"
+        />
       </div>
+
       <div class="md-layout-item"></div>
     </div>
   </div>
