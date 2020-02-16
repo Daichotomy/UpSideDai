@@ -241,8 +241,8 @@ export default {
 .fingerFlip {
   padding-top: 0px;
   position: relative;
-  width: 75px;
-  height: 75px;
+  width: 80px;
+  height: 80px;
   transform: rotate(180deg);
 }
 .Deposit {

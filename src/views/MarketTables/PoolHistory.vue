@@ -4,7 +4,6 @@
     <br />
     <br />
     OBJECT<br />
-    {{ tabledata }}
     <PoolHistoryItem
       v-for="item in tableData"
       :historyItem="item"
