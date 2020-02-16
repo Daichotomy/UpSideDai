@@ -39,7 +39,7 @@
       <div id="foot">
         <span>
           <b>
-            <a href="https://github.com/Daichotomy/DaiHard">DaiHard</a> - made
+            <a href="https://github.com/Daichotomy/DaiHard">UpSideDai</a> - made
             with ❤️ by Daichotomy ☯️
           </b>
         </span>
