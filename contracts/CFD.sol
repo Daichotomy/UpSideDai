@@ -1,6 +1,6 @@
 pragma solidity ^0.5.16;
 
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+// import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 //import "openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IUniswapFactory.sol";
@@ -8,9 +8,10 @@ import "./interfaces/IUniswapExchange.sol";
 import "./interfaces/IMakerMedianizer.sol";
 import "./UpDai.sol";
 import "./DownDai.sol";
+import "./StableMath.sol";
 
 contract CFD {
-    using SafeMath for uint256;
+    using StableMath for uint256;
 
     /**************** PROTOCOL CONFIGURATION ****************/
     address public makerMedianizer;
@@ -23,11 +24,12 @@ contract CFD {
     address public uniswapUpDaiExchange;
     address public uniswapDownDaiExchange;
 
-    uint256 public leverage; // 1x leverage == 1
-    uint256 public fee; // 1% fee == ?
+    uint256 public leverage; // 1x leverage == 1e18
+    uint256 public fee; // 100% fee == 1e18, 0.3% fee == 3e15
     uint256 public settlementDate; // In seconds
 
     mapping(address => uint256) public providerLP; // Total LP for a given staker
+    uint256 totalLP;
 
     /**
      * @notice constructor
@@ -113,7 +115,9 @@ contract CFD {
             _underlyingAmount.div(2),
             now + 3600
         );
-        providerLP[msg.sender] = providerLP[msg.sender].add(upLP.add(downLP));
+        uint256 newLP = upLP.add(downLP);
+        providerLP[msg.sender] = providerLP[msg.sender].add(newLP);
+        totalLP = totalLP.add(newLP);
     }
 
     /**
@@ -214,29 +218,27 @@ contract CFD {
     {
         // TODO - validate that everything is denominated in the right decimal amounts
         // by running through an actual example with numbers on each step
-
         // get ETH price
-        uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
-        // get DAI price
-        uint256 daiUsdPrice = GetDaiPriceUSD();
-        // get the price of 1 UPDAI in DAI
-        uint256 upDaiDaiPrice = uint256(1).add(daiUsdPrice.sub(1)).mul(
-            leverage
-        );
-        // get the price of 1 DOWNDAI in DAI
-        uint256 downDaiDaiPrice = uint256(1).sub(daiUsdPrice.sub(1)).mul(
-            leverage
-        );
-        // ETH amount needed for the UPDAI pool
-        uint256 upDaiPoolEth = ((_underlyingAmount.div(2)).mul(upDaiDaiPrice))
-            .div(ethUsdPrice);
-        // ETH amount needed for the DOWNDAI pool
-        uint256 downDaiPoolEth = (
-            (_underlyingAmount.div(2)).mul(downDaiDaiPrice)
-        )
-            .div(ethUsdPrice);
-
-        return (upDaiPoolEth, downDaiPoolEth);
+        // uint256 ethUsdPrice = uint256(IMakerMedianizer(makerMedianizer).read());
+        // // get DAI price
+        // uint256 daiUsdPrice = GetDaiPriceUSD();
+        // // get the price of 1 UPDAI in DAI
+        // uint256 upDaiDaiPrice = uint256(1).add(daiUsdPrice.sub(1)).mul(
+        //     leverage
+        // );
+        // // get the price of 1 DOWNDAI in DAI
+        // uint256 downDaiDaiPrice = uint256(1).sub(daiUsdPrice.sub(1)).mul(
+        //     leverage
+        // );
+        // // ETH amount needed for the UPDAI pool
+        // uint256 upDaiPoolEth = ((_underlyingAmount.div(2)).mul(upDaiDaiPrice))
+        //     .div(ethUsdPrice);
+        // // ETH amount needed for the DOWNDAI pool
+        // uint256 downDaiPoolEth = (
+        //     (_underlyingAmount.div(2)).mul(downDaiDaiPrice)
+        // )
+        //     .div(ethUsdPrice);
+        // return (upDaiPoolEth, downDaiPoolEth);
     }
 
     /**

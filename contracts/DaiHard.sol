@@ -21,11 +21,11 @@ contract DaiHard is Ownable {
      * @notice deploy a new CFD
      * @param _makerMedianizer maker medianizer address
      * @param _uniswapFactory uniswap factory address
-     * @param _daiToken maker medianizer address
-     * @param _leverage leverage (1000000000000000x)
-     * @param _fee payout fee
-     * @param _settlementLength maker medianizer address
-     * @param _version maker medianizer address
+     * @param _daiToken dai token addr
+     * @param _leverage leverage where 1x == 1e18
+     * @param _fee payout fee where 100% fee == 1e18
+     * @param _settlementLength time in seconds for settlement
+     * @param _version tranche number, or version
      */
     function newCFD(
         address _makerMedianizer,
