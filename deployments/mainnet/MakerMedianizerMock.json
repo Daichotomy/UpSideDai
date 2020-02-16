@@ -1,0 +1,740 @@
+{
+  "contractName": "MakerMedianizerMock",
+  "abi": [
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "read",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_etherPrice",
+          "type": "uint256"
+        }
+      ],
+      "name": "poke",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_etherPrice\",\"type\":\"uint256\"}],\"name\":\"poke\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"read\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol\":\"MakerMedianizerMock\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol\":{\"keccak256\":\"0x413445e8c3af5fd7924178852533370c3c093e918219d1924a4eb82d14a9d6b4\",\"urls\":[\"bzz-raw://4afd4477b94c95449c645a6a7aad899324ce4aed4f608af4597f775e35b46290\",\"dweb:/ipfs/QmSyZhR6LdTLecfYhSt8WZfdKXzjbTYvanvPMzsti5CYkk\"]}},\"version\":1}",
+  "bytecode": "0x6080604052680e60e0033988bb800060005534801561001d57600080fd5b5060ab8061002c6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806332145f9014603757806357de26a4146053575b600080fd5b605160048036036020811015604b57600080fd5b5035606b565b005b60596070565b60408051918252519081900360200190f35b600055565b6000549056fea265627a7a72315820170ee6582fa2ed15ff776b9ef85fd9f71ea0eb190b847d08c314c467f07e5e5e64736f6c63430005100032",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c806332145f9014603757806357de26a4146053575b600080fd5b605160048036036020811015604b57600080fd5b5035606b565b005b60596070565b60408051918252519081900360200190f35b600055565b6000549056fea265627a7a72315820170ee6582fa2ed15ff776b9ef85fd9f71ea0eb190b847d08c314c467f07e5e5e64736f6c63430005100032",
+  "sourceMap": "26:404:7:-;;;112:66;98:80;;198:58;5:2:-1;;;;30:1;27;20:12;5:2;198:58:7;26:404;;;;;;",
+  "deployedSourceMap": "26:404:7:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;26:404:7;;;;;;;;;;;;;;;;;;;;;;;;343:85;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;343:85:7;;:::i;:::-;;262:75;;;:::i;:::-;;;;;;;;;;;;;;;;343:85;401:20;395:26;343:85::o;262:75::-;301:7;327:3;262:75;:::o",
+  "source": "pragma solidity ^0.5.16;\n\ncontract MakerMedianizerMock {\n    // Current price from Medianizer\n    bytes32 val = 0x00000000000000000000000000000000000000000000000e60e0033988bb8000; // $1 == 1e8\n\n    constructor() public {\n        // val = _etherPrice;\n    }\n\n    function read() external view returns (bytes32) {\n        return val;\n    }\n\n    function poke(uint256 _etherPrice) public {\n        val = bytes32(_etherPrice);\n    }\n}\n",
+  "sourcePath": "/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol",
+  "ast": {
+    "absolutePath": "/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol",
+    "exportedSymbols": {
+      "MakerMedianizerMock": [
+        1654
+      ]
+    },
+    "id": 1655,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1626,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".16"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:7"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 1654,
+        "linearizedBaseContracts": [
+          1654
+        ],
+        "name": "MakerMedianizerMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 1629,
+            "name": "val",
+            "nodeType": "VariableDeclaration",
+            "scope": 1654,
+            "src": "98:80:7",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes32",
+              "typeString": "bytes32"
+            },
+            "typeName": {
+              "id": 1627,
+              "name": "bytes32",
+              "nodeType": "ElementaryTypeName",
+              "src": "98:7:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes32",
+                "typeString": "bytes32"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "307830303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030306536306530303333393838626238303030",
+              "id": 1628,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "112:66:7",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_265235000000000000000_by_1",
+                "typeString": "int_const 265235000000000000000"
+              },
+              "value": "0x00000000000000000000000000000000000000000000000e60e0033988bb8000"
+            },
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 1632,
+              "nodeType": "Block",
+              "src": "219:37:7",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 1633,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1630,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "209:2:7"
+            },
+            "returnParameters": {
+              "id": 1631,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "219:0:7"
+            },
+            "scope": 1654,
+            "src": "198:58:7",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1640,
+              "nodeType": "Block",
+              "src": "310:27:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 1638,
+                    "name": "val",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 1629,
+                    "src": "327:3:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "functionReturnParameters": 1637,
+                  "id": 1639,
+                  "nodeType": "Return",
+                  "src": "320:10:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 1641,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "read",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1634,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "275:2:7"
+            },
+            "returnParameters": {
+              "id": 1637,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1636,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1641,
+                  "src": "301:7:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 1635,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "301:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "300:9:7"
+            },
+            "scope": 1654,
+            "src": "262:75:7",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": {
+              "id": 1652,
+              "nodeType": "Block",
+              "src": "385:43:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 1650,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 1646,
+                      "name": "val",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1629,
+                      "src": "395:3:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 1648,
+                          "name": "_etherPrice",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 1643,
+                          "src": "409:11:7",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        ],
+                        "id": 1647,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "lValueRequested": false,
+                        "nodeType": "ElementaryTypeNameExpression",
+                        "src": "401:7:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_bytes32_$",
+                          "typeString": "type(bytes32)"
+                        },
+                        "typeName": "bytes32"
+                      },
+                      "id": 1649,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "401:20:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      }
+                    },
+                    "src": "395:26:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "id": 1651,
+                  "nodeType": "ExpressionStatement",
+                  "src": "395:26:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 1653,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "poke",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1644,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1643,
+                  "name": "_etherPrice",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1653,
+                  "src": "357:19:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1642,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "357:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "356:21:7"
+            },
+            "returnParameters": {
+              "id": 1645,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "385:0:7"
+            },
+            "scope": 1654,
+            "src": "343:85:7",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1655,
+        "src": "26:404:7"
+      }
+    ],
+    "src": "0:431:7"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/haythem96/Projects/DaiHard/contracts/mocks/MakerMedianizerMock.sol",
+    "exportedSymbols": {
+      "MakerMedianizerMock": [
+        1654
+      ]
+    },
+    "id": 1655,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1626,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".16"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:7"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 1654,
+        "linearizedBaseContracts": [
+          1654
+        ],
+        "name": "MakerMedianizerMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 1629,
+            "name": "val",
+            "nodeType": "VariableDeclaration",
+            "scope": 1654,
+            "src": "98:80:7",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes32",
+              "typeString": "bytes32"
+            },
+            "typeName": {
+              "id": 1627,
+              "name": "bytes32",
+              "nodeType": "ElementaryTypeName",
+              "src": "98:7:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes32",
+                "typeString": "bytes32"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "307830303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030306536306530303333393838626238303030",
+              "id": 1628,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "112:66:7",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_265235000000000000000_by_1",
+                "typeString": "int_const 265235000000000000000"
+              },
+              "value": "0x00000000000000000000000000000000000000000000000e60e0033988bb8000"
+            },
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 1632,
+              "nodeType": "Block",
+              "src": "219:37:7",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 1633,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1630,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "209:2:7"
+            },
+            "returnParameters": {
+              "id": 1631,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "219:0:7"
+            },
+            "scope": 1654,
+            "src": "198:58:7",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1640,
+              "nodeType": "Block",
+              "src": "310:27:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 1638,
+                    "name": "val",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 1629,
+                    "src": "327:3:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "functionReturnParameters": 1637,
+                  "id": 1639,
+                  "nodeType": "Return",
+                  "src": "320:10:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 1641,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "read",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1634,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "275:2:7"
+            },
+            "returnParameters": {
+              "id": 1637,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1636,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1641,
+                  "src": "301:7:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 1635,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "301:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "300:9:7"
+            },
+            "scope": 1654,
+            "src": "262:75:7",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": {
+              "id": 1652,
+              "nodeType": "Block",
+              "src": "385:43:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 1650,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 1646,
+                      "name": "val",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1629,
+                      "src": "395:3:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 1648,
+                          "name": "_etherPrice",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 1643,
+                          "src": "409:11:7",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        ],
+                        "id": 1647,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "lValueRequested": false,
+                        "nodeType": "ElementaryTypeNameExpression",
+                        "src": "401:7:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_bytes32_$",
+                          "typeString": "type(bytes32)"
+                        },
+                        "typeName": "bytes32"
+                      },
+                      "id": 1649,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "401:20:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      }
+                    },
+                    "src": "395:26:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "id": 1651,
+                  "nodeType": "ExpressionStatement",
+                  "src": "395:26:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 1653,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "poke",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1644,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1643,
+                  "name": "_etherPrice",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1653,
+                  "src": "357:19:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1642,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "357:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "356:21:7"
+            },
+            "returnParameters": {
+              "id": 1645,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "385:0:7"
+            },
+            "scope": 1654,
+            "src": "343:85:7",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1655,
+        "src": "26:404:7"
+      }
+    ],
+    "src": "0:431:7"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.23",
+  "updatedAt": "2020-02-16T14:35:19.502Z",
+  "networkType": "ethereum",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
