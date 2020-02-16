@@ -1,6 +1,7 @@
 <template>
   <div class="page-container">
     <div class="md-layout sections">
+      {{ cfdState }}
       <div class="md-layout-item"></div>
       <div class="md-layout-item" style="padding-top:60px">
         <span class="infoText">Current Dai price</span>
@@ -8,7 +9,11 @@
         <br />
         <div class="priceBlob">
           <span class="priceBlobText">
-            {{ daiPrice }}
+            {{
+              cfdState.daiPrice
+                ? parseFloat(cfdState.daiPrice).toFixed(3)
+                : "Loading..."
+            }}
           </span>
         </div>
       </div>
@@ -115,6 +120,7 @@
 <script>
 import router from "@/router";
 import Lottie from "vue-lottie";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "trade",
@@ -148,7 +154,10 @@ export default {
       console.log("deposit");
     }
   },
-  mounted() {}
+  mounted() {},
+  computed: {
+    ...mapState(["cfdState"])
+  }
 };
 </script>
 
