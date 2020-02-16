@@ -4,6 +4,7 @@
 
 var contract = require("@truffle/contract");
 
+var { utils } = require("web3");
 var c_ERC20Mock = artifacts.require("DAITokenMock");
 var c_UpDai = artifacts.require("UpDai");
 var c_MakerMedianizerMock = artifacts.require("MakerMedianizerMock");
@@ -82,7 +83,7 @@ module.exports = async (deployer, network, accounts) => {
     let daiExchange = await exchange.at(exchangeAddr);
 
     // Fund DAI Exchange with initial liquidity
-    const liquidityAmt = (264 * 10 ** 18).toString();
+    const liquidityAmt = "13200000000000000000000";
     await d_ERC20Mock.approve(daiExchange.address, liquidityAmt, {
       from: acc_default
     });
@@ -90,7 +91,7 @@ module.exports = async (deployer, network, accounts) => {
       0,
       liquidityAmt,
       parseInt(now + oneMonthInSeconds),
-      { from: acc_default, value: 1 * 10 ** 18 }
+      { from: acc_default, value: 50 * 10 ** 18 }
     );
 
     // DaiHard contracts
@@ -119,15 +120,16 @@ module.exports = async (deployer, network, accounts) => {
     // Grab CFD deets
     const newCFD_address = await d_UpSideDai.deployedCFD(1);
     const d_CFD = await c_CFD.at(newCFD_address);
-    await d_ERC20Mock.approve(d_CFD.address, (100 * 10 ** 18).toString(), {
+    var mintAmt = "1000000000000000000000";
+    await d_ERC20Mock.approve(d_CFD.address, mintAmt, {
       from: acc_default
     });
     // console.log('xx');
     const cfdDeets = await cfdDetails(d_CFD);
     console.log(cfdDeets);
-    await d_CFD.mint((100 * 10 ** 18).toString(), {
+    await d_CFD.mint(mintAmt, {
       from: acc_default,
-      value: 1 * 10 ** 18
+      value: 10 * 10 ** 18
     });
 
     // Try to do a swap
