@@ -1,8 +1,6 @@
 <template>
   <div class="page-container">
     <div class="md-layout sections">
-      {{ cfdState }}
-      {{ userInfo }}
       <div class="md-layout-item"></div>
       <div class="md-layout-item" style="padding-top:60px">
         <span class="infoText">Current Dai price</span>
