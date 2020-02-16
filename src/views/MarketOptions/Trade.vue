@@ -131,8 +131,8 @@ export default {
   data() {
     return {
       daiPrice: 1.0101,
-      inputDaiAmount: 420.69,
-      buyPrice: 1.101,
+      inputDaiAmount: null,
+      //   buyPrice: 1.101,
       direction: null,
       daiBallance: 100.92,
       maturity: "16th March"
@@ -164,7 +164,17 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapState(["cfdState", "userInfo"])
+    ...mapState(["cfdState", "userInfo"]),
+    buyPrice() {
+      //(1+(price-1)*20
+      let alpha = this.direction == null || this.direction == "up" ? 1 : -1;
+
+      let value = this.cfdState.daiPrice
+        ? 1 + alpha * (parseFloat(this.cfdState.daiPrice).toFixed(6) - 1) * 20
+        : "Loading...";
+      console.log("value", value);
+      return value.toFixed(4);
+    }
   }
 };
 </script>

@@ -245,7 +245,6 @@ export default new Vuex.Store({
 
       let uniswapExchange =
         params.direction == "up" ? state.uniswapUpDai : state.uniswapDownDai;
-      console.log(uniswapExchange);
 
       let upOrDownDai = params.direction == "up" ? state.upDai : state.downDai;
 
@@ -270,9 +269,10 @@ export default new Vuex.Store({
           state.web3.web3.utils.toWei("100000"),
           { from: state.account }
         );
+
         console.log("passedApprove");
         let txHash = await uniswapExchange.tokenToTokenSwapInput(
-          state.web3.web3.utils.toWei("10000000"),
+          "100000",
           1,
           1,
           timestamp,
@@ -291,7 +291,7 @@ export default new Vuex.Store({
       } else {
         console.log("passedApprove");
         let txHash = await uniswapExchange.tokenToTokenSwapInput(
-          state.web3.web3.utils.toWei("10000000"),
+          "100000",
           1,
           1,
           timestamp,
