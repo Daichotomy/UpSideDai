@@ -226,6 +226,25 @@ export interface CFDInstance extends Truffle.ContractInstance {
     estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
   };
 
+  _getCurrentDaiRates: {
+    (
+      daiUsdPrice: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      daiUsdPrice: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<[BN, BN]>;
+    sendTransaction(
+      daiUsdPrice: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      daiUsdPrice: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
   GetDaiPriceUSD(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
   GetETHUSDPriceFromMedianizer(

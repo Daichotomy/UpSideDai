@@ -102,6 +102,15 @@ contract CFD {
         uniswapDownDaiExchange = IUniswapExchange(
             IUniswapFactory(uniswapFactory).createExchange(address(downDai))
         );
+
+        require(
+            upDai.approve(address(uniswapUpDaiExchange), uint256(-1)),
+            "Approval of upDai failed"
+        );
+        require(
+            downDai.approve(address(uniswapDownDaiExchange), uint256(-1)),
+            "Approval of downDai failed"
+        );
     }
 
     /***************************************
@@ -163,7 +172,7 @@ contract CFD {
         uint256 upLP = uniswapUpDaiExchange.addLiquidity.value(upDaiEthUnits)(
             1,
             _daiDeposit.div(2),
-            now + 3600
+            now.add(3600)
         );
         uint256 downLP = uniswapDownDaiExchange.addLiquidity.value(
             downDaiEthUnits

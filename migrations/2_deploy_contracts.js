@@ -17,6 +17,7 @@ const oneMonthInSeconds = 60 * 60 * 24 * 30;
 const cfdDetails = async (d_CFD) => {
   return {
     address: d_CFD.address,
+    daiToken: await d_CFD.daiToken(),
     upDai: await d_CFD.upDai(),
     downDai: await d_CFD.downDai(),
     uniswapUpDaiExchange: await d_CFD.uniswapUpDaiExchange(),
@@ -95,11 +96,13 @@ module.exports = async (deployer, network, accounts) => {
         );
 
         // Grab CFD deets
-        //const newCFD_address = await d_UpSideDai.deployedCFD(1);
-        //const d_CFD = await c_CFD.at(newCFD_address);
-
-        //const cfdDeets = await cfdDetails(d_CFD);
-        //console.log(cfdDeets);
+        const newCFD_address = await d_UpSideDai.deployedCFD(1);
+        const d_CFD = await c_CFD.at(newCFD_address);
+        await d_ERC20Mock.approve(d_CFD.address, (100 * 10**18).toString(), { from: acc_default});
+        // console.log('xx');
+        const cfdDeets = await cfdDetails(d_CFD);
+        console.log(cfdDeets);
+        await d_CFD.mint((100 * 10**18).toString(), { from: acc_default, value: 1 * (10**18)})
     }
     else if (network == "kovan") {
         // DaiHard contracts
