@@ -3,9 +3,14 @@
     <div class="md-layout sections">
       <div class="md-layout-item"></div>
       <div class="md-layout-item">
-        <br />
-        <br />
-        <br />
+        <div style="padding-top:75px" />
+        <span class="SectionHeading">My Active trades</span>
+        <div style="padding-top:10px" />
+        <span class="SectionDetails">
+          Remember when selling your Up/Down DAI before the withdrawal date, the
+          selling price might vary.</span
+        >
+        <div style="padding-top:10px" />
         <TradeHistoryItem
           v-for="item in tableData"
           :historyItem="item"
@@ -58,5 +63,23 @@ export default {
 @import "../../styles/variables.scss";
 .rowItem {
   padding: 10px;
+}
+.SectionHeading {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 23px;
+  align-items: center;
+  padding: 30px;
+}
+.SectionDetails {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  align-items: center;
+  padding: 30px;
+  color: #000000;
 }
 </style>

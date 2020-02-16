@@ -6,7 +6,7 @@
         style="padding-left:25px;padding-top:20px"
       >
         <div class="md-layout-item">
-          <span class="rowDetails rowDetailsItem">DAI</span>
+          <span class="rowDetails rowDetailsItem">Direction</span>
           <br />
           <span class="detailedItem"
             ><img
@@ -26,14 +26,14 @@
           >
         </div>
         <div class="md-layout-item">
-          <span class="rowDetails rowDetailsItem">Buy Price</span>
+          <span class="rowDetails rowDetailsItem">Buy price</span>
           <div style="margin-top:10px" />
           <span class="detailedItem" style="margin-top:15px">
             {{ historyItem.amount }}</span
           >
         </div>
         <div class="md-layout-item">
-          <span class="rowDetails rowDetailsItem">Withdrawal Date</span>
+          <span class="rowDetails rowDetailsItem">Withdrawal date</span>
           <div style="margin-top:10px" />
           <span class="detailedItem" style="margin-top:15px">
             {{ historyItem.amount }}</span
