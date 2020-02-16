@@ -6,6 +6,22 @@
 [Pitch deck](https://docs.google.com/presentation/d/1qZtUZ2vuH_k8AtWUEa444_UhoD8DlzgenaHmmxuohMU)  
 [Figma mockups](https://www.figma.com/file/561C0EC33s556EpVKYBzG2/Eth-Denver?node-id=8%3A0)  
 
+## Table of Contents
+
+- [What is UpSideDai](#what-is-upsidedai)
+  - [Local development](#local-development)
+- [Team](#team)
+- [Financial engineering](#financial-engineering)
+  - [On-chain Price of Dai in USD](#on-chain-price-of-dai-in-usd)
+  - [Calculating The Settlement Price Of The CDF](#calculating-the-settlement-price-of-the-cdf)
+  - [Incentives For Market Makers](#incentives-for-market-makers)
+  - [Transaction Flow](#transaction-flow)
+- [Technical Description](#technical-description)
+  - [Local Development Setup](#local-development-setup)
+  - [Smart Contracts](#smart-contracts)
+
+---
+
 ## What is UpSideDai??
 
 UpsideDai is a **highly leveraged** contract for difference (CFD) built on Dai, Uniswap and Maker. This mechanism enables traders and speculators to bet on and hedge against price fluctuations of Dai by buying leveraged long or short positions. The CFD construction enables high leverage (20x) while remaining capital efficient and not requiring high margin requirements (100% collateralization). Positions are priced against the market observable Dai/Usd price by using a combination of the Maker oracle and Uniswap.
