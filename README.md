@@ -26,7 +26,7 @@
 
 ---
 
-## What is UpSideDai??
+## What is UpSideDai ??
 
 UpsideDai is a **highly leveraged** contract for difference (CFD) built on Dai, Uniswap and Maker. This mechanism enables traders and speculators to bet on and hedge against price fluctuations of Dai by buying leveraged long or short positions. The CFD construction enables high leverage (20x) while remaining capital efficient and not requiring high margin requirements (100% collateralization). Positions are priced against the market observable Dai/Usd price by using a combination of the Maker oracle and Uniswap.
 
@@ -80,7 +80,9 @@ These three sources of revenue makes being a liquidity provider for UpsideDai mo
 
 ### Transaction Flow
 
-- At the time of providing liquidity into the protocol as a market maker, the deposited asset (DAI) 
+- At any time a new Contract For Difference get created, a new UPDAI (Long token) and DOWNDAI (short token) tokens get created with a Uniswap exchange for each one. The fee, leverage and the settlement date are configurable parameters at the deployment time.
+
+...
 
 ## Local Development Setup
 
