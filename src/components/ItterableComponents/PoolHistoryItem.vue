@@ -40,7 +40,9 @@
           >
         </div>
         <div class="md-layout-item">
-          <md-button class="withdrawalButton" @click="deposit()">Buy</md-button>
+          <md-button class="withdrawalButton" @click="deposit()"
+            >withdraw</md-button
+          >
         </div>
       </div>
 
@@ -129,16 +131,14 @@ export default {
 }
 .withdrawalButton {
   background: #fece4d;
-  margin-top: 85px;
   border-radius: 15px;
   border: none;
   color: #473144;
-  padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 20px;
-  height: 70px;
+  height: 50px;
   font-weight: 500;
 }
 </style>
