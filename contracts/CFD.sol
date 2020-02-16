@@ -23,7 +23,6 @@ contract CFD {
     address public uniswapFactory;
     address public daiToken;
 
-
     /***************************************
                     CONFIG
     ****************************************/
@@ -36,7 +35,6 @@ contract CFD {
     uint256 public leverage; // 1x leverage == 1e18
     uint256 public feeRate; // 100% fee == 1e18, 0.3% fee == 3e15
     uint256 public settlementDate; // In seconds
-
 
     /***************************************
               STAKING & SETTLEMENT
@@ -96,12 +94,12 @@ contract CFD {
         upDai = new UpDai(_version);
         downDai = new DownDai(_version);
 
-        uniswapUpDaiExchange = IUniswapExchange(IUniswapFactory(uniswapFactory).createExchange(
-            address(upDai)
-        ));
-        uniswapDownDaiExchange = IUniswapExchange(IUniswapFactory(uniswapFactory).createExchange(
-            address(downDai)
-        ));
+        uniswapUpDaiExchange = IUniswapExchange(
+            IUniswapFactory(uniswapFactory).createExchange(address(upDai))
+        );
+        uniswapDownDaiExchange = IUniswapExchange(
+            IUniswapFactory(uniswapFactory).createExchange(address(downDai))
+        );
     }
 
     /***************************************
@@ -160,10 +158,14 @@ contract CFD {
         downDai.mint(address(this), _daiDeposit.div(2));
 
         // Step 4. Contribute to Uniswap
-        uint256 upLP = uniswapUpDaiExchange.addLiquidity
-            .value(upDaiEthUnits)(1, _daiDeposit.div(2), now + 3600);
-        uint256 downLP = uniswapDownDaiExchange.addLiquidity
-            .value(downDaiEthUnits)(1, _daiDeposit.div(2), now + 3600);
+        uint256 upLP = uniswapUpDaiExchange.addLiquidity.value(upDaiEthUnits)(
+            1,
+            _daiDeposit.div(2),
+            now + 3600
+        );
+        uint256 downLP = uniswapDownDaiExchange.addLiquidity.value(
+            downDaiEthUnits
+        )(1, _daiDeposit.div(2), now + 3600);
 
         // Step 5. Store the LP and log the mint volume
         totalMintVolumeInDai = totalMintVolumeInDai.add(_daiDeposit);
@@ -172,10 +174,11 @@ contract CFD {
             downLP: stakes[msg.sender].downLP.add(downLP),
             mintVolume: stakes[msg.sender].mintVolume.add(_daiDeposit),
             liquidated: false
-        })
+        });
 
         // TODO - add a time element here to incentivise early stakers to provide liquidity
         // This will affect the proportionate amount of rewards they receive at the end
+
     }
 
     /**
@@ -222,23 +225,31 @@ contract CFD {
      */
     function claimRewards() external onlyInSettlementPeriod {
         Stake memory stake = stakes[msg.sender];
-        require(stake.mintVolume > 0 && !stake.liquidated, "Must be a valid staker");
+        require(
+            stake.mintVolume > 0 && !stake.liquidated,
+            "Must be a valid staker"
+        );
         stakes[msg.sender].liquidated = true;
 
         // 1. Claim Redemption Fees (proportionate to LP)
         // e.g. (1e27 * 3e15)/1e18 = 3e42/1e18 = 3e24
         uint256 totalRedemptionFees = totalMintVolumeInDai.mulTruncate(feeRate);
-        require(IERC20(daiToken).transfer(msg.sender, totalRedemptionFees), "Must receive the fees");
+        require(
+            IERC20(daiToken).transfer(msg.sender, totalRedemptionFees),
+            "Must receive the fees"
+        );
 
         // 2. Redeem or withdraw LP
         // 2.1. Get everything from Uniswap
-        (uint256 ethRedeemedUp, uint256 upDaiRedeemed)  = uniswapUpDaiExchange.removeLiquidity(stake.upLP, 1, 1, now + 3600);
-        (uint256 ethRedeemedDown, uint256 downDaiRedeemed) = uniswapDownDaiExchange.removeLiquidity(stake.downLP, 1, 1, now + 3600);
+        (uint256 ethRedeemedUp, uint256 upDaiRedeemed) = uniswapUpDaiExchange
+            .removeLiquidity(stake.upLP, 1, 1, now + 3600);
+        (uint256 ethRedeemedDown, uint256 downDaiRedeemed) = uniswapDownDaiExchange
+            .removeLiquidity(stake.downLP, 1, 1, now + 3600);
         // 2.2. Redeem all the tokens
         _payout(
             msg.sender,
-            _redeemAmount,
-            _redeemAmount,
+            upDaiRedeemed,
+            downDaiRedeemed,
             upDaiRateAtSettlement,
             downDaiRateAtSettlement
         );

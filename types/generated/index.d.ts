@@ -114,10 +114,6 @@ export interface UpSideDaiContract extends Truffle.Contract<UpSideDaiInstance> {
 }
 
 export interface CFDInstance extends Truffle.ContractInstance {
-  DPLP(arg0: string | BN, txDetails?: Truffle.TransactionDetails): Promise<BN>;
-
-  UPLP(arg0: string | BN, txDetails?: Truffle.TransactionDetails): Promise<BN>;
-
   daiPriceAtSettlement(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
   daiToken(txDetails?: Truffle.TransactionDetails): Promise<string>;
@@ -136,7 +132,12 @@ export interface CFDInstance extends Truffle.ContractInstance {
 
   settlementDate(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
-  totalLP(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+  stakes(
+    arg0: string | BN,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<[BN, BN, BN, boolean]>;
+
+  totalMintVolumeInDai(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
   uniswapDownDaiExchange(
     txDetails?: Truffle.TransactionDetails
