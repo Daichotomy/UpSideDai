@@ -21,6 +21,8 @@
   - [Local Development Setup](#local-development-setup)
     - [Testing](#testing)
     - [Code Linting](#code-linting)
+  - [Networks](#networks)
+    - [Mainnet](#mainnet)
   - [Smart Contracts](#smart-contracts)
 
 ---
@@ -133,6 +135,23 @@ Linting is setup for `JavaScript` with [ESLint](https://eslint.org) & Solidity w
     $ npm run lint:tests
 
 Code style is enforced through the CI test process, builds will fail if there're any linting errors.
+
+### Networks
+
+#### Mainnet
+
+The contract addresses deployed on `Mainnet` Mainnet:
+
+| Contract                  | Address                                                                                                               |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| UpSideDai                 | [0xE62D238db69cCdD2F177bd8a370043Dac162d6C8](https://etherscan.io/address/0xE62D238db69cCdD2F177bd8a370043Dac162d6C8) |
+| CFD                       | [0x8039a64414786a66b35d2793C2982c62E9fB02C8](https://etherscan.io/address/0x8039a64414786a66b35d2793C2982c62E9fB02C8) |
+| UPDAI                     | [0xEf51576000b972569154e4372e8f636cAf810784](https://etherscan.io/address/0xEf51576000b972569154e4372e8f636cAf810784) |
+| DOWNDAI                   | [0xa1845C1bB4f76E8dfAb032A0f2F6b237c114ECc2](https://etherscan.io/address/0xa1845C1bB4f76E8dfAb032A0f2F6b237c114ECc2) |
+| UPDAI Uniswap Exchange    | [0xCB34BB3bea8E133a4a1B33c33C94224ABDeC93c8](https://etherscan.io/address/0xCB34BB3bea8E133a4a1B33c33C94224ABDeC93c8) |
+| DOWNDAI Uniswap Exchange  | [0xb3aB20695CB498698Da938A7Bab828F5ebD5ae48](https://etherscan.io/address/0xb3aB20695CB498698Da938A7Bab828F5ebD5ae48) |
+| Uniswap Factory           | [0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95](https://etherscan.io/address/0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95) |
+| MakerDAO Medianizer       | [0xE3774Af455602C5a0EACC1b0f93e3cE0f65236ce](https://etherscan.io/address/0xE3774Af455602C5a0EACC1b0f93e3cE0f65236ce) |
 
 ### Smart Contracts
 
