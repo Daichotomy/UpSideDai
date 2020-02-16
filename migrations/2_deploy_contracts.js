@@ -83,7 +83,7 @@ module.exports = async (deployer, network, accounts) => {
     let daiExchange = await exchange.at(exchangeAddr);
 
     // Fund DAI Exchange with initial liquidity
-    const liquidityAmt = "13200000000000000000000";
+    const liquidityAmt = "420000000000000000000";
     await d_ERC20Mock.approve(daiExchange.address, liquidityAmt, {
       from: acc_default
     });
@@ -91,7 +91,7 @@ module.exports = async (deployer, network, accounts) => {
       0,
       liquidityAmt,
       parseInt(now + oneMonthInSeconds),
-      { from: acc_default, value: 50 * 10 ** 18 }
+      { from: acc_default, value: 1 * 10 ** 18 }
     );
 
     // DaiHard contracts
