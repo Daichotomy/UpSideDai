@@ -3631,9 +3631,68 @@
     "name": "solc",
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "1": {
+      "events": {
+        "0x5d150dd53a2d89d347748e6a2a9cd1fee651d7dd3740ab18ca8375e48b84a5ab": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "CFD",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "creationDate",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "settlementDate",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "version",
+              "type": "uint256"
+            }
+          ],
+          "name": "CFDeployed",
+          "type": "event"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xaE2F528965280278A4653dC0092779d3016fcDA6",
+      "transactionHash": "0x6df16a9eac98f1b323f24c802c3c841396ec8b7fc52c3075c3aa8c6d1f7facfd"
+    }
+  },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-02-19T07:27:07.937Z",
+  "updatedAt": "2020-02-16T14:35:19.506Z",
+  "networkType": "ethereum",
   "devdoc": {
     "details": "Just a CFD factory",
     "methods": {
