@@ -9,6 +9,13 @@
 - [Figma mockups](https://www.figma.com/file/561C0EC33s556EpVKYBzG2/Eth-Denver?node-id=8%3A0)
 - [Youtube demo](https://youtu.be/ZfAq1ypdMdo)
 
+## ETHDenver 2020 Winners
+
+ - [Open Track Winners](https://alchemy-xdai.daostack.io/dao/0xe248a76a4a84667c859eb51b9af6dea29e52f139/crx/proposal/0xc2584683cbf5f10af39fb2b79b62ff967608a9e179241e0fce9c8f6dbd6a579a)
+ - [DeFi Rate shoutout (](https://defirate.com/ethdenver-defi/)
+ - [TheBlock write up (highlights)](https://www.theblockcrypto.com/post/56159/ethdenver-defi-project-highlights)
+ - [DaoStack tweet](https://twitter.com/daostack/status/1229840533666893826)
+
 ## Table of Contents
 
 - [What is UpSideDai](#what-is-upsidedai)
