@@ -220,20 +220,16 @@ export default new Vuex.Store({
       //     );
 
       let daiPrice = await cfd.GetDaiPriceUSD();
-      console.log("daiPrice", web3.utils.fromWei(daiPrice).toString());
-      state.cfdState.daiPrice = web3.utils.fromWei(daiPrice).toString();
+      console.log("daiPrice", daiPrice);
+      state.cfdState.daiPrice = web3.utils.fromWei(daiPrice.toString());
 
       let userDaiBallance = await dai.balanceOf.call(account);
       console.log("userdaiBallance", userDaiBallance);
-      state.userInfo.daiBallance = web3.utils
-        .fromWei(userDaiBallance)
-        .toString();
+      state.userInfo.daiBallance = web3.utils.fromWei(userDaiBallance.toString());
 
       let userEthBallance = await web3.eth.getBalance(account);
       console.log("userEthBallance", userEthBallance);
-      state.userInfo.ethBallance = web3.utils
-        .fromWei(userEthBallance)
-        .toString();
+      state.userInfo.ethBallance = web3.utils.fromWei(userEthBallance.toString());
     },
     [actions.POOL]: async function({ commit, dispatch, state }, params) {
       console.log("POOL");
