@@ -118,19 +118,19 @@ module.exports = async (deployer, network, accounts) => {
     );
 
     // Grab CFD deets
-    const newCFD_address = await d_UpSideDai.deployedCFD(1);
-    const d_CFD = await c_CFD.at(newCFD_address);
-    var mintAmt = "1000000000000000000000";
-    await d_ERC20Mock.approve(d_CFD.address, mintAmt, {
-      from: acc_default
-    });
+    //const newCFD_address = await d_UpSideDai.deployedCFD(1);
+    //const d_CFD = await c_CFD.at(newCFD_address);
+    //var mintAmt = "1000000000000000000000";
+    //await d_ERC20Mock.approve(d_CFD.address, mintAmt, {
+    //  from: acc_default
+    //});
     // console.log('xx');
-    const cfdDeets = await cfdDetails(d_CFD);
-    console.log(cfdDeets);
-    await d_CFD.mint(mintAmt, {
-      from: acc_default,
-      value: 10 * 10 ** 18
-    });
+    //const cfdDeets = await cfdDetails(d_CFD);
+    //console.log(cfdDeets);
+    //await d_CFD.mint(mintAmt, {
+    //  from: acc_default,
+    //  value: 10 * 10 ** 18
+    //});
 
     // Try to do a swap
     // await d_ERC20Mock.approve(daiExchange.address, (100 * 10**18).toString(), { from: acc_default} )

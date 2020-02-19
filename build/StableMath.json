@@ -5040,7 +5040,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-02-16T14:19:47.650Z",
+  "updatedAt": "2020-02-19T07:27:07.935Z",
   "devdoc": {
     "details": "Accesses the Stable Math library using generic system wide variables for managing precision Derives from OpenZeppelin's SafeMath lib",
     "methods": {},
