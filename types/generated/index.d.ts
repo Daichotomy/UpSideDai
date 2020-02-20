@@ -226,7 +226,7 @@ export interface CFDInstance extends Truffle.ContractInstance {
     estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
   };
 
-  _getCurrentDaiRates: {
+  getCurrentDaiRates: {
     (
       daiUsdPrice: number | BN | string,
       txDetails?: Truffle.TransactionDetails
