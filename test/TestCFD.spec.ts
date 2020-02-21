@@ -82,13 +82,39 @@ contract("CFD", ([upSideDaiTeam, random]) => {
 
   describe("Liquidity provider", async () => {
     it("get required ETH for up&down pool", async () => {
-      let ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
-      let daiPrice = await cfd.GetDaiPriceUSD();
+      let _individualDeposits = daiAmountDeposit.div(new BN(2));
+      let _ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
+      let _daiPriceUsd = await cfd.GetDaiPriceUSD();
+      let upDaiRate;
+      let downDaiRate;
+      let _totalUpDaiValue;
+      let _totalDownDaiValue;   
+      let _upDaiPoolEth;
+      let _downDaiPoolEth;
 
-      let tx = await cfd.getETHCollateralRequirements(daiAmountDeposit);
-      truffleAssert.eventEmitted(tx, "NeededEthCollateral", ev => {
-        console.log(ev.downDaiPoolEth.toString());
-        console.log(ev.upDaiPoolEth.toString());
+      let tx1 = await cfd.getCurrentDaiRates(_daiPriceUsd);   // To improve test; mock this function math
+      truffleAssert.eventEmitted(tx1, "UpDownDaiRates", ev => {
+        upDaiRate = ev.upDaiRate;
+        downDaiRate = ev.downDaiRate;
+        return ev;
+      });
+
+      _totalUpDaiValue = upDaiRate.mul(_individualDeposits).div(new BN(10).pow(new BN(18)));
+      _totalDownDaiValue = downDaiRate.mul(_individualDeposits).div(new BN(10).pow(new BN(18)));
+
+      _upDaiPoolEth = _totalUpDaiValue.mul(new BN(10).pow(new BN(18))).div(_ethUSDPrice);
+      _downDaiPoolEth = _totalDownDaiValue.mul(new BN(10).pow(new BN(18))).div(_ethUSDPrice);
+
+      let tx2 = await cfd.getETHCollateralRequirements(daiAmountDeposit);
+      truffleAssert.eventEmitted(tx2, "NeededEthCollateral", ev => {
+        expect(_upDaiPoolEth).bignumber.eq(
+          ev.upDaiPoolEth,
+          "expected needed ETH collateral for UPDAI pool mismatch"
+        );
+        expect(_downDaiPoolEth).bignumber.eq(
+          ev.downDaiPoolEth,
+          "expected needed ETH collateral for DOWNDAI pool mismatch"
+        );
         return ev;
       });
     });
@@ -108,10 +134,9 @@ contract("CFD", ([upSideDaiTeam, random]) => {
         .mul(new BN(10).pow(new BN(18)))
         .div(ethDAPriceExact);
       const onChainPrice = await cfd.GetDaiPriceUSD();
-      console.log("dai price usd: ", onChainPrice.toString());
       expect(onChainPrice).bignumber.eq(
         expectedPrice,
-        "expected price mismatch"
+        "expected DAI price mismatch"
       );
     });
   });

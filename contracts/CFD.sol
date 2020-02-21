@@ -58,6 +58,11 @@ contract CFD {
 
     mapping(address => Stake) public stakes;
 
+    event UpDownDaiRates(
+        uint256 upDaiRate,
+        uint256 downDaiRate
+    );
+
     event NeededEthCollateral(
         address indexed depositor,
         address indexed cfd,
@@ -124,7 +129,7 @@ contract CFD {
             (
                 upDaiRateAtSettlement,
                 downDaiRateAtSettlement
-            ) = _getCurrentDaiRates(daiPriceAtSettlement);
+            ) = getCurrentDaiRates(daiPriceAtSettlement);
         }
         require(!inSettlementPeriod, "Must not be in settlement period");
         _;
@@ -208,7 +213,7 @@ contract CFD {
         uint256 daiPriceUsd = GetDaiPriceUSD();
 
         // Rate 1:1 == 1e18, 1.2:1 == 12e17
-        (uint256 upDaiRate, uint256 downDaiRate) = _getCurrentDaiRates(
+        (uint256 upDaiRate, uint256 downDaiRate) = getCurrentDaiRates(
             daiPriceUsd
         );
         // e.g. (11e17 * 1e18) / 1e18 = 11e17
@@ -284,7 +289,7 @@ contract CFD {
 
         uint256 daiPriceUsd = GetDaiPriceUSD();
         // Rate 1:1 == 1e18, 1.2:1 == 12e17
-        (uint256 upDaiRate, uint256 downDaiRate) = _getCurrentDaiRates(
+        (uint256 upDaiRate, uint256 downDaiRate) = getCurrentDaiRates(
             daiPriceUsd
         );
 
@@ -355,6 +360,26 @@ contract CFD {
     }
 
     /***************************************
+              INTERNAL - SETTLE CONTRACT
+    ****************************************/
+
+    /**
+     * @notice settle CFD
+     * @param daiUsdPrice Dai price in USD where $1 == 1e18
+     */
+    function _settleContract(uint256 daiUsdPrice, bool priceIsPositive) internal {
+        inSettlementPeriod = true;
+        daiPriceAtSettlement = daiUsdPrice;
+
+        // If Price is positive, Up wins and is worth 2:1, where Down is worth 0:1
+        (uint256 finalUpDaiRate, uint256 finalDownDaiRate) = priceIsPositive
+            ? (uint256(2e18), uint256(0))
+            : (uint256(0), uint256(2e18));
+        upDaiRateAtSettlement = finalUpDaiRate;
+        downDaiRateAtSettlement = finalDownDaiRate;
+    }
+
+    /***************************************
                   PRICE HELPERS
     ****************************************/
 
@@ -364,9 +389,9 @@ contract CFD {
      * @return upDaiRate where 1:1 == 1e18
      * @return downDaiRate where 1:1 == 1e18
      */
-    function _getCurrentDaiRates(uint256 daiUsdPrice)
+    function getCurrentDaiRates(uint256 daiUsdPrice)
         public
-        returns (uint256 upDaiRate, uint256 downDaiRate)
+        returns (uint256, uint256)
     {
         // (1 + ((DaiPriceFeed-1) *  Leverage))
         // Given that price is reflected absolutely on both sides.. then
@@ -384,20 +409,27 @@ contract CFD {
         uint256 winRate = one.add(deltaWithLeverage);
         // If the price has hit the roof, settle the contract
         if (winRate >= uint256(2e18)) {
-            inSettlementPeriod = true;
-            daiPriceAtSettlement = daiUsdPrice;
-            // If Price is positive, Up wins and is worth 2:1, where Down is worth 0:1
-            (uint256 finalUpDaiRate, uint256 finalDownDaiRate) = priceIsPositive
-                ? (uint256(2e18), uint256(0))
-                : (uint256(0), uint256(2e18));
-            upDaiRateAtSettlement = finalUpDaiRate;
-            downDaiRateAtSettlement = finalDownDaiRate;
-            return (finalUpDaiRate, finalDownDaiRate);
+            _settleContract(daiUsdPrice, priceIsPositive);
+
+            emit UpDownDaiRates(upDaiRateAtSettlement, downDaiRateAtSettlement);
+
+            return (upDaiRateAtSettlement, downDaiRateAtSettlement);
         }
-        // e.g. 1e18 - 2e17 = 8e17
-        uint256 loseRate = (uint256(2e18)).sub(deltaWithLeverage);
-        // If price is positive, upDaiRate should be better :)
-        return priceIsPositive ? (winRate, loseRate) : (loseRate, winRate);
+        else {
+            // e.g. 1e18 - 2e17 = 8e17
+            uint256 loseRate = (uint256(2e18)).sub(deltaWithLeverage);
+            // If price is positive, upDaiRate should be better :)
+            if(priceIsPositive) {
+                emit UpDownDaiRates(winRate, loseRate);
+
+                return (winRate, loseRate);
+            }
+            else {
+                emit UpDownDaiRates(loseRate, winRate);
+
+                return (loseRate, winRate);
+            }
+        }
     }
 
     /**
