@@ -242,12 +242,12 @@ export default new Vuex.Store({
           async function(error, event) {
             if(!error) {
               console.log(event.returnValues);
-              console.log(event.returnValues.totalEthCollateral);
+              console.log(event.returnValues[5]);
 
               dispatch(actions.POOL, {
                 spender: state.cfd.address,
                 daiDeposit: params.daiDeposit,
-                ethCollateral: event.returnValues.totalEthCollateral
+                ethCollateral: event.returnValues[5]
               });
             }
             else {
