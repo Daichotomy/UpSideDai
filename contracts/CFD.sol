@@ -68,7 +68,8 @@ contract CFD {
         address indexed cfd,
         uint256 indexed amount,
         uint256 upDaiPoolEth,
-        uint256 downDaiPoolEth
+        uint256 downDaiPoolEth,
+        uint256 totalEthCollateral
     );
 
     /**
@@ -230,7 +231,8 @@ contract CFD {
             address(this),
             _daiDeposit,
             upDaiPoolEth,
-            downDaiPoolEth
+            downDaiPoolEth,
+            upDaiPoolEth.add(downDaiPoolEth)
         );
 
         return (upDaiPoolEth, downDaiPoolEth);

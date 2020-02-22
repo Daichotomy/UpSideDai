@@ -46,7 +46,8 @@ export default new Vuex.Store({
       txHash: ""
     },
     cfdState: {
-      daiPrice: null
+      daiPrice: null,
+      ethUsdPrice: null
     },
     userInfo: {
       daiBallance: null,
@@ -200,25 +201,6 @@ export default new Vuex.Store({
       let value = await uniSwapDai.factoryAddress();
       console.log("factory", value);
 
-      //   const oneMonthInSeconds = 60 * 60 * 24 * 30;
-      //   const now = new Date().getTime() / 1000;
-
-      //   await state.dai.approve(
-      //     state.uniswapDai.address,
-      //     (100 * 10 ** 18).toString(),
-      //     {
-      //       from: state.account
-      //     }
-      //   );
-      //     await uniSwapDai.tokenToTokenSwapInput(
-      //       (1 * 10 ** 18).toString(),
-      //       (1 * 10 ** 18).toString(),
-      //       (1 * 10 ** 14).toString(),
-      //       parseInt(now + oneMonthInSeconds),
-      //       upDai.address,
-      //       { from: state.account }
-      //     );
-
       let daiPrice = await cfd.GetDaiPriceUSD();
       console.log("daiPrice", daiPrice);
       state.cfdState.daiPrice = web3.utils.fromWei(daiPrice.toString());
@@ -231,8 +213,8 @@ export default new Vuex.Store({
       console.log("userEthBallance", userEthBallance);
       state.userInfo.ethBallance = web3.utils.fromWei(userEthBallance.toString());
     },
-    [actions.POOL]: async function({ commit, dispatch, state }, params) {
-      console.log("POOL");
+    [actions.CALCULATE_ETH_COLLATERAL]: async function({ commit, dispatch, state }, params) {
+      console.log("CALCULATE NEEDED ETH COLLATERAL")
       console.log(params);
 
       commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
@@ -240,50 +222,90 @@ export default new Vuex.Store({
         txHash: ""
       });
 
-      let walletApproval = await state.dai.allowance(
-        state.account,
-        state.cfd.address
+      let latest = await state.web3.web3.eth.getBlockNumber();
+
+      let txHash = await state.cfd.getETHCollateralRequirements(
+        state.web3.web3.utils.toWei(params.daiDeposit.toString()),
+        { from: state.account }
       );
 
-      console.log(state.cfd.address);
-      console.log("walletApproval", walletApproval.toString());
-      if (walletApproval.toString() == "0") {
-        await state.dai.approve(
-          state.cfd.address,
-          state.web3.web3.utils.toWei("100000"),
-          { from: state.account }
-        );
-
-        let txHash = await state.cfd.mint(
-          state.web3.web3.utils.toWei(params.daiDeposit),
+      if(txHash) {
+        state.cfd.contract.events.NeededEthCollateral(
           {
-            from: state.account,
-            value: state.web3.web3.utils.toWei("1")
+            filter: {
+              depositor: state.account,
+              cfd: state.cfd.address,
+              amount: state.web3.web3.utils.toWei(params.daiDeposit)
+            },
+            fromBlock: latest
+          },
+          async function(error, event) {
+            if(!error) {
+              console.log(event.returnValues);
+              console.log(event.returnValues.totalEthCollateral);
+
+              dispatch(actions.POOL, {
+                spender: state.cfd.address,
+                daiDeposit: params.daiDeposit,
+                ethCollateral: event.returnValues.totalEthCollateral
+              });
+            }
+            else {
+              console.log(error);
+            }
           }
         );
-
-        if (txHash) {
-          commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
-            status: "done",
-            txHash: txHash.tx
-          });
-        }
-      } else {
-        let txHash = await state.cfd.mint(
-          state.web3.web3.utils.toWei(params.daiDeposit),
-          {
-            from: state.account,
-            value: state.web3.web3.utils.toWei("1")
-          }
-        );
-
-        if (txHash) {
-          commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
-            status: "done",
-            txHash: txHash.tx
-          });
-        }
       }
+    },
+    [actions.POOL]: async function({ commit, dispatch, state }, params) {
+      console.log("APPROVE DAI TRANSFER ", params.daiDeposit, " To ",  params.spender);
+      
+      await state.dai.approve(
+        params.spender,
+        state.web3.web3.utils.toWei(params.daiDeposit.toString()),
+        { from: state.account }
+      );
+
+      console.log("POOL");
+
+      let txHash = await state.cfd.mint(
+        state.web3.web3.utils.toWei(params.daiDeposit),
+        {
+          from: state.account,
+          value: params.ethCollateral.toString()
+        }
+      );
+
+      if(txHash) {
+        commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+          status: "done",
+          txHash: txHash.tx
+        });
+      }
+    },
+    [actions.APPROVE_DAI_TRANSFER]: async function({ commit, dispatch, state }, params) {
+      console.log("APPROVE DAI TRANSFER ", params.daiDeposit, " To ",  params.spender);
+
+      commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+        status: "pending",
+        txHash: ""
+      });
+
+      let txHash = await state.dai.approve(
+        params.spender,
+        state.web3.web3.utils.toWei(params.daiDeposit.toString()),
+        { from: state.account }
+      );
+
+      if(txHash) {
+        commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+          status: "done",
+          txHash: txHash.tx
+        });
+      }
+    },
+    [actions.ETH_USD_PRICE]: async function({ commit, dispatch, state }, params) {
+      state.cfdState.ethUsdPrice = web3.utils.fromWei((await state.cfd.GetETHUSDPriceFromMedianizer()).toString());
     },
     [actions.TRADE]: async function({ commit, dispatch, state }, params) {
       console.log("TRADE");

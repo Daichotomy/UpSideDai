@@ -3,4 +3,6 @@ export const INIT_APP = "INIT_APP";
 export const CLOSE_MINING_DIALOG = "CLOSE_MINING_DIALOG";
 export const POOL = "POOL";
 export const TRADE = "TRADE";
-// export const COMMIT = "COMMIT";
+export const CALCULATE_ETH_COLLATERAL = "CALCULATE_ETH_COLLATERAL";
+export const ETH_USD_PRICE = "ETH_USD_PRICE";
+export const APPROVE_DAI_TRANSFER = "APPROVE_DAI_TRANSFER";

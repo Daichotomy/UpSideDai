@@ -34,13 +34,12 @@
               <span>
                 <md-field
                   md-inline
-                  style="
-    padding-top: 5px;
-    margin-bottom: 5px;"
+                  style="padding-top: 5px;margin-bottom: 5px;"
                 >
                   <label style="margin-left:80px">To Deposit...</label>
                   <md-input
                     v-model="inputDaiAmount"
+                    v-on:input="requiredEth"
                     class="inputDai"
                     type="number"
                   ></md-input>
@@ -65,7 +64,7 @@
                   <span class="SoftFont">
                     Required:
                     <img class="ethLogo" src="../../assets/eth.png" />
-                    {{ requiredEth }}
+                    {{ this.requiredEthAmount }}
                   </span>
                 </div>
                 <div class="md-layout-item" style="text-align: center;">
@@ -99,29 +98,36 @@ export default {
   components: {},
   data() {
     return {
-      daiPrice: 1.069,
       inputDaiAmount: null,
-      daiBallance: 101.69,
-      ethBallance: 12.42,
+      requiredEthAmount: 0,
       maturity: "16th March"
     };
   },
   methods: {
-    ...mapActions(["POOL"]),
+    ...mapActions([
+      "CALCULATE_ETH_COLLATERAL",
+      "ETH_USD_PRICE"
+    ]),
     changeDirection(direction) {
       this.directionLong = direction;
     },
     deposit() {
-      console.log("deposit");
-      this.POOL({ daiDeposit: this.inputDaiAmount });
+      console.log("deposit liquidity");
+      this.CALCULATE_ETH_COLLATERAL({ daiDeposit: this.inputDaiAmount });
+    },
+    /*calEthCollateral() {
+      console.log("calculate ETH collateral");
+      this.CALCULATE_ETH_COLLATERAL({ daiDeposit: this.inputDaiAmount });
+    },*/
+    // this one does not make sense
+    async requiredEth() {
+      await this.ETH_USD_PRICE();
+      this.requiredEthAmount = ((this.inputDaiAmount / this.cfdState.ethUsdPrice)).toFixed(6);
     }
   },
   mounted() {},
   computed: {
-    ...mapState(["cfdState", "userInfo"]),
-    requiredEth() {
-      return ((this.inputDaiAmount / 271.23)).toFixed(6);
-    }
+    ...mapState(["cfdState", "userInfo"])
   }
 };
 </script>
