@@ -235,6 +235,8 @@ contract("CFD", ([provider1, provider2, provider3, trader1, trader2, trader3, ra
         let trader1DaiBalanceAfter = await dai.balanceOf(trader1);
         let trader1UpDaiBalanceAfter = await upDai.balanceOf(trader1);
 
+        console.log("Trader1 UPDAI balance: ", trader1UpDaiBalanceAfter.toString());
+
         expect(trader1DaiBalanceBefore.sub(trader1DaiBalanceAfter)).bignumber.eq(
           daiAmountToSellForUpDai,
           "expected sold DAI amount for UPDAI mismatch"
@@ -263,6 +265,8 @@ contract("CFD", ([provider1, provider2, provider3, trader1, trader2, trader3, ra
         let trader1DaiBalanceAfter = await dai.balanceOf(trader1);
         let trader1DownDaiBalanceAfter = await downDai.balanceOf(trader1);
 
+        console.log("Trader1 DOWNDAI balance: ", trader1DownDaiBalanceAfter.toString());
+
         expect(trader1DaiBalanceBefore.sub(trader1DaiBalanceAfter)).bignumber.eq(
           daiAmountToSellForDownDai,
           "expected sold DAI amount for DOWNDAI mismatch"
@@ -272,7 +276,40 @@ contract("CFD", ([provider1, provider2, provider3, trader1, trader2, trader3, ra
 
     describe("Redeem", async () => {
       it("redeem during CFD execution time", async () => {
-        //
+        let upDaiRate;
+        let downDaiRate;
+        let _convertedUpDai, _convertedDownDai, _totalDaiPayout, _fee, _payout;
+
+        let amountToRedeem = await downDai.balanceOf(trader1);  // trader should have an equal amount of UP&DOWN DAI tokens to burn
+        let trader1DaiBalanceBefore = await dai.balanceOf(trader1);
+
+        upDai.approve(cfd.address, amountToRedeem, { from: trader1 });
+        downDai.approve(cfd.address, amountToRedeem, { from: trader1 });
+
+        let tx1 = await cfd.redeem(amountToRedeem, { from: trader1 });
+        truffleAssert.eventEmitted(tx1, "UpDownDaiRates", ev => {
+          upDaiRate = ev.upDaiRate;
+          downDaiRate = ev.downDaiRate;
+
+          return ev;
+        });
+
+        _convertedUpDai = upDaiRate.mul(amountToRedeem).div(new BN(10).pow(new BN(18)));
+        _convertedDownDai = downDaiRate.mul(amountToRedeem).div(new BN(10).pow(new BN(18)));
+        _totalDaiPayout = _convertedUpDai.add(_convertedDownDai);
+        _fee = _totalDaiPayout.mul(await cfd.feeRate()).div(new BN(10).pow(new BN(18)));
+        _payout = _totalDaiPayout.sub(_fee);
+        
+        let trader1DaiBalanceAfter = await dai.balanceOf(trader1);
+
+        console.log("Trader1 DAI balance before: ", trader1DaiBalanceBefore.toString());
+        console.log("Trader1 DAI balance after: ", trader1DaiBalanceAfter.toString());
+        console.log("Calculated payout: ", _payout.toString());
+
+        expect(trader1DaiBalanceAfter.sub(trader1DaiBalanceBefore)).bignumber.eq(
+          _payout,
+          "expected DAI payout mismatch"
+        );
       });
 
       it("redeem when CFD in settlement status", async () => {
