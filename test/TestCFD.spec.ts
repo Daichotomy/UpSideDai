@@ -50,6 +50,11 @@ const DownDaiContract: DownDaiContract = artifacts.require("DownDai");
 contract("CFD", ([provider1, provider2, provider3, trader1, trader2, trader3, random]) => {
   const daiAmountMint = ether("100");
   const daiAmountDeposit = ether("50");
+  const daiAmountToSellForUpDai = ether("5");
+  const daiAmountToSellForDownDai = ether("5");
+  const oneMonthInSeconds = 60 * 60 * 24 * 30;
+  const now = new Date().getTime() / 1000;
+
   let dai: DAITokenMockInstance;
   let upSideDai: UpSideDaiInstance;
   let cfd: CFDInstance;
@@ -89,7 +94,7 @@ contract("CFD", ([provider1, provider2, provider3, trader1, trader2, trader3, ra
     });
   });
 
-  describe("Liquidity provider", async () => {
+  describe("Uniswap pools", async () => {
     it("get required ETH for up&down pool", async () => {
       let _individualDeposits = daiAmountDeposit.div(new BN(2));
       let _ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
@@ -128,84 +133,153 @@ contract("CFD", ([provider1, provider2, provider3, trader1, trader2, trader3, ra
       });
     });
 
-    it("deposit liquidity into CFD", async () => {
-      let cfdUpDaiBalanceBefore = await upDai.balanceOf(cfd.address);
-      let cfdDownDaiBalanceBefore = await downDai.balanceOf(cfd.address);
+    describe("DAI price oracle", async () => {
+      it("should return relative price", async () => {
+        let ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
+        let daiExchange: IUniswapExchangeInstance = await IUniswapExchange.at(
+          await uniswapFactory.getExchange(dai.address)
+        );
+        let ethDAIPriceSimple = await daiExchange.getEthToTokenInputPrice(
+          (1000000).toString()
+        );
+        let ethDAPriceExact = ethDAIPriceSimple.mul(new BN(10 ** 12));
+        let expectedPrice = ethUSDPrice
+          .mul(new BN(10).pow(new BN(18)))
+          .div(ethDAPriceExact);
+        const onChainPrice = await cfd.GetDaiPriceUSD();
+        expect(onChainPrice).bignumber.eq(
+          expectedPrice,
+          "expected DAI price mismatch"
+        );
+      });
+    });
 
-      let upDaiExchange: IUniswapExchangeInstance = await IUniswapExchange.at(
-        await uniswapFactory.getExchange(upDai.address)
-      );
-      let downDaiExchange: IUniswapExchangeInstance = await IUniswapExchange.at(
-        await uniswapFactory.getExchange(downDai.address)
-      );
+    describe("Market maker", async () => {
+      it("deposit liquidity into CFD", async () => {
+        let cfdUpDaiBalanceBefore = await upDai.balanceOf(cfd.address);
+        let cfdDownDaiBalanceBefore = await downDai.balanceOf(cfd.address);
+  
+        let upDaiExchange: IUniswapExchangeInstance = await IUniswapExchange.at(
+          await uniswapFactory.getExchange(upDai.address)
+        );
+        let downDaiExchange: IUniswapExchangeInstance = await IUniswapExchange.at(
+          await uniswapFactory.getExchange(downDai.address)
+        );
+  
+        let neededEthCollateral;
+        let tx2 = await cfd.getETHCollateralRequirements(daiAmountDeposit);
+        truffleAssert.eventEmitted(tx2, "NeededEthCollateral", ev => {
+          neededEthCollateral = ev.upDaiPoolEth.add(ev.downDaiPoolEth);
+          return ev;
+        });
+  
+        console.log("needed ETH: ", web3.utils.fromWei(neededEthCollateral, "ether"));
+  
+        await dai.approve(cfd.address, daiAmountDeposit, {from: provider1});
+        await cfd.mint(daiAmountDeposit, {from: provider1, value: neededEthCollateral});
+  
+        let cfdUpDaiBalanceAfter = await upDai.balanceOf(cfd.address);      // for better test, calculate Uniswap exchange addLiquidity() 
+        let cfdDownDaiBalanceAfter = await downDai.balanceOf(cfd.address);  // for better test, calculate Uniswap exchange addLiquidity()
+  
+        console.log("DOWNDAI exchange balance: ", (await downDaiExchange.balanceOf(cfd.address)).toString());
+        console.log("UPDAi exchange balance: ", (await upDaiExchange.balanceOf(cfd.address)).toString());
+  
+        let provider1Stake = await cfd.stakes(provider1);
+  
+        expect(await cfd.totalMintVolumeInDai()).bignumber.eq(
+          daiAmountDeposit,
+          "expected minted UPDAI mismatch"
+        );
+  
+        expect(provider1Stake[0]).bignumber.eq(
+          await upDaiExchange.balanceOf(cfd.address),
+          "expected UPDAI LP mismatch"
+        );
+  
+        expect(provider1Stake[1]).bignumber.eq(
+          await downDaiExchange.balanceOf(cfd.address),
+          "expected DOWNDAI LP mismatch"
+        );
+  
+        /*expect(cfdUpDaiBalanceAfter.sub(cfdUpDaiBalanceBefore)).bignumber.eq(
+          daiAmountDeposit.div(new BN(2)),
+          "expected minted UPDAI mismatch"
+        );
+        expect(cfdDownDaiBalanceAfter.sub(cfdDownDaiBalanceBefore)).bignumber.eq(
+          daiAmountDeposit.div(new BN(2)),
+          "expected minted DOWNDAI mismatch"
+        );*/
+      });
+    });
 
-      let neededEthCollateral;
-      let tx2 = await cfd.getETHCollateralRequirements(daiAmountDeposit);
-      truffleAssert.eventEmitted(tx2, "NeededEthCollateral", ev => {
-        neededEthCollateral = ev.upDaiPoolEth.add(ev.downDaiPoolEth);
-        return ev;
+    describe("Buy UP/DOWN tokens", async () => {
+      it("buy UPDAI token", async () => {
+        let trader1DaiBalanceBefore = await dai.balanceOf(trader1);
+        let trader1UpDaiBalanceBefore = await upDai.balanceOf(trader1);
+
+        let daiExchange: IUniswapExchangeInstance = await IUniswapExchange.at(
+          await uniswapFactory.getExchange(dai.address)
+        );
+
+        await dai.approve(daiExchange.address, daiAmountToSellForUpDai, {from: trader1});
+
+        await daiExchange.tokenToTokenSwapInput(
+          daiAmountToSellForUpDai,
+          ether("1"),
+          1 * 10**14,
+          parseInt(now.toString())+oneMonthInSeconds,
+          upDai.address,
+          { from: trader1 }
+        );
+
+        let trader1DaiBalanceAfter = await dai.balanceOf(trader1);
+        let trader1UpDaiBalanceAfter = await upDai.balanceOf(trader1);
+
+        expect(trader1DaiBalanceBefore.sub(trader1DaiBalanceAfter)).bignumber.eq(
+          daiAmountToSellForUpDai,
+          "expected sold DAI amount for UPDAI mismatch"
+        );
       });
 
-      console.log("needed ETH: ", web3.utils.fromWei(neededEthCollateral, "ether"));
+      it("buy DOWNDAI token", async () => {
+        let trader1DaiBalanceBefore = await dai.balanceOf(trader1);
+        let trader1DownDaiBalanceBefore = await downDai.balanceOf(trader1);
 
-      await dai.approve(cfd.address, daiAmountDeposit, {from: provider1});
-      await cfd.mint(daiAmountDeposit, {from: provider1, value: neededEthCollateral});
+        let daiExchange: IUniswapExchangeInstance = await IUniswapExchange.at(
+          await uniswapFactory.getExchange(dai.address)
+        );
+  
+        await dai.approve(daiExchange.address, daiAmountToSellForDownDai, {from: trader1});
 
-      let cfdUpDaiBalanceAfter = await upDai.balanceOf(cfd.address);      // for better test, calculate Uniswap exchange addLiquidity() 
-      let cfdDownDaiBalanceAfter = await downDai.balanceOf(cfd.address);  // for better test, calculate Uniswap exchange addLiquidity()
+        await daiExchange.tokenToTokenSwapInput(
+          daiAmountToSellForDownDai,
+          ether("1"),
+          1 * 10**14,
+          parseInt(now.toString())+oneMonthInSeconds,
+          downDai.address,
+          { from: trader1 }
+        );
 
-      console.log("DOWNDAI exchange balance: ", (await downDaiExchange.balanceOf(cfd.address)).toString());
-      console.log("UPDAi exchange balance: ", (await upDaiExchange.balanceOf(cfd.address)).toString());
+        let trader1DaiBalanceAfter = await dai.balanceOf(trader1);
+        let trader1DownDaiBalanceAfter = await downDai.balanceOf(trader1);
 
-      let provider1Stake = await cfd.stakes(provider1);
-
-      expect(await cfd.totalMintVolumeInDai()).bignumber.eq(
-        daiAmountDeposit,
-        "expected minted UPDAI mismatch"
-      );
-
-      expect(provider1Stake[0]).bignumber.eq(
-        await upDaiExchange.balanceOf(cfd.address),
-        "expected UPDAI LP mismatch"
-      );
-
-      expect(provider1Stake[1]).bignumber.eq(
-        await downDaiExchange.balanceOf(cfd.address),
-        "expected DOWNDAI LP mismatch"
-      );
-
-      /*expect(cfdUpDaiBalanceAfter.sub(cfdUpDaiBalanceBefore)).bignumber.eq(
-        daiAmountDeposit.div(new BN(2)),
-        "expected minted UPDAI mismatch"
-      );
-      expect(cfdDownDaiBalanceAfter.sub(cfdDownDaiBalanceBefore)).bignumber.eq(
-        daiAmountDeposit.div(new BN(2)),
-        "expected minted DOWNDAI mismatch"
-      );*/
+        expect(trader1DaiBalanceBefore.sub(trader1DaiBalanceAfter)).bignumber.eq(
+          daiAmountToSellForDownDai,
+          "expected sold DAI amount for DOWNDAI mismatch"
+        );
+      });
     });
 
+    describe("Redeem", async () => {
+      it("redeem during CFD execution time", async () => {
+        //
+      });
 
-  });
-
-  describe("GetDaiPriceUSD", async () => {
-    it("should return relative price", async () => {
-      let ethUSDPrice = new BN(await cfd.GetETHUSDPriceFromMedianizer());
-      let daiExchange: IUniswapExchangeInstance = await IUniswapExchange.at(
-        await uniswapFactory.getExchange(dai.address)
-      );
-      let ethDAIPriceSimple = await daiExchange.getEthToTokenInputPrice(
-        (1000000).toString()
-      );
-      let ethDAPriceExact = ethDAIPriceSimple.mul(new BN(10 ** 12));
-      let expectedPrice = ethUSDPrice
-        .mul(new BN(10).pow(new BN(18)))
-        .div(ethDAPriceExact);
-      const onChainPrice = await cfd.GetDaiPriceUSD();
-      expect(onChainPrice).bignumber.eq(
-        expectedPrice,
-        "expected DAI price mismatch"
-      );
+      it("redeem when CFD in settlement status", async => () {
+        //
+      });
     });
+
   });
 
 });
