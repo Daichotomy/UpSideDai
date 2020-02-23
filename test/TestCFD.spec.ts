@@ -275,7 +275,7 @@ contract("CFD", ([provider1, provider2, provider3, trader1, trader2, trader3, ra
         //
       });
 
-      it("redeem when CFD in settlement status", async => () {
+      it("redeem when CFD in settlement status", async () => {
         //
       });
     });
