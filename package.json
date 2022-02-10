@@ -61,7 +61,7 @@
         "eslint": "^5.8.0",
         "eslint-plugin-vue": "^5.0.0",
         "ethlint": "^1.2.5",
-        "node-sass": "^4.11.0",
+        "node-sass": "^7.0.0",
         "openzeppelin-solidity": "^2.5.0",
         "openzeppelin-test-helpers": "^0.4.2",
         "sass-loader": "^7.1.0",
